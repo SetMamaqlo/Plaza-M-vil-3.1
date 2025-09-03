@@ -2,8 +2,22 @@
 $role = $_SESSION['user_role'] ?? null;
 require_once __DIR__ . '/controller/notificaciones_controller.php';
 ?>
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+3i9zYkGm60D9e5e5e5e5e5e5e5e5" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Ensure dropdowns are initialized
+        var dropdownElements = document.querySelectorAll('.dropdown-toggle');
+        dropdownElements.forEach(function (dropdown) {
+            new bootstrap.Dropdown(dropdown);
+        });
+    });
+</script>
 <link rel="stylesheet" href="/Plaza_Movil/css/styles.css">
+<!-- Updated styles for buttons -->
+<style>
+
+</style>
 <nav class="navbar navbar-expand-sm navbar-light bg-light-green fixed-top">
     <div class="container-fluid">
         <!-- Espacio para una imagen horizontal -->
