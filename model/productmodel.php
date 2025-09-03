@@ -12,3 +12,5 @@ class ProductModel {
         return $stmt->execute([$nombre, $descripcion, $precio, $imagen, $id_usuario, $categoria]);
     }
 }
+
+    
