@@ -3,12 +3,12 @@ $role = $_SESSION['user_role'] ?? null;
 require_once __DIR__ . '/controller/notificaciones_controller.php';
 ?>
 
-<link rel="stylesheet" href="/Plaza_Movil/css/styles.css">
+<link rel="stylesheet" href="/Plaza-M-vil-3.1/css/styles.css">
 <nav class="navbar navbar-expand-sm navbar-light bg-light-green fixed-top">
     <div class="container-fluid">
         <!-- Espacio para una imagen horizontal -->
-        <a class="navbar-brand" href="/Plaza_Movil/index.php"> <!-- Redirige al index.php -->
-            <img src="/Plaza_Movil/img/logohorizontal.png" alt="Logo" style="height: 40px;">
+        <a class="navbar-brand" href="/Plaza-M-vil-3.1/index.php"> <!-- Redirige al index.php -->
+            <img src="/Plaza-M-vil-3.1/img/logohorizontal.png" alt="Logo" style="height: 40px;">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,7 +18,7 @@ require_once __DIR__ . '/controller/notificaciones_controller.php';
             <ul class="navbar-nav ms-auto">
                 <!-- Enlace de Inicio -->
                 <li class="nav-item">
-                    <a class="nav-link" href="/Plaza_Movil/index.php">Inicio</a> <!-- Redirige al index.php -->
+                    <a class="nav-link" href="/Plaza-M-vil-3.1/index.php">Inicio</a> <!-- Redirige al index.php -->
                 </li>
 
                 <!-- Enlace de ¿Quienes Somos? -->
@@ -45,7 +45,7 @@ require_once __DIR__ . '/controller/notificaciones_controller.php';
                 <!-- Opciones según el rol -->
                 <?php if ($role === 'administrador'): ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="/Plaza_Movil/view/dashboard.php">Dashboard</a>
+                        <a class="nav-link" href="/Plaza-M-vil-3.1/view/dashboard.php">Dashboard</a>
                     </li>
                 <?php endif; ?>
 
@@ -72,7 +72,7 @@ require_once __DIR__ . '/controller/notificaciones_controller.php';
 
                 <!-- Botón Carrito de Compras -->
                 <li class="nav-item">
-                    <a class="nav-link position-relative" href="/Plaza_Movil/view/carritoview.php">
+                    <a class="nav-link position-relative" href="/Plaza-M-vil-3.1/view/carritoview.php">
                         <i class="bi bi-cart3" style="font-size: 1.5rem;"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                             id="cart-count">
@@ -88,14 +88,14 @@ require_once __DIR__ . '/controller/notificaciones_controller.php';
                         Usuario
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end"> <!-- Alinea el menú hacia la derecha -->
-                        <li><a class="dropdown-item" href="/Plaza_Movil/view/perfil.php">Mi Perfil</a></li>
+                        <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/perfil.php">Mi Perfil</a></li>
                         <?php if ($role === 'vendedor'): ?>
-                            <li><a class="dropdown-item" href="/Plaza_Movil/view/mis_productos.php">Mis Productos</a></li>
+                            <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/mis_productos.php">Mis Productos</a></li>
                         <?php endif; ?>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="/Plaza_Movil/controller/logincontroller.php?action=logout"
+                        <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/controller/logincontroller.php?action=logout"
                                 class="btn btn-danger">Cerrar Sesión</a></li>
                     </ul>
                 </li>
