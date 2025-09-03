@@ -1,0 +1,105 @@
+<?php
+$role = $_SESSION['user_role'] ?? null;
+require_once __DIR__ . '/controller/notificaciones_controller.php';
+?>
+
+<link rel="stylesheet" href="/Plaza_Movil/css/styles.css">
+<nav class="navbar navbar-expand-sm navbar-light bg-light-green fixed-top">
+    <div class="container-fluid">
+        <!-- Espacio para una imagen horizontal -->
+        <a class="navbar-brand" href="/Plaza_Movil/index.php"> <!-- Redirige al index.php -->
+            <img src="/Plaza_Movil/img/logohorizontal.png" alt="Logo" style="height: 40px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto">
+                <!-- Enlace de Inicio -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/Plaza_Movil/index.php">Inicio</a> <!-- Redirige al index.php -->
+                </li>
+
+                <!-- Enlace de ¿Quienes Somos? -->
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">¿Quienes Somos?</a>
+                </li>
+
+                <!-- Enlace de Categorías -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Categorías
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Frutas</a></li>
+                        <li><a class="dropdown-item" href="#">Verduras</a></li>
+                        <li><a class="dropdown-item" href="#">Lácteos</a></li>
+                        <li><a class="dropdown-item" href="#">Bebidas</a></li>
+                        <li><a class="dropdown-item" href="#">Carnes</a></li>
+                        <li><a class="dropdown-item" href="#">Legumbres</a></li>
+                    </ul>
+                </li>
+
+                <!-- Opciones según el rol -->
+                <?php if ($role === 'administrador'): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Plaza_Movil/view/dashboard.php">Dashboard</a>
+                    </li>
+                <?php endif; ?>
+
+                <!-- Botón de Notificaciones -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link position-relative dropdown-toggle" href="#" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-bell" style="font-size: 1.5rem;"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            id="notification-count">
+                            <?php echo isset($notificaciones) ? count($notificaciones) : 0; ?>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <?php if (!empty($notificaciones)): ?>
+                            <?php foreach ($notificaciones as $notificacion): ?>
+                                <li><a class="dropdown-item" href="#"><?php echo htmlspecialchars($notificacion); ?></a></li>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <li><span class="dropdown-item text-muted">No hay notificaciones</span></li>
+                        <?php endif; ?>
+                    </ul>
+                </li>
+
+                <!-- Botón Carrito de Compras -->
+                <li class="nav-item">
+                    <a class="nav-link position-relative" href="/Plaza_Movil/view/carritoview.php">
+                        <i class="bi bi-cart3" style="font-size: 1.5rem;"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            id="cart-count">
+                            <?php echo isset($_SESSION['carrito']) ? count($_SESSION['carrito']) : 0; ?>
+                        </span>
+                    </a>
+                </li>
+
+                <!-- Menú de Usuario -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Usuario
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end"> <!-- Alinea el menú hacia la derecha -->
+                        <li><a class="dropdown-item" href="/Plaza_Movil/view/perfil.php">Mi Perfil</a></li>
+                        <?php if ($role === 'vendedor'): ?>
+                            <li><a class="dropdown-item" href="/Plaza_Movil/view/mis_productos.php">Mis Productos</a></li>
+                        <?php endif; ?>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="/Plaza_Movil/controller/logincontroller.php?action=logout"
+                                class="btn btn-danger">Cerrar Sesión</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
