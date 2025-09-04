@@ -103,7 +103,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="confirmar_contrasena" class="form-label">Confirmar Contraseña</label>
-                            <input type="confirmar_contrasena" class="form-control" id="confirmar_contrasena" name="confirmar_contrasena" required>
+                            <input type="password" class="form-control" id="confirmar_contrasena" name="confirmar_contrasena" required>
                         </div>
                         <div class="mb-3">
                             <label for="id_rol" class="form-label">Tipo de Usuario</label>
