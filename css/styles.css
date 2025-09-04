@@ -1,3 +1,31 @@
+/* Tarjeta minimalista para productos */
+.minimal-card {
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    transition: transform 0.15s, box-shadow 0.15s;
+    background: #fff;
+}
+.minimal-card:hover {
+    transform: translateY(-4px) scale(1.025);
+    box-shadow: 0 8px 32px rgba(44, 62, 80, 0.13);
+}
+.minimal-card .card-img-top {
+    height: 180px;
+    object-fit: cover;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+}
+.minimal-card .card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #222;
+}
+.minimal-card .card-text {
+    color: #6c757d;
+}
+.minimal-card .text-success {
+    color: #28a745 !important;
+}
 /* Ajustar las imágenes de las tarjetas */
 .card-img-top {
     height: 200px; /* Altura fija para todas las imágenes */
@@ -82,15 +110,7 @@
     padding: 32px 24px;
     box-shadow: 0 2px 16px rgba(0,0,0,0.04);
 }
-.productos-fondo .card {
-    border-radius: 14px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    transition: transform 0.15s;
-}
-.productos-fondo .card:hover {
-    transform: translateY(-6px) scale(1.03);
-    box-shadow: 0 6px 24px rgba(0,0,0,0.10);
-}
+
 
 .custom-carousel {
     max-width: 900px;
