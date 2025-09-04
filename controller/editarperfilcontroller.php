@@ -2,10 +2,10 @@
 session_start();
 
 // Si el usuario no ha iniciado sesión, redirige al login
-if (!isset($_SESSION['user_id'])) {
-    header('Location: ../view/login.php');
-    exit();
-}
+//if (!isset($_SESSION['user_id'])) {
+    //header('Location: ../view/login.php');
+    //exit();
+//}
 require_once '../config/conexion.php';
 
 // Obtiene los datos enviados por el formulario, o valores vacíos si no existen
@@ -27,11 +27,11 @@ if (isset($_FILES['foto_perfil']) && $_FILES['foto_perfil']['error'] === UPLOAD_
 if ($nombre && $correo && $usuario) {
     // Si hay nueva foto, actualiza todos los campos incluyendo la foto
     if ($foto_perfil) {
-        $stmt = $pdo->prepare('UPDATE usuarios SET nombre_completo = ?, email = ?, username = ?, telefono = ?, foto_perfil = ? WHERE id = ?');
+        $stmt = $pdo->prepare('UPDATE usuarios SET nombre_completo = ?, email = ?, username = ?, telefono = ?, foto = ? WHERE id_usuario = ?');
         $stmt->execute([$nombre, $correo, $usuario, $telefono, $foto_perfil, $user_id]);
     } // Si no hay nueva foto, actualiza los demás campos}
     else {
-        $stmt = $pdo->prepare('UPDATE usuarios SET nombre_completo = ?, email = ?, username = ?, telefono = ? WHERE id = ?');
+        $stmt = $pdo->prepare('UPDATE usuarios SET nombre_completo = ?, email = ?, username = ?, telefono = ? WHERE id_usuario = ?');
         $stmt->execute([$nombre, $correo, $usuario, $telefono, $user_id]);
     }
     $_SESSION['user_name'] = $nombre; // Actualiza el nombre en la sesión

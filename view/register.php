@@ -102,11 +102,15 @@
                             <input type="password" class="form-control" id="password" name="password" required>
                         </div>
                         <div class="mb-3">
-                            <label for="role" class="form-label">Tipo de Usuario</label>
-                            <select class="form-control" id="role" name="role" required>
-                                <option value="comprador">Comprador</option>
-                                <option value="vendedor">Vendedor</option>
-                                <option value="administrador">Administrador</option>
+                            <label for="confirmar_contrasena" class="form-label">Confirmar Contraseña</label>
+                            <input type="confirmar_contrasena" class="form-control" id="confirmar_contrasena" name="confirmar_contrasena" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_rol" class="form-label">Tipo de Usuario</label>
+                            <select class="form-control" id="id_rol" name="id_rol" required>
+                                <option value="2">Comprador</option>
+                                <option value="3">Agricultor</option>
+                                <option value="1">Administrador</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Registrarse</button>

@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 require_once '../config/conexion.php';
 $user_id = $_SESSION['user_id'];
-$stmt = $pdo->prepare('SELECT * FROM usuarios WHERE id = ?');
+$stmt = $pdo->prepare('SELECT * FROM usuarios WHERE id_usuario = ?');
 $stmt->execute([$user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$user) {
@@ -32,19 +32,19 @@ if (!$user) {
     <div class="container perfil-container">
         <h2 class="mb-4 text-center">Mi Perfil</h2>
         <div class="text-center mb-4">
-            <?php if (!empty($user['foto_perfil'])): ?>
-                <img src="../img/<?php echo htmlspecialchars($user['foto_perfil']); ?>" alt="Foto de perfil" class="rounded-circle shadow perfil-foto">
+            <?php if (!empty($user['foto'])): ?>
+                <img src="../img/<?php echo htmlspecialchars($user['foto']); ?>" alt="Foto de perfil" class="rounded-circle shadow perfil-foto">
             <?php else: ?>
                 <img src="../img/default_profile.png" alt="Foto de perfil" class="rounded-circle shadow perfil-foto">
             <?php endif; ?>
         </div>
         <table class="table table-bordered perfil-tabla">
-            <tr><th>ID</th><td><?php echo htmlspecialchars($user['id']); ?></td></tr>
+            <tr><th>ID</th><td><?php echo htmlspecialchars($user['id_usuarrio']); ?></td></tr>
             <tr><th>Nombre</th><td><?php echo htmlspecialchars($user['nombre_completo']); ?></td></tr>
             <tr><th>Correo</th><td><?php echo htmlspecialchars($user['email']); ?></td></tr>
             <tr><th>Usuario</th><td><?php echo htmlspecialchars($user['username']); ?></td></tr>
             <tr><th>Teléfono</th><td><?php echo htmlspecialchars($user['telefono']); ?></td></tr>
-            <tr><th>Rol</th><td><?php echo htmlspecialchars($user['role']); ?></td></tr>
+            <tr><th>Rol</th><td><?php echo htmlspecialchars($user['id_rol']); ?></td></tr>
         </table>
         <div class="text-center mt-4">
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEditarPerfil"><i class="bi bi-pencil"></i> Editar Datos</button>
@@ -61,7 +61,7 @@ if (!$user) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name="id_usuario" value="<?php echo htmlspecialchars($user['id']); ?>">
+                    <input type="hidden" name="id_usuario" value="<?php echo htmlspecialchars($user['id_usuario']); ?>">
                     <div class="mb-3">
                         <label for="nombre" class="form-label">Nombre</label>
                         <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo htmlspecialchars($user['nombre_completo']); ?>" required>

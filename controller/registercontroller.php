@@ -22,11 +22,26 @@ class RegisterController
             $fecha_nacimiento = $_POST['fecha_nacimiento'];
             $username = $_POST['username'];
             $password = $_POST['password']; // Contraseña sin encriptar
-            $role = $_POST['role'];
+            $rolSeleccionado = $_POST['id_rol']; // "comprador"
+
+switch ($rolSeleccionado) {
+    case "admin":
+        $id_rol = 1;
+        break;
+    case "comprador":
+        $id_rol = 2;
+        break;
+    case "vendedor":
+        $id_rol = 3;
+        break;
+    default:
+        $id_rol = 2; // Por defecto "comprador"
+}
+            
 
             // Validar que el rol sea válido
-            if (!in_array($role, ['vendedor', 'comprador', 'administrador'])) {
-                header("Location: ../view/register.php?error=invalid_role");
+            if (!in_array($id_rol, ['1', '2', '3'])) {
+                header("Location: ../view/register.php?error=invalid_id_rol");
                 exit;
             }
 
@@ -43,8 +58,9 @@ class RegisterController
                     $email,
                     $fecha_nacimiento,
                     $username,
-                    $hashedPassword,
-                    $role
+                    $hashedPassword,                  
+                    id_rol: $id_rol
+                    
                 )
             ) {
                 header("Location: ../view/register.php?success=1");

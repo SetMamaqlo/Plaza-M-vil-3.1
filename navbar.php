@@ -1,6 +1,6 @@
 <?php
 $role = $_SESSION['user_role'] ?? null;
-require_once __DIR__ . '/controller/notificaciones_controller.php';
+//require_once __DIR__ . '/controller/notificaciones_controller.php';
 ?>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+3i9zYkGm60D9e5e5e5e5e5e5e5e5" crossorigin="anonymous"></script>
@@ -21,6 +21,7 @@ require_once __DIR__ . '/controller/notificaciones_controller.php';
 <nav class="navbar navbar-expand-sm navbar-light bg-light-green fixed-top">
     <div class="container-fluid">
         <!-- Espacio para una imagen horizontal -->
+
         <a class="navbar-brand" href="/Plaza-M-vil-3.1/index.php"> <!-- Redirige al index.php -->
             <img src="/Plaza-M-vil-3.1/img/logohorizontal.png" alt="Logo" style="height: 40px;">
         </a>
@@ -64,13 +65,13 @@ require_once __DIR__ . '/controller/notificaciones_controller.php';
                 <?php endif; ?>
 
                 <!-- Botón de Notificaciones -->
-                <li class="nav-item dropdown">
+               <!--  <li class="nav-item dropdown">
                     <a class="nav-link position-relative dropdown-toggle" href="#" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-bell" style="font-size: 1.5rem;"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                             id="notification-count">
-                            <?php echo isset($notificaciones) ? count($notificaciones) : 0; ?>
+                        /*  <?php echo isset($notificaciones) ? count($notificaciones) : 0; ?>   */
                         </span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
