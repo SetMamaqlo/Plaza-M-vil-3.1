@@ -71,17 +71,17 @@ $role = $_SESSION['user_role'] ?? null;
                         <i class="bi bi-bell" style="font-size: 1.5rem;"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                             id="notification-count">
-                        /*  <?php echo isset($notificaciones) ? count($notificaciones) : 0; ?>   */
+                        /*  ?php echo isset($notificaciones) ? count($notificaciones) : 0; ?>   */
                         </span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <?php if (!empty($notificaciones)): ?>
-                            <?php foreach ($notificaciones as $notificacion): ?>
-                                <li><a class="dropdown-item" href="#"><?php echo htmlspecialchars($notificacion); ?></a></li>
-                            <?php endforeach; ?>
-                        <?php else: ?>
+                        ?php if (!empty($notificaciones)): ?>
+                            ?php foreach ($notificaciones as $notificacion): ?>
+                                <li><a class="dropdown-item" href="#">?php echo htmlspecialchars($notificacion); ?></a></li>
+                            ?php endforeach; ?>
+                        ?php else: ?>
                             <li><span class="dropdown-item text-muted">No hay notificaciones</span></li>
-                        <?php endif; ?>
+                        ?php endif; ?>
                     </ul>
                 </li>
 

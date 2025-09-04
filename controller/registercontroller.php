@@ -23,6 +23,7 @@ class RegisterController
             $username = $_POST['username'];
             $password = $_POST['password']; // Contraseña sin encriptar
             $rolSeleccionado = $_POST['id_rol']; // "comprador"
+            $foto = null;
 
 switch ($rolSeleccionado) {
     case "admin":

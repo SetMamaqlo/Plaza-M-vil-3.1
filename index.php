@@ -1,7 +1,7 @@
 <?php
 session_start();
-$role = $_SESSION['user_role'] ?? null;
-if (!isset($_SESSION['user_id'])) {
+$id_rol = $_SESSION['user_id_role'] ?? null;
+if (!isset($_SESSION['user_id_rol'])) {
     header("Location: view/login.php");
     exit;
 }

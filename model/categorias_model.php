@@ -12,72 +12,58 @@ class CategoriasModel
         $this->pdo = $pdo;
     }
 
-    public function obtenerCategorias()
-    {
-        $stmt = $this->pdo->prepare("SHOW COLUMNS FROM productos LIKE 'categoria'");
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Extraer los valores del ENUM
-        preg_match("/^enum\((.*)\)$/", $row['Type'], $matches);
-        $categorias = array_map(function ($value) {
-            return trim($value, "'");
-        }, explode(',', $matches[1]));
-
-        return $categorias;
+    
+    // Lista TODAS las categorías
+    public function obtenerCategorias(): array {
+        $stmt = $this->pdo->query(
+            "SELECT id_categoria, nombre, descripcion
+             FROM categoria
+             ORDER BY nombre ASC"
+        );
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function agregarCategoria($nuevaCategoria)
-    {
-        // Obtener los valores actuales del ENUM
-        $stmt = $this->pdo->prepare("SHOW COLUMNS FROM productos LIKE 'categoria'");
-        $stmt->execute();
+    // Busca UNA por nombre y descripción (si la necesitas)
+    public function buscarCategoria(string $nombre, string $descripcion): ?array {
+        $stmt = $this->pdo->prepare(
+            "SELECT id_categoria, nombre, descripcion
+             FROM categoria
+             WHERE nombre = ? AND descripcion = ?
+             LIMIT 1"
+        );
+        $stmt->execute([$nombre, $descripcion]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Extraer los valores del ENUM
-        preg_match("/^enum\((.*)\)$/", $row['Type'], $matches);
-        $categorias = array_map(function ($value) {
-            return trim($value, "'");
-        }, explode(',', $matches[1]));
-
-        // Agregar la nueva categoría si no existe
-        if (!in_array($nuevaCategoria, $categorias)) {
-            $categorias[] = $nuevaCategoria;
-            $nuevaDefinicion = "ENUM('" . implode("','", $categorias) . "')";
-
-            // Modificar la columna para incluir la nueva categoría
-            $stmt = $this->pdo->prepare("ALTER TABLE productos MODIFY COLUMN categoria $nuevaDefinicion NOT NULL");
-            return $stmt->execute();
-        }
-
-        return false; // La categoría ya existe
+        return $row ?: null;
     }
 
-    public function eliminarCategoria($categoria)
+    public function agregarCategoria($nombre, $descripcion)
     {
-        // Obtener los valores actuales del ENUM
-        $stmt = $this->pdo->prepare("SHOW COLUMNS FROM productos LIKE 'categoria'");
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        // 1. Verificar si ya existe
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM categoria WHERE nombre = ?");
+        $stmt->execute([$nombre]);
+        $existe = $stmt->fetchColumn();
 
-        // Extraer los valores del ENUM
-        preg_match("/^enum\((.*)\)$/", $row['Type'], $matches);
-        $categorias = array_map(function ($value) {
-            return trim($value, "'");
-        }, explode(',', $matches[1]));
-
-        // Eliminar la categoría si existe
-        if (in_array($categoria, $categorias)) {
-            $categorias = array_filter($categorias, function ($value) use ($categoria) {
-                return $value !== $categoria;
-            });
-            $nuevaDefinicion = "ENUM('" . implode("','", $categorias) . "')";
-
-            // Modificar la columna para excluir la categoría
-            $stmt = $this->pdo->prepare("ALTER TABLE productos MODIFY COLUMN categoria $nuevaDefinicion NOT NULL");
-            return $stmt->execute();
+        if ($existe > 0) {
+            // Ya existe → no insertar
+            return false;
         }
 
-        return false; // La categoría no existe
+        // 2. Insertar la nueva categoría
+        $stmt = $this->pdo->prepare(
+            "INSERT INTO categoria (nombre, descripcion) VALUES (?, ?)"
+        );
+        return $stmt->execute([$nombre, $descripcion]);
+    }
+
+    public function eliminarcategoria($id)
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM categoria WHERE id = ?");
+        return $stmt->execute([$id]);
+    }
+
+    public function actualizarcategoria($id_categoria, $nombre, $descripcion)
+    {
+        $stmt = $this->pdo->prepare("UPDATE categoria SET nombre = ?, descripcion = ?, where id_categoria = ? ");
+        return $stmt->execute([$id_categoria, $nombre, $descripcion, ]);
     }
 }

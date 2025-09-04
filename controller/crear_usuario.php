@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre_completo = $_POST['nombre_completo'] ?? '';
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
-    $role = $_POST['role'] ?? '';
+    $rol = $_POST['rol'] ?? '';
 
     if (!empty($nombre_completo) && !empty($email) && !empty($password) && !empty($role)) {
         try {

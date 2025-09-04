@@ -8,14 +8,20 @@ $categoriasModel = new CategoriasModel();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['accion'])) {
         if ($_POST['accion'] === 'agregar') {
-            $categoriasModel->agregarCategoria($_POST['nueva_categoria']);
+            $nombre = $_POST['nombre'] ?? '';
+            $descripcion = $_POST['descripcion'] ?? '';
+            $categoriasModel->agregarCategoria($nombre, $descripcion);
+
         } elseif ($_POST['accion'] === 'eliminar') {
-            $categoriasModel->eliminarCategoria($_POST['categoria']);
+            $id_categoria = $_POST['id_categoria'] ?? null;
+            if ($id_categoria) {
+                $categoriasModel->eliminarCategoria($id_categoria);
+            }
         }
     }
     header("Location: ../view/gestion_categorias.php");
     exit;
 }
 
-// Obtener categorías para la vista
+// Obtener todas las categorías
 $categorias = $categoriasModel->obtenerCategorias();
