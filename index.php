@@ -72,69 +72,70 @@ if (!isset($_SESSION['user_id'])) {
     <!-- Apartado de productos -->
     <?php include 'config/conexion.php'; ?>
 
-    <div class="container mt-5 productos-fondo">
-    <h2 class="text-center mb-4">Productos Publicados</h2>
-    <div class="row"> <!-- Asegúrate de que las columnas estén dentro de un contenedor con la clase 'row' -->
-        <?php
-        $stmt = $pdo->query("SELECT * FROM productos ORDER BY fecha_publicacion DESC");
-        while ($producto = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    <section class="container mt-5 productos-fondo">
+        <h2 class="text-center mb-4 fw-bold display-6 border-bottom pb-2" style="letter-spacing:1px;">Productos Publicados</h2>
+        <div class="row g-4 justify-content-center">
+            <?php
+            $stmt = $pdo->query("SELECT * FROM productos ORDER BY fecha_publicacion DESC");
+            while ($producto = $stmt->fetch(PDO::FETCH_ASSOC)) {
             ?>
-            <div class="col-md-4 mb-4"> <!-- Divide en tres columnas por fila -->
-                <a href="view/producto_detalle.php?id=<?php echo $producto['id']; ?>" style="text-decoration:none; color:inherit;">
-                    <div class="card h-100 shadow-sm" style="cursor:pointer;">
-                        <img src="img/<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top"
-                            alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
-                        <div class="card-body">
-                            <h5 class="card-title"><?php echo htmlspecialchars($producto['nombre']); ?></h5>
-                            <p class="card-text"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
-                            <p class="card-text"><strong>Precio:</strong>
-                                $<?php echo number_format($producto['precio']); ?></p>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch">
+                    <a href="view/producto_detalle.php?id=<?php echo $producto['id']; ?>" class="w-100 text-decoration-none text-dark">
+                        <div class="card h-100 border-0 shadow-sm minimal-card">
+                            <img src="img/<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top rounded-top" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <h5 class="card-title mb-2 fw-semibold text-truncate"><?php echo htmlspecialchars($producto['nombre']); ?></h5>
+                                <p class="card-text small text-muted mb-2" style="min-height:48px;">
+                                    <?php echo htmlspecialchars($producto['descripcion']); ?>
+                                </p>
+                                <p class="card-text mb-0"><span class="fw-bold text-success">$<?php echo number_format($producto['precio']); ?></span></p>
+                            </div>
                         </div>
-                    </div>
-                </a>
-            </div>
-        <?php } ?>
-    </div>
+                    </a>
+                </div>
+            <?php } ?>
+        </div>
+    </section>
 
     <!-- Apartado de productos por categoría -->
-<div class="container mt-5">
-    <h2 class="text-center mb-4">Productos por Categoría</h2>
-    <?php
-    // Consulta para obtener las categorías
-    $categoriasStmt = $pdo->query("SELECT DISTINCT categoria FROM productos ORDER BY categoria ASC");
-    $categorias = $categoriasStmt->fetchAll(PDO::FETCH_ASSOC);
+    <section class="container mt-5">
+        <h2 class="text-center mb-4 fw-bold display-6 border-bottom pb-2" style="letter-spacing:1px;">Productos por Categoría</h2>
+        <?php
+        // Consulta para obtener las categorías
+        $categoriasStmt = $pdo->query("SELECT DISTINCT categoria FROM productos ORDER BY categoria ASC");
+        $categorias = $categoriasStmt->fetchAll(PDO::FETCH_ASSOC);
 
-    foreach ($categorias as $categoria) {
-        $categoriaNombre = htmlspecialchars($categoria['categoria']);
+        foreach ($categorias as $categoria) {
+            $categoriaNombre = htmlspecialchars($categoria['categoria']);
         ?>
-        <div class="mb-5">
-            <h3 class="text-success"><?php echo $categoriaNombre; ?></h3>
-            <div class="row">
-                <?php
-                // Consulta para obtener los productos de la categoría actual
-                $productosStmt = $pdo->prepare("SELECT * FROM productos WHERE categoria = ? ORDER BY fecha_publicacion DESC");
-                $productosStmt->execute([$categoriaNombre]);
-                while ($producto = $productosStmt->fetch(PDO::FETCH_ASSOC)) {
+            <div class="mb-5">
+                <h3 class="text-success border-start border-4 ps-3 mb-4" style="font-weight:600; letter-spacing:0.5px;"> <?php echo $categoriaNombre; ?> </h3>
+                <div class="row g-4 justify-content-center">
+                    <?php
+                    // Consulta para obtener los productos de la categoría actual
+                    $productosStmt = $pdo->prepare("SELECT * FROM productos WHERE categoria = ? ORDER BY fecha_publicacion DESC");
+                    $productosStmt->execute([$categoriaNombre]);
+                    while ($producto = $productosStmt->fetch(PDO::FETCH_ASSOC)) {
                     ?>
-                    <div class="col-md-4 mb-4">
-                        <a href="view/producto_detalle.php?id=<?php echo $producto['id']; ?>" style="text-decoration:none; color:inherit;">
-                            <div class="card h-100 shadow-sm" style="cursor:pointer;">
-                                <img src="img/<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top"
-                                    alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
-                                <div class="card-body">
-                                    <h5 class="card-title"><?php echo htmlspecialchars($producto['nombre']); ?></h5>
-                                    <p class="card-text"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
-                                    <p class="card-text"><strong>Precio:</strong>
-                                        $<?php echo number_format($producto['precio']); ?></p>
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch">
+                            <a href="view/producto_detalle.php?id=<?php echo $producto['id']; ?>" class="w-100 text-decoration-none text-dark">
+                                <div class="card h-100 border-0 shadow-sm minimal-card">
+                                    <img src="img/<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top rounded-top" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
+                                    <div class="card-body d-flex flex-column justify-content-between">
+                                        <h5 class="card-title mb-2 fw-semibold text-truncate"><?php echo htmlspecialchars($producto['nombre']); ?></h5>
+                                        <p class="card-text small text-muted mb-2" style="min-height:48px;">
+                                            <?php echo htmlspecialchars($producto['descripcion']); ?>
+                                        </p>
+                                        <p class="card-text mb-0"><span class="fw-bold text-success">$<?php echo number_format($producto['precio']); ?></span></p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
-                <?php } ?>
+                            </a>
+                        </div>
+                    <?php } ?>
+                </div>
             </div>
-        </div>
-    <?php } ?>
-</div>
+        <?php } ?>
+    </section>
 </div>
     <?php include 'config/conexion.php'; ?>
     <div class="container mt-5">
