@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 require_once '../config/conexion.php';
 $user_id = $_SESSION['user_id'];
-$stmt = $pdo->prepare('SELECT * FROM usuarios WHERE id = ?');
+$stmt = $pdo->prepare('SELECT * FROM usuarios WHERE id_usuario = ?');
 $stmt->execute([$user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$user) {
