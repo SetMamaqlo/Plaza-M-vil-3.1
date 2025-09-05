@@ -77,5 +77,7 @@ class UserModel extends Rol_Model
         $stmt->execute([$id_usuario]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    
 }
 ?>

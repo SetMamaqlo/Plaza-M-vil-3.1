@@ -22,7 +22,7 @@ class LoginController {
                 // Iniciar sesión
                 $_SESSION['user_id'] = $user['id_usuario'];
                 $_SESSION['user_name'] = $user['username'];
-                $_SESSION['user_id_rol'] = $user['id_rol']; // Guardar el rol del usuario
+                $_SESSION['user_id_rol'] = $user['id_rol'];  // Guardar el rol del usuario
                 header("Location: ../index.php");
                 exit;
             } else {

@@ -54,6 +54,7 @@ if (!isset($_SESSION['user_id_rol'])) {
                 <img src="img/carousel3.jpg" class="d-block w-100 h-100" style="object-fit: cover;" alt="...">
                 <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
                     <h5>LAS FRUTAS MAS FRESCAS</h5>
+                    
                     <p>Mira las ultimas publicaciones en frutas.</p>
                 </div>
             </div>
@@ -103,7 +104,6 @@ if (!isset($_SESSION['user_id_rol'])) {
             <?php } ?>
         </div>
     </section>
-
     <!-- Apartado de productos por categoría -->
     <section class="container mt-5">
         <h2 class="text-center mb-4 fw-bold display-6 border-bottom pb-2" style="letter-spacing:1px;">Productos por
