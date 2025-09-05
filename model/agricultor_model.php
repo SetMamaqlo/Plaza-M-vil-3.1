@@ -7,12 +7,12 @@ class AgricultorModel {
     }
 
     // Crear agricultor
-    public function addAgricultor($id_usuario, $id_zona, $certificaciones, $fotos, $metodo_entrega, $metodos_de_pago, $id_calificacion) {
+    public function addAgricultor($id_usuario, $id_zona, $certificaciones, $fotos, $metodo_entrega, $metodos_de_pago) {
         $stmt = $this->pdo->prepare("
-            INSERT INTO agricultor (id_usuario, id_zona, certificaciones, fotos, metodo_entrega, metodos_de_pago, id_calificacion) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO agricultor (id_usuario, id_zona, certificaciones, fotos, metodo_entrega, metodos_de_pago) 
+            VALUES (?, ?, ?, ?, ?, ?)
         ");
-        return $stmt->execute([$id_usuario, $id_zona, $certificaciones, $fotos, $metodo_entrega, $metodos_de_pago, $id_calificacion]);
+        return $stmt->execute([$id_usuario, $id_zona, $certificaciones, $fotos, $metodo_entrega, $metodos_de_pago]);
     }
 
     // Obtener agricultor con datos de usuario y zona
@@ -55,5 +55,7 @@ class AgricultorModel {
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
+
 }
 ?>

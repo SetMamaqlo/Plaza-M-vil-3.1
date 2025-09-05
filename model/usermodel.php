@@ -15,16 +15,28 @@ class UserModel extends Rol_Model
     }
 
     // Agregar usuario
-    public function addUser($nombre_completo, $tipo_documento, $numero_documento, $telefono, $email, $fecha_nacimiento, $username, $password, $id_rol)
-     {
+    public function addUser($nombre_completo, $tipo_documento, $numero_documento, $telefono, $email, $fecha_nacimiento, $username, $password, $id_rol, $foto)
+    {
         $stmt = $this->pdo->prepare("INSERT INTO usuarios 
-            (nombre_completo, tipo_documento, numero_documento, telefono, email, fecha_nacimiento, username, password, id_rol) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        return $stmt->execute([
-            $nombre_completo, $tipo_documento, $numero_documento, 
-            $telefono, $email, $fecha_nacimiento, 
-            $username, $password, $id_rol
-        ]);
+            (nombre_completo, tipo_documento, numero_documento, telefono, email, fecha_nacimiento, username, password, id_rol, foto) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        
+        if ($stmt->execute([
+            $nombre_completo, 
+            $tipo_documento, 
+            $numero_documento, 
+            $telefono, 
+            $email, 
+            $fecha_nacimiento, 
+            $username, 
+            $password, 
+            $id_rol, 
+            $foto
+        ])) {
+            return $this->pdo->lastInsertId();
+        } else {
+            return false;
+        }
     }
     // Actualizar usuario
     public function updateUser($id_usuario, $nombre_completo, $tipo_documento, $numero_documento, $telefono, $email, $fecha_nacimiento, $username, $password, $id_rol)  
