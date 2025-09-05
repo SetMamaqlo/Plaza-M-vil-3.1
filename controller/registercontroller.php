@@ -68,7 +68,7 @@ class RegisterController
 
             if ($id_usuario) {
                 // Si es agricultor, creamos su registro en la tabla agricultor con valores por defecto
-                if ($id_rol == 2) {
+                if ($id_rol == 3) {
                     $this->agricultorModel->addAgricultor(
                         $id_usuario,
                         1,          // zona por defecto

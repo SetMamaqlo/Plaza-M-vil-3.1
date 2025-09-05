@@ -108,8 +108,8 @@
                         <div class="mb-3">
                             <label for="id_rol" class="form-label">Tipo de Usuario</label>
                             <select class="form-control" id="id_rol" name="id_rol" required>
-                                <option value="3">Comprador</option>
-                                <option value="2">Agricultor</option>
+                                <option value="2">Comprador</option>
+                                <option value="3">Agricultor</option>
                                 <option value="1">Administrador</option>
                             </select>
                         </div>

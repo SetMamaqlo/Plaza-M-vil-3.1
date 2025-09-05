@@ -1,6 +1,7 @@
 <?php
+include '../config/conexion.php';
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'vendedor') {
+if (!isset($_SESSION['user_id_usuario']) || $_SESSION['user_id_rol'] !== 3) {
     header("Location: ../view/login.php");
     exit;
 }
@@ -19,7 +20,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'vendedor') {
 
 <body class="d-flex align-items-center justify-content-center vh-100">
 
-    <?php include '../config/conexion.php'; ?>
+    
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -37,6 +38,18 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'vendedor') {
                         <label for="precio" class="form-label">Precio</label>
                         <input type="number" class="form-control" id="precio" name="precio" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="precio" class="form-label">Stock</label>
+                        <input type="number" class="form-control" id="precio" name="precio" required>
+                    </div>
+                     <div class="mb-3">
+                            <label for="id_unidad" class="form-label">Unidad de medida</label>
+                            <select class="form-control" id="id_rol" name="id_unidad" required>
+                                <option value="2">Comprador</option>
+                                <option value="3">Agricultor</option>
+                                <option value="1">Administrador</option>
+                            </select>
+                        </div>
                     <div class="mb-3">
                         <label for="imagen" class="form-label">Imagen del Producto</label>
                         <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*" required>

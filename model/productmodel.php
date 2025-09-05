@@ -6,10 +6,16 @@ class ProductModel {
         $this->pdo = $pdo;
     }
 
-    public function addProduct($nombre, $descripcion, $precio, $imagen, $id_usuario, $categoria) {
+    public function addProduct($id_agricultor, $id_categoria, $descripcion, $nombre, $stock, $precio_unitario, $id_unidad, $foto, $fecha_publicacion) {
         // Ajusta la consulta para usar la columna 'categoria'
-        $stmt = $this->pdo->prepare("INSERT INTO productos (nombre, descripcion, precio, imagen, id_usuario, categoria, fecha_publicacion) VALUES (?, ?, ?, ?, ?, ?, NOW())");
-        return $stmt->execute([$nombre, $descripcion, $precio, $imagen, $id_usuario, $categoria]);
+        $stmt = $this->pdo->prepare("INSERT INTO productos (id_agricultor, id_categoria, descripcion, nombre, stock, precio_unitario, id_unidad, foto, fecha_publicacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+        if ($stmt->execute([$id_agricultor, $id_categoria, $descripcion, $nombre, $stock, $precio_unitario, $id_unidad, $foto, $fecha_publicacion]))
+        {
+            return $this -> pdo ->lastInsertId();
+        } else{
+            return false;
+        }
+    
     }
 }
 

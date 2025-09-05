@@ -20,14 +20,20 @@ class LoginController {
 
             if ($user && password_verify($password, $user['password'])) {
                 // Iniciar sesión
-                $_SESSION['user_id'] = $user['id_usuario'];
+                $_SESSION['user_id_usuario'] = $user['id_usuario'];
                 $_SESSION['user_name'] = $user['username'];
                 $_SESSION['user_id_rol'] = $user['id_rol'];  // Guardar el rol del usuario
+
+             //   if (isset($_SESSION['user_id_usuario'])) {
+              //   echo "Sesión iniciada correctamente. Usuario ID: " . $_SESSION['user_id_usuario']."  ". $_SESSION['user_name']."  ". $_SESSION['user_id_rol'];
+                //} else {
+                 //echo "Error: la sesión no se inició.";
+                //}
                 header("Location: ../index.php");
                 exit;
             } else {
-                // Error de login
-                header("Location: ../view/login.php?error=1");
+                //Error de login
+              header("Location: ../view/login.php?error=1");
                 exit;
             }
         }

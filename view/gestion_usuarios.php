@@ -3,14 +3,14 @@ session_start();
 require_once '../config/conexion.php';
 
 // Verificar si el usuario tiene el rol de administrador
-$role = $_SESSION['user_role'] ?? null;
-if ($role !== 'administrador') {
+$id_rol = $_SESSION['user_id_rol'] ?? null;
+if ($id_rol !== 1) {
     header("Location: ../index.php");
     exit;
 }
 
 // Obtener la lista de usuarios
-$stmt = $pdo->prepare("SELECT id, nombre_completo, email, role FROM usuarios");
+$stmt = $pdo->prepare("SELECT id_usuario, nombre_completo, email, id_rol FROM usuarios");
 $stmt->execute();
 $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

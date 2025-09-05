@@ -1,11 +1,13 @@
 <?php
+include '../navbar.php'; 
+require_once '../controller/gestion_productos.php';
 // filepath: c:\xampp\htdocs\Plaza_Movil\view\gestion_productos.php
 session_start();
-require_once '../controller/gestion_productos.php';
+
 
 // Verificar si el usuario tiene el rol de administrador
-$role = $_SESSION['user_role'] ?? null;
-if ($role !== 'administrador') {
+$id_rol = $_SESSION['user_id_rol'] ?? null;
+if ($id_rol !== 1) {
     header("Location: ../index.php");
     exit;
 }
@@ -25,7 +27,7 @@ if ($role !== 'administrador') {
 
 <body>
     <!-- Navbar -->
-    <?php include '../navbar.php'; ?>
+    
 
     <!-- Espacio para que el contenido no quede oculto bajo la navbar fija -->
     <div style="height:70px"></div>

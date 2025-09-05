@@ -1,4 +1,4 @@
-<?php
+php
 require_once '../config/conexion.php';
 
 // Verificar si se recibieron los datos

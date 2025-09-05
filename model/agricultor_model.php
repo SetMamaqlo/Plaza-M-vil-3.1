@@ -12,7 +12,12 @@ class AgricultorModel {
             INSERT INTO agricultor (id_usuario, id_zona, certificaciones, fotos, metodo_entrega, metodos_de_pago) 
             VALUES (?, ?, ?, ?, ?, ?)
         ");
-        return $stmt->execute([$id_usuario, $id_zona, $certificaciones, $fotos, $metodo_entrega, $metodos_de_pago]);
+        if ($stmt->execute([$id_usuario, $id_zona, $certificaciones, $fotos, $metodo_entrega, $metodos_de_pago
+        ])) {
+            return $this -> pdo -> lastInsertId();
+        } else {
+            return false;
+        }
     }
 
     // Obtener agricultor con datos de usuario y zona

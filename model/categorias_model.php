@@ -22,6 +22,14 @@ class CategoriasModel
         );
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function listaCategorias(): array {
+        $stmt = $this->pdo->query(
+           "SELECT nombre
+           FROM categoria
+           ORDER BY nombre ASC"
+    );
+    return $stmt->fetchAll(PDO::FETCH_COLUMN); // Trae solo una columna en un array
+    }
 
     // Busca UNA por nombre y descripción (si la necesitas)
     public function buscarCategoria(string $nombre, string $descripcion): ?array {

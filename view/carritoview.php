@@ -3,7 +3,7 @@ session_start();
 
 require_once '../config/conexion.php';
 
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['user_id_usuario'])) {
     header("Location: login.php");
     exit;
 }

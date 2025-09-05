@@ -1,13 +1,13 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['user_id_usuario'])) {
     header('Location: login.php');
     exit();
 }
 require_once '../config/conexion.php';
-$user_id = $_SESSION['user_id'];
+$user_id_usuario = $_SESSION['user_id_usuario'];
 $stmt = $pdo->prepare('SELECT * FROM usuarios WHERE id_usuario = ?');
-$stmt->execute([$user_id]);
+$stmt->execute([$user_id_usuario]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$user) {
     echo '<div class="alert alert-danger">Usuario no encontrado.</div>';
