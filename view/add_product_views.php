@@ -1,10 +1,11 @@
 <?php
-include '../config/conexion.php';
 session_start();
 if (!isset($_SESSION['user_id_usuario']) || $_SESSION['user_id_rol'] !== 3) {
     header("Location: ../view/login.php");
     exit;
 }
+include '../config/conexion.php';
+include '../controller/medidas_controller.php'
 ?>
 
 <!DOCTYPE html>
@@ -43,13 +44,27 @@ if (!isset($_SESSION['user_id_usuario']) || $_SESSION['user_id_rol'] !== 3) {
                         <input type="number" class="form-control" id="precio" name="precio" required>
                     </div>
                      <div class="mb-3">
-                            <label for="id_unidad" class="form-label">Unidad de medida</label>
-                            <select class="form-control" id="id_rol" name="id_unidad" required>
-                                <option value="2">Comprador</option>
-                                <option value="3">Agricultor</option>
-                                <option value="1">Administrador</option>
-                            </select>
-                        </div>
+						<label for="id_unidad" class="form-label">Unidad de medida</label>
+						<select class="form-control" id="id_unidad" name="id_unidad" required>
+							<option value="">-- Selecciona una unidad --</option>
+							<?php var_dump($medidas); ?>
+							<?php foreach ($medidas as $medida): ?>
+								<option value="<?= $medida['id_unidad'] ?>"><?= htmlspecialchars($medida['nombre']) ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+					<div class="mb-3">
+						<label for="id_categoria" class="form-label">Categoría</label>
+						<select class="form-control" id="id_categoria" name="id_categoria" required>
+							<option value="">-- Selecciona una categoría --</option>
+							<?php var_dump($categorias); ?>
+							<?php foreach ($categorias as $cat): ?>
+								<option value="<?= htmlspecialchars($cat['id_categoria']) ?>">
+									<?= htmlspecialchars($cat['nombre']) ?>
+								</option>
+							<?php endforeach; ?>
+						</select>
+					</div>
                     <div class="mb-3">
                         <label for="imagen" class="form-label">Imagen del Producto</label>
                         <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*" required>

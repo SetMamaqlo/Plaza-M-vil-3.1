@@ -35,36 +35,93 @@ if ($id_rol !== 1) {
 
         <!-- Formulario para agregar una nueva categoría -->
         <div class="mb-4">
-            <form action="../controller/gestion_categorias.php" method="POST" class="d-flex">
+            <form action="../controller/gestion_categorias.php" method="POST" class="row g-2">
                 <input type="hidden" name="accion" value="agregar">
-                <input type="text" name="nueva_categoria" class="form-control me-2" placeholder="Nueva Categoría" required>
-                <button type="submit" class="btn btn-primary">Agregar</button>
+                <div class="col-md-4">
+                    <input type="text" name="nombre" class="form-control" placeholder="Nombre de la categoría" required>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" name="descripcion" class="form-control" placeholder="Descripción" required>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-plus-circle"></i> Agregar
+                    </button>
+                </div>
             </form>
         </div>
 
         <!-- Tabla de categorías -->
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-hover align-middle">
             <thead class="table-success">
                 <tr>
-                    <th>Categoría</th>
-                    <th>Acciones</th>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th class="text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($categorias as $categoria): ?>
                 <tr>
-                    <td><?php echo htmlspecialchars($categoria); ?></td>
-                    <td>
-                        <!-- Formulario para eliminar una categoría -->
+                    <td><?= htmlspecialchars($categoria['id_categoria']); ?></td>
+                    <td><?= htmlspecialchars($categoria['nombre']); ?></td>
+                    <td><?= htmlspecialchars($categoria['descripcion']); ?></td>
+                    <td class="text-center">
+                        <!-- Botón editar (abre modal) -->
+                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#editarModal<?= $categoria['id_categoria']; ?>">
+                            <i class="bi bi-pencil"></i> Editar
+                        </button>
+
+                        <!-- Formulario eliminar -->
                         <form action="../controller/gestion_categorias.php" method="POST" class="d-inline">
                             <input type="hidden" name="accion" value="eliminar">
-                            <input type="hidden" name="categoria" value="<?php echo htmlspecialchars($categoria); ?>">
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar esta categoría?');">
+                            <input type="hidden" name="id_categoria" value="<?= $categoria['id_categoria']; ?>">
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                onclick="return confirm('¿Seguro que deseas eliminar esta categoría?');">
                                 <i class="bi bi-trash"></i> Eliminar
                             </button>
                         </form>
                     </td>
                 </tr>
+
+                <!-- Modal editar -->
+                <div class="modal fade" id="editarModal<?= $categoria['id_categoria']; ?>" tabindex="-1"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form action="../controller/gestion_categorias.php" method="POST">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Editar Categoría</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Cerrar"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" name="accion" value="editar">
+                                    <input type="hidden" name="id_categoria"
+                                        value="<?= $categoria['id_categoria']; ?>">
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Nombre</label>
+                                        <input type="text" name="nombre" class="form-control"
+                                            value="<?= htmlspecialchars($categoria['nombre']); ?>" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Descripción</label>
+                                        <input type="text" name="descripcion" class="form-control"
+                                            value="<?= htmlspecialchars($categoria['descripcion']); ?>" required>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-success">Guardar cambios</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 <?php endforeach; ?>
             </tbody>
         </table>

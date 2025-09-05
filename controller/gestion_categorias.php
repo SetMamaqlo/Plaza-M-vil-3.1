@@ -14,6 +14,10 @@ class CategoriaController {
         return $this->model->obtenerCategorias();
     }
 
+    public function listaCategorias(): array {
+        return $this->model->listaCategorias();
+    }
+
     public function agregarCategoria($nombre, $descripcion): void {
         $this->model->agregarCategoria($nombre, $descripcion);
     }
@@ -21,31 +25,47 @@ class CategoriaController {
     public function eliminarCategoria($id_categoria): void {
         $this->model->eliminarCategoria($id_categoria);
     }
+
+    public function actualizarCategoria($id_categoria, $nombre, $descripcion): void {
+        $this->model->actualizarCategoria($id_categoria, $nombre, $descripcion);
+    }
 }
 
 // Crear instancia del controlador
 $controller = new CategoriaController($pdo);
 
-// Manejar solicitudes POST
+// Manejo de solicitudes POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['accion'])) {
-        if ($_POST['accion'] === 'agregar') {
-            $nombre = $_POST['nombre'] ?? '';
-            $descripcion = $_POST['descripcion'] ?? '';
-            $controller->agregarCategoria($nombre, $descripcion);
+        switch ($_POST['accion']) {
+            case 'agregar':
+                $nombre = $_POST['nombre'] ?? '';
+                $descripcion = $_POST['descripcion'] ?? '';
+                $controller->agregarCategoria($nombre, $descripcion);
+                break;
 
-        } elseif ($_POST['accion'] === 'eliminar') {
-            $id_categoria = $_POST['id_categoria'] ?? null;
-            if ($id_categoria) {
-                $controller->eliminarCategoria($id_categoria);
-            }
+            case 'eliminar':
+                $id_categoria = $_POST['id_categoria'] ?? null;
+                if ($id_categoria) {
+                    $controller->eliminarCategoria($id_categoria);
+                }
+                break;
+
+            case 'actualizar':
+                $id_categoria = $_POST['id_categoria'] ?? null;
+                $nombre = $_POST['nombre'] ?? '';
+                $descripcion = $_POST['descripcion'] ?? '';
+                if ($id_categoria) {
+                    $controller->actualizarCategoria($id_categoria, $nombre, $descripcion);
+                }
+                break;
         }
     }
 
+    // Redirigir tras la acción
     header("Location: ../view/gestion_categorias.php");
     exit;
 }
 
-// Obtener todas las categorías (para la vista)
+// Si es GET → obtener listado de categorías
 $categorias = $controller->obtenerCategorias();
-

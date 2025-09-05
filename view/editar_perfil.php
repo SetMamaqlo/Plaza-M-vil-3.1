@@ -2,7 +2,7 @@
 require_once '../config/conexion.php';
 session_start();
 if (!isset($_SESSION['user_id_usuario'])) {
-    echo "contenido de la variabel". $_SESSION['user_id_usuario'] ."tipo de dato". gettype($_SESSION['user_id_usuario']); 
+    
     //header('Location: login.php');
    // exit();
 }

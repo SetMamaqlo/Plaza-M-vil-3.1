@@ -7,9 +7,9 @@ class Medidas_model {
     }
 
     // Obtener todas los Zonas
-    public function Consultarmedidas() {
-        $stmt = $this->pdo->query("SELECT * FROM unidades_de_medida");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    public function Consultarmedidas(): array {
+    $stmt = $this->pdo->query("SELECT id_unidad, nombre FROM unidades_de_medida ORDER BY nombre ASC");
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // Obtener una medida por ID
@@ -28,7 +28,7 @@ class Medidas_model {
     // Actualizar una medida
     public function Editarmedida($id_unidad, $nombre) {
         $stmt = $this->pdo->prepare("UPDATE unidades_de_medida SET nombre = ? WHERE id_unidad = ?");
-        return $stmt->execute([$id_unidad, $nombre]);
+        return $stmt->execute([ $nombre, $id_unidad]);
     }
 
     // Eliminar una medida
