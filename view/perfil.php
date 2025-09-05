@@ -39,7 +39,7 @@ if (!$user) {
             <?php endif; ?>
         </div>
         <table class="table table-bordered perfil-tabla">
-            <tr><th>ID</th><td><?php echo htmlspecialchars($user['id_usuarrio']); ?></td></tr>
+            <tr><th>ID</th><td><?php echo htmlspecialchars($user['id_usuario']); ?></td></tr>
             <tr><th>Nombre</th><td><?php echo htmlspecialchars($user['nombre_completo']); ?></td></tr>
             <tr><th>Correo</th><td><?php echo htmlspecialchars($user['email']); ?></td></tr>
             <tr><th>Usuario</th><td><?php echo htmlspecialchars($user['username']); ?></td></tr>
