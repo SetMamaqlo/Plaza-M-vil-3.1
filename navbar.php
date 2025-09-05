@@ -1,5 +1,5 @@
 <?php
-$role = $_SESSION['user_role'] ?? null;
+$role = $_SESSION['user_id_role'] ?? null;
 //require_once __DIR__ . '/controller/notificaciones_controller.php';
 ?>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -58,7 +58,7 @@ $role = $_SESSION['user_role'] ?? null;
                 </li>
 
                 <!-- Opciones según el rol -->
-                <?php if ($role === 'administrador'): ?>
+                <?php if ($role === '2'): ?>
                     <li class="nav-item">
                         <a class="nav-link" href="/Plaza-M-vil-3.1/view/dashboard.php">Dashboard</a>
                     </li>
@@ -104,7 +104,7 @@ $role = $_SESSION['user_role'] ?? null;
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end"> <!-- Alinea el menú hacia la derecha -->
                         <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/perfil.php">Mi Perfil</a></li>
-                        <?php if ($role === 'vendedor'): ?>
+                        <?php if ($role === '3'): ?>
                             <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/mis_productos.php">Mis Productos</a></li>
                         <?php endif; ?>
                         <li>
