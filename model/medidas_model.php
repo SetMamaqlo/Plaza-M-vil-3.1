@@ -6,7 +6,7 @@ class Medidas_model {
         $this->pdo = $pdo;
     }
 
-    // Obtener todas los Zonas
+    // Obtener todas los medidas
     public function Consultarmedidas(): array {
     $stmt = $this->pdo->query("SELECT id_unidad, nombre FROM unidades_de_medida ORDER BY nombre ASC");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);

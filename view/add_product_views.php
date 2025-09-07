@@ -5,7 +5,10 @@ if (!isset($_SESSION['user_id_usuario']) || $_SESSION['user_id_rol'] !== 3) {
     exit;
 }
 include '../config/conexion.php';
-include '../controller/medidas_controller.php'
+include '../controller/medidas_controller.php';
+include '../controller/gestion_categorias.php';
+include '../controller/productcontroller.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -65,6 +68,10 @@ include '../controller/medidas_controller.php'
 							<?php endforeach; ?>
 						</select>
 					</div>
+					<div class="mb-3">
+                            <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
+                            <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" required>
+                        </div>
                     <div class="mb-3">
                         <label for="imagen" class="form-label">Imagen del Producto</label>
                         <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*" required>

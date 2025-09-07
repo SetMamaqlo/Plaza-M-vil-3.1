@@ -3,9 +3,6 @@
 require_once '../config/conexion.php';
 require_once '../model/medidas_model.php';
 
-$model = new Medidas_model($pdo);
-$medidas = $model->Consultarmedidas();
-
 class MedidasController {
     private $model;
 

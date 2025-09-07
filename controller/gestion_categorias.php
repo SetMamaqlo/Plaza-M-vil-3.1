@@ -3,14 +3,14 @@
 require_once '../model/categorias_model.php';
 require_once '../config/conexion.php';
 
-class CategoriaController {
+class CategoriasController {
     private $model;
 
     public function __construct($pdo) {
         $this->model = new CategoriasModel($pdo);
     }
 
-    public function obtenerCategorias(): array {
+    public function index(): array {
         return $this->model->obtenerCategorias();
     }
 
@@ -32,7 +32,7 @@ class CategoriaController {
 }
 
 // Crear instancia del controlador
-$controller = new CategoriaController($pdo);
+$controller = new CategoriasController($pdo);
 
 // Manejo de solicitudes POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -68,4 +68,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Si es GET → obtener listado de categorías
-$categorias = $controller->obtenerCategorias();
+$categorias = $controller->index();
