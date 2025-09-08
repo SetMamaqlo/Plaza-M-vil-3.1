@@ -2,8 +2,10 @@
 session_start();
 require_once '../config/conexion.php';
 
+// Asegurarse de que $id_rol sea un entero para evitar problemas de comparación estricta
+$id_rol = isset($_SESSION['user_id_rol']) ? (int) $_SESSION['user_id_rol'] : null;
+
 // Verificar si el usuario tiene el rol de administrador
-$id_rol = $_SESSION['user_id_rol'] ?? null;
 if ($id_rol !== 1) {
     header("Location: ../index.php");
     exit;
@@ -140,6 +142,13 @@ $deleted = isset($_GET['deleted']) && $_GET['deleted'] == 1;
             <tbody>
                 <?php foreach ($usuarios as $usuario): ?>
                     <tr>
+                        <?php
+                        // Verificar si la clave 'id' existe antes de acceder a ella
+                        if (!isset($usuario['id'])) {
+                            error_log("La clave 'id' no está definida en el array de usuario.");
+                            $usuario['id'] = null; // Asignar un valor predeterminado si es necesario
+                        }
+                        ?>
                         <td><?php echo htmlspecialchars($usuario['id']); ?></td>
                         <td><?php echo htmlspecialchars($usuario['nombre_completo']); ?></td>
                         <td><?php echo htmlspecialchars($usuario['email']); ?></td>
@@ -147,10 +156,9 @@ $deleted = isset($_GET['deleted']) && $_GET['deleted'] == 1;
                             <form action="../controller/editar_usuario.php" method="POST" class="d-inline">
                                 <input type="hidden" name="id_usuario" value="<?php echo $usuario['id']; ?>">
                                 <select name="role" class="form-select form-select-sm" onchange="this.form.submit()">
-                                    <option value="comprador" <?php echo $usuario['role'] === 'comprador' ? 'selected' : ''; ?>>Comprador</option>
-                                    <option value="vendedor" <?php echo $usuario['role'] === 'vendedor' ? 'selected' : ''; ?>>
-                                        Vendedor</option>
-                                    <option value="administrador" <?php echo $usuario['role'] === 'administrador' ? 'selected' : ''; ?>>Administrador</option>
+                                    <option value="comprador" <?php echo isset($usuario['role']) && $usuario['role'] === 'comprador' ? 'selected' : ''; ?>>Comprador</option>
+                                    <option value="vendedor" <?php echo isset($usuario['role']) && $usuario['role'] === 'vendedor' ? 'selected' : ''; ?>>Vendedor</option>
+                                    <option value="administrador" <?php echo isset($usuario['role']) && $usuario['role'] === 'administrador' ? 'selected' : ''; ?>>Administrador</option>
                                 </select>
                             </form>
                         </td>

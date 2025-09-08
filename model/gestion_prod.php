@@ -14,20 +14,16 @@ class ProductosModel
     public function obtenerProductos()
     {
         $stmt = $this->pdo->prepare("
-                SELECT 
-                p.id_producto, 
-                p.nombre, 
-                p.descripcion, 
-                p.precio_unitario, 
-                p.stock, 
-                p.foto, 
-                p.fecha_publicacion, 
-                c.nombre AS categoria, 
-                u.nombre_completo AS agricultor
-            FROM productos p
-            LEFT JOIN categoria c ON p.id_categoria = c.id_categoria
-            LEFT JOIN usuarios u ON p.id_agricultor = u.id_usuario;
-            ");
+        SELECT 
+            p.id, 
+            p.nombre, 
+            p.descripcion, 
+            p.precio, 
+            p.categoria, 
+            u.nombre_completo AS vendedor
+        FROM productos p
+        LEFT JOIN usuarios u ON p.id_usuario = u.id
+    ");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -81,6 +77,14 @@ class ProductosModel
 
         // Extraer los valores del ENUM
         preg_match("/^enum\((.*)\)$/", $row['Type'], $matches);
+        
+        // Verificar si la clave del array existe antes de acceder a ella
+        if (!isset($matches[1])) {
+            error_log("La clave '1' no está definida en el array.");
+            // Manejo de error o valor predeterminado
+            $matches[1] = null;
+        }
+
         $enumValues = array_map(function ($value) {
             return trim($value, "'");
         }, explode(',', $matches[1]));
