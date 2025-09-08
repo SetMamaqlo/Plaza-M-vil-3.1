@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 04-09-2025 a las 01:39:48
+-- Tiempo de generación: 08-09-2025 a las 05:36:20
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -28,15 +28,22 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `agricultor` (
-  `id_agricultor` int(10) NOT NULL,
+  `id_agricultor` int(11) NOT NULL,
   `id_usuario` int(10) DEFAULT NULL,
   `id_zona` int(10) DEFAULT NULL,
   `certificaciones` varchar(150) DEFAULT NULL,
   `fotos` int(10) DEFAULT NULL,
   `metodo_entrega` varchar(20) DEFAULT NULL,
-  `metodos_de_pago` varchar(20) DEFAULT NULL,
-  `id_calificacion` int(2) DEFAULT NULL
+  `metodos_de_pago` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `agricultor`
+--
+
+INSERT INTO `agricultor` (`id_agricultor`, `id_usuario`, `id_zona`, `certificaciones`, `fotos`, `metodo_entrega`, `metodos_de_pago`) VALUES
+(4, 15, 1, NULL, NULL, NULL, NULL),
+(5, 16, 1, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -85,10 +92,18 @@ CREATE TABLE `carrito_detalle` (
 --
 
 CREATE TABLE `categoria` (
-  `id_categoria` int(10) NOT NULL,
+  `id_categoria` int(11) NOT NULL,
   `nombre` varchar(20) DEFAULT NULL,
   `descripcion` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `categoria`
+--
+
+INSERT INTO `categoria` (`id_categoria`, `nombre`, `descripcion`) VALUES
+(1, 'Mango tomi', 'Variedad de mango pequeño y dulce'),
+(2, 'papa de año', 'Variedad de papa gruesa ');
 
 -- --------------------------------------------------------
 
@@ -204,7 +219,7 @@ CREATE TABLE `pqrs` (
 --
 
 CREATE TABLE `productos` (
-  `id_producto` int(10) NOT NULL,
+  `id_producto` int(11) NOT NULL,
   `id_agricultor` int(10) DEFAULT NULL,
   `id_categoria` int(10) DEFAULT NULL,
   `descripcion` varchar(250) DEFAULT NULL,
@@ -215,6 +230,16 @@ CREATE TABLE `productos` (
   `foto` varchar(100) DEFAULT NULL,
   `fecha_publicacion` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `productos`
+--
+
+INSERT INTO `productos` (`id_producto`, `id_agricultor`, `id_categoria`, `descripcion`, `nombre`, `stock`, `precio_unitario`, `id_unidad`, `foto`, `fecha_publicacion`) VALUES
+(13, 4, 1, 'sadasdasdasd', 'Mango  ', 500, 17000, 4, '68be360ba62ad_mango tomi.webp', '2025-09-08'),
+(14, NULL, 1, 'Mucha papa ', 'papa', 1000, 65000, 4, '68be389968c06_mango tomi.webp', '2025-09-08'),
+(15, NULL, 2, 'mucha mucha papa so ', 'papa', 1000, 65000, 4, '68be3f93b8e10_mucha papa.jpg', '2025-09-08'),
+(16, NULL, 2, 'Juan pablo segundo', 'papa', 1, 10000, 2, '68be4d3bbb85e_papa.jpg', '2025-09-08');
 
 -- --------------------------------------------------------
 
@@ -257,9 +282,18 @@ INSERT INTO `rol` (`id_rol`, `nombre`) VALUES
 --
 
 CREATE TABLE `unidades_de_medida` (
-  `id_unidad` int(10) NOT NULL,
+  `id_unidad` int(11) NOT NULL,
   `nombre` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `unidades_de_medida`
+--
+
+INSERT INTO `unidades_de_medida` (`id_unidad`, `nombre`) VALUES
+(2, 'kilogramos'),
+(3, 'libra'),
+(4, 'bultos');
 
 -- --------------------------------------------------------
 
@@ -286,8 +320,9 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `nombre_completo`, `email`, `telefono`, `id_rol`, `numero_documento`, `username`, `password`, `tipo_documento`, `fecha_nacimiento`, `Foto`) VALUES
-(1, 'juan1', 'admin@gmil.com', 2147483647, 2, '80821459', 'juan1', '$2y$10$5kWLIyRFZOIW4BXydS6LoOS6Bw.oxfEK7RqbJ.Z5Z8tYZgjKJhkgS', 'Cédula de Ciudadanía', '2025-09-16', NULL),
-(2, 'juanadmin', 'ujiht3d5@gmil.com', 2147483647, 2, '1233913179', 'juanadmin', '$2y$10$s3xFFiw53zH0yZXN4nPhMuZzYKmAzGOe9mqWAa6qY/SLc/EhODDeu', 'Cédula de Ciudadanía', '2025-09-16', NULL);
+(12, 'admin', 'ujiht3d5@gmil.com', 35345345, 1, '1209930219', 'admin ', '$2y$10$esrEadfU98MFN5aL7DK7JutaraCsgmEXGVxAkItGUZfckGoSBrIve', 'Cédula de Ciudadanía', '2025-09-23', NULL),
+(15, 'juan2', 'admin@gmil.com', 2147483647, 3, '80821459', 'juanadmin1', '$2y$10$62LFc9It39LEQDsF3l8blelHDyWW7PzyXNa1y/K5wHAGbQyqidVrW', 'Cédula de Ciudadanía', '2025-09-15', NULL),
+(16, 'juan', 'dslajdla@gmail.com', 312321433, 3, '1212343214', 'Juanagro', '$2y$10$k37KuW.hQKb5clt4FoZzAOpoV08BjCDJpuiO2HKoLZw3JiW5UTF3W', 'Cédula de Ciudadanía', '2025-09-25', NULL);
 
 -- --------------------------------------------------------
 
@@ -318,6 +353,13 @@ CREATE TABLE `zona` (
   `id_zona` int(10) NOT NULL,
   `zona` varchar(150) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `zona`
+--
+
+INSERT INTO `zona` (`id_zona`, `zona`) VALUES
+(1, 'Zona por defecto');
 
 --
 -- Índices para tablas volcadas
@@ -466,10 +508,34 @@ ALTER TABLE `zona`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `agricultor`
+--
+ALTER TABLE `agricultor`
+  MODIFY `id_agricultor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `categoria`
+--
+ALTER TABLE `categoria`
+  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `productos`
+--
+ALTER TABLE `productos`
+  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT de la tabla `unidades_de_medida`
+--
+ALTER TABLE `unidades_de_medida`
+  MODIFY `id_unidad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Restricciones para tablas volcadas
