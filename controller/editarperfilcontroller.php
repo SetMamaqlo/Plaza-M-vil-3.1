@@ -20,6 +20,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Manejo de la foto de perfil
     $foto_nombre = null;
+    $foto_anterior = null;
+    // Obtener la foto anterior del usuario
+    $stmt_foto = $pdo->prepare('SELECT foto FROM usuarios WHERE id_usuario = ?');
+    $stmt_foto->execute([$id_usuario]);
+    $foto_anterior = $stmt_foto->fetchColumn();
+
     if (!empty($foto_perfil['name'])) {
         $foto_nombre = uniqid() . '_' . basename($foto_perfil['name']);
         $foto_ruta = '../img/' . $foto_nombre;
@@ -31,11 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
 
-        // Verificar si la imagen subida existe y es accesible
-        if (!empty($foto_nombre) && !file_exists($foto_ruta)) {
-            $_SESSION['error'] = 'La imagen no se guardó correctamente. Por favor, inténtalo de nuevo.';
-            header('Location: ../view/perfil.php');
-            exit();
+        // Eliminar la foto anterior si existe y no es la predeterminada
+        if (!empty($foto_anterior) && $foto_anterior !== 'default_profile.png') {
+            $ruta_anterior = '../img/' . $foto_anterior;
+            if (file_exists($ruta_anterior)) {
+                @unlink($ruta_anterior);
+            }
         }
     }
 

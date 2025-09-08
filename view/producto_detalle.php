@@ -21,10 +21,10 @@ if (!isset($_GET['id'])) {
 $id_producto = $_GET['id'];
 
 // Consultar los detalles del producto y del vendedor
-$stmt = $pdo->prepare("SELECT p.*, u.nombre_completo AS vendedor, u.telefono, u.foto_perfil 
+$stmt = $pdo->prepare("SELECT p.*, u.nombre_completo AS vendedor, u.telefono, u.foto 
                        FROM productos p 
-                       JOIN usuarios u ON p.id_usuario = u.id 
-                       WHERE p.id = ?");
+                       JOIN usuarios u ON p.id_agricultor = u.id_usuario 
+                       WHERE p.id_producto = ?");
 $stmt->execute([$id_producto]);
 $producto = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -80,8 +80,8 @@ $role = $_SESSION['user_role'] ?? null;
                                     <?php echo htmlspecialchars($producto['fecha_publicacion']); ?></p>
                                 <hr>
                                 <div class="d-flex align-items-center mb-3">
-                                    <?php if (!empty($producto['foto_perfil'])): ?>
-                                        <img src="../img/<?php echo htmlspecialchars($producto['foto_perfil']); ?>"
+                                    <?php if (!empty($producto['foto'])): ?>
+                                        <img src="../img/<?php echo htmlspecialchars($producto['foto']); ?>"
                                             alt="Foto de perfil"
                                             style="width:50px; height:50px; object-fit:cover; border-radius:50%; margin-right:15px;">
                                     <?php else: ?>
@@ -98,11 +98,11 @@ $role = $_SESSION['user_role'] ?? null;
 
                                 <!-- Botones de acción -->
                                 <form action="../controller/procesar_compra.php" method="POST" class="mt-3">
-                                <input type="hidden" name="id_producto" value="<?php echo $producto['id']; ?>">
+                                <input type="hidden" name="id_producto" value="<?php echo $producto['id_producto']; ?>">
                                 <button type="submit" class="btn btn-outline-success w-100 mb-3">Comprar Ahora</button>
                                 </form>
                                 <form action="../controller/carritocontroller.php" method="POST">
-                                    <input type="hidden" name="id_producto" value="<?php echo $producto['id']; ?>">
+                                    <input type="hidden" name="id_producto" value="<?php echo $producto['id_producto']; ?>">
                                     <button type="submit" class="btn btn-success w-100">Añadir al Carrito</button>
                                 </form>
                             </div>
@@ -116,13 +116,13 @@ $role = $_SESSION['user_role'] ?? null;
                     <div class="row">
                         <?php
                         // Consulta para obtener 3 productos aleatorios, excluyendo el actual
-                        $stmtRecomendados = $pdo->prepare("SELECT id, nombre, imagen, precio FROM productos WHERE id != ? ORDER BY RAND() LIMIT 3");
-                        $stmtRecomendados->execute([$producto['id']]);
+                        $stmtRecomendados = $pdo->prepare("SELECT id_producto, nombre, imagen, precio FROM productos WHERE id_producto != ? ORDER BY RAND() LIMIT 3");
+                        $stmtRecomendados->execute([$producto['id_producto']]);
                         $recomendados = $stmtRecomendados->fetchAll(PDO::FETCH_ASSOC);
 
                         foreach ($recomendados as $reco): ?>
                             <div class="col-md-4 mb-4">
-                                <a href="producto_detalle.php?id=<?php echo $reco['id']; ?>"
+                                <a href="producto_detalle.php?id=<?php echo $reco['id_producto']; ?>"
                                     style="text-decoration:none; color:inherit;">
                                     <div class="card h-100 shadow-sm">
                                         <img src="../img/<?php echo htmlspecialchars($reco['imagen']); ?>"
@@ -132,7 +132,7 @@ $role = $_SESSION['user_role'] ?? null;
                                             <h5 class="card-title"><?php echo htmlspecialchars($reco['nombre']); ?></h5>
                                             <p class="card-text text-success fw-bold">
                                                 $<?php echo number_format($reco['precio']); ?></p>
-                                            <a href="producto_detalle.php?id=<?php echo $reco['id']; ?>"
+                                            <a href="producto_detalle.php?id=<?php echo $reco['id_producto']; ?>"
                                                 class="btn btn-outline-primary btn-sm">Ver Detalles</a>
                                         </div>
                                     </div>

@@ -48,13 +48,10 @@ if (!$user) {
     <div class="container perfil-container">
         <h2 class="mb-4 text-center">Mi Perfil</h2>
         <div class="text-center mb-4">
-            <?php if (!empty($user['foto'])): ?>
-                <?php
-                // Ruta de la imagen generada para depuración
-                $foto_url = "../img/" . htmlspecialchars($user['foto']);
-                echo "<p>Ruta de la imagen: $foto_url</p>";
-                ?>
-                <img src="<?php echo $foto_url; ?>" alt="Foto de perfil" class="rounded-circle shadow perfil-foto">
+            <?php 
+            $foto = isset($user['foto']) ? $user['foto'] : '';
+            if (!empty($foto) && file_exists("../img/" . $foto)) : ?>
+                <img src="<?php echo "../img/" . htmlspecialchars($foto); ?>" alt="Foto de perfil" class="rounded-circle shadow perfil-foto">
             <?php else: ?>
                 <img src="../img/default_profile.png" alt="Foto de perfil" class="rounded-circle shadow perfil-foto">
             <?php endif; ?>
