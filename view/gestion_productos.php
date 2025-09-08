@@ -2,15 +2,23 @@
 include '../navbar.php'; 
 require_once '../controller/gestion_productos.php';
 // filepath: c:\xampp\htdocs\Plaza_Movil\view\gestion_productos.php
-session_start();
 
+// Verificar si la sesión ya está activa antes de llamar a session_start()
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Asegurarse de que $id_rol sea un entero para evitar problemas de comparación estricta
+$id_rol = isset($_SESSION['user_id_rol']) ? (int) $_SESSION['user_id_rol'] : null;
 
 // Verificar si el usuario tiene el rol de administrador
-$id_rol = $_SESSION['user_id_rol'] ?? null;
 if ($id_rol !== 1) {
     header("Location: ../index.php");
     exit;
 }
+
+// Mover ob_start() al inicio del archivo para evitar errores de encabezados ya enviados
+ob_start();
 ?>
 
 <!DOCTYPE html>

@@ -1,45 +1,71 @@
 <?php
+// filepath: c:\xampp\htdocs\Plaza-M-vil-3.1\controller\editarperfilcontroller.php
 session_start();
-
-// Si el usuario no ha iniciado sesión, redirige al login
-//if (!isset($_SESSION['user_id'])) {
-    //header('Location: ../view/login.php');
-    //exit();
-//}
 require_once '../config/conexion.php';
 
-// Obtiene los datos enviados por el formulario, o valores vacíos si no existen
-$user_id = $_SESSION['user_id'];
-$nombre = $_POST['nombre'] ?? '';
-$correo = $_POST['correo'] ?? '';
-$usuario = $_POST['usuario'] ?? '';
-$telefono = $_POST['telefono'] ?? '';
-$foto_perfil = null;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id_usuario = $_POST['id_usuario'];
+    $nombre = $_POST['nombre'];
+    $correo = $_POST['correo'];
+    $usuario = $_POST['usuario'];
+    $telefono = $_POST['telefono'];
+    $foto_perfil = $_FILES['foto_perfil'];
 
-// Si se subió una nueva foto de perfil y no hubo error
-if (isset($_FILES['foto_perfil']) && $_FILES['foto_perfil']['error'] === UPLOAD_ERR_OK) {
-    $tmp_name = $_FILES['foto_perfil']['tmp_name'];// Ruta temporal del archivo subido
-    $ext = pathinfo($_FILES['foto_perfil']['name'], PATHINFO_EXTENSION); // Obtiene la extensión del archivo
-    $foto_perfil = 'perfil_' . $user_id . '_' . time() . '.' . $ext; // Genera un nombre único para la foto de perfil
-    move_uploaded_file($tmp_name, __DIR__ . '/../img/' . $foto_perfil); // Mueve la foto a la carpeta img
-}
-// Si los campos obligatorios están completos
-if ($nombre && $correo && $usuario) {
-    // Si hay nueva foto, actualiza todos los campos incluyendo la foto
-    if ($foto_perfil) {
-        $stmt = $pdo->prepare('UPDATE usuarios SET nombre_completo = ?, email = ?, username = ?, telefono = ?, foto = ? WHERE id_usuario = ?');
-        $stmt->execute([$nombre, $correo, $usuario, $telefono, $foto_perfil, $user_id]);
-    } // Si no hay nueva foto, actualiza los demás campos}
-    else {
-        $stmt = $pdo->prepare('UPDATE usuarios SET nombre_completo = ?, email = ?, username = ?, telefono = ? WHERE id_usuario = ?');
-        $stmt->execute([$nombre, $correo, $usuario, $telefono, $user_id]);
+    // Validación básica
+    if (empty($id_usuario) || empty($nombre) || empty($correo) || empty($usuario)) {
+        $_SESSION['error'] = 'Todos los campos obligatorios deben ser completados.';
+        header('Location: ../view/perfil.php');
+        exit();
     }
-    $_SESSION['user_name'] = $nombre; // Actualiza el nombre en la sesión
-    header('Location: ../view/perfil.php?success=1'); // Redirige al perfil con mensaje de éxito
-    exit();
-} 
-// Si faltan campos, redirige con error
-else {
-    header('Location: ../view/editar_perfil.php?error=1');
+
+    // Manejo de la foto de perfil
+    $foto_nombre = null;
+    if (!empty($foto_perfil['name'])) {
+        $foto_nombre = uniqid() . '_' . basename($foto_perfil['name']);
+        $foto_ruta = '../img/' . $foto_nombre;
+
+        // Mover el archivo subido
+        if (!move_uploaded_file($foto_perfil['tmp_name'], $foto_ruta)) {
+            $_SESSION['error'] = 'Error al subir la foto de perfil.';
+            header('Location: ../view/perfil.php');
+            exit();
+        }
+
+        // Verificar si la imagen subida existe y es accesible
+        if (!empty($foto_nombre) && !file_exists($foto_ruta)) {
+            $_SESSION['error'] = 'La imagen no se guardó correctamente. Por favor, inténtalo de nuevo.';
+            header('Location: ../view/perfil.php');
+            exit();
+        }
+    }
+
+    // Actualizar los datos en la base de datos
+    try {
+        $sql = "UPDATE usuarios SET nombre_completo = ?, email = ?, username = ?, telefono = ?";
+        $params = [$nombre, $correo, $usuario, $telefono];
+
+        // Si se subió una nueva foto, incluirla en la consulta
+        if ($foto_nombre) {
+            $sql .= ", foto = ?";
+            $params[] = $foto_nombre;
+        }
+
+        $sql .= " WHERE id_usuario = ?";
+        $params[] = $id_usuario;
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+
+        $_SESSION['success'] = 'Perfil actualizado correctamente.';
+        header('Location: ../view/perfil.php');
+        exit();
+    } catch (PDOException $e) {
+        $_SESSION['error'] = 'Error al actualizar el perfil: ' . $e->getMessage();
+        header('Location: ../view/perfil.php');
+        exit();
+    }
+} else {
+    header('Location: ../view/perfil.php');
     exit();
 }
+?>

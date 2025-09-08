@@ -2,8 +2,10 @@
 session_start();
 require_once '../config/conexion.php';
 
+// Asegurarse de que $id_rol sea un entero para evitar problemas de comparación estricta
+$id_rol = isset($_SESSION['user_id_rol']) ? (int) $_SESSION['user_id_rol'] : null;
+
 // Verificar si el usuario tiene el rol de administrador
-$id_rol = $_SESSION['user_id_rol'] ?? null;
 if ($id_rol !== 1) {
     header("Location: ../index.php");
     exit;

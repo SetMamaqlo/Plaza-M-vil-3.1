@@ -1,5 +1,8 @@
 php
-require_once '../config/conexion.php';
+// Verificar si la conexión a la base de datos ($pdo) está definida
+if (!isset($pdo)) {
+    require_once '../config/conexion.php';
+}
 
 // Verificar si se recibieron los datos
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -8,10 +11,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     $rol = $_POST['rol'] ?? '';
 
-    if (!empty($nombre_completo) && !empty($email) && !empty($password) && !empty($role)) {
+    // Cambiar 'role' por 'rol' para que coincida con el nombre de la variable
+    if (!empty($nombre_completo) && !empty($email) && !empty($password) && !empty($rol)) {
         try {
-            $stmt = $pdo->prepare("INSERT INTO usuarios (nombre_completo, email, password, role) VALUES (?, ?, ?, ?)");
-            $stmt->execute([$nombre_completo, $email, password_hash($password, PASSWORD_DEFAULT), $role]);
+            $stmt = $pdo->prepare("INSERT INTO usuarios (nombre_completo, email, password, id_rol) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$nombre_completo, $email, password_hash($password, PASSWORD_DEFAULT), $rol]);
 
             // Redirigir de vuelta a la página de gestión de usuarios
             header("Location: ../view/gestion_usuarios.php");

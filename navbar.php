@@ -1,8 +1,28 @@
 <?php
-session_start();
-$id_rol = $_SESSION['user_id_rol'] ?? null;
+// Asegurarse de que no haya salidas antes de modificar encabezados
+ob_start();
+
+// Verificar si la sesión está iniciada correctamente
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Asegurarse de que la clave 'user_id_rol' exista en la sesión
+if (!isset($_SESSION['user_id_rol'])) {
+    error_log("La clave 'user_id_rol' no está definida en la sesión.");
+    $id_rol = null;
+} else {
+    // Asegurarse de que $id_rol sea un entero para evitar problemas de comparación
+    $id_rol = (int) $_SESSION['user_id_rol'];
+}
 
 //require_once __DIR__ . '/controller/notificaciones_controller.php';
+
+// Verificar si el usuario tiene el rol correcto antes de redirigir
+if ($id_rol !== 1) {
+    header('Location: /Plaza-M-vil-3.1/index.php');
+    exit();
+}
 ?>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+3i9zYkGm60D9e5e5e5e5e5e5e5e5" crossorigin="anonymous"></script>
