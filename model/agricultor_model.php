@@ -23,7 +23,7 @@ class AgricultorModel {
     // Obtener agricultor con datos de usuario y zona
     public function getAgricultorById($id_agricultor) {
         $stmt = $this->pdo->prepare("
-            SELECT a.*, u.nombre_completo, u.email, z.nombre_zona
+            SELECT a.*, u.nombre_completo, u.email, z.zona
             FROM agricultor a
             INNER JOIN usuarios u ON a.id_usuario = u.id_usuario
             INNER JOIN zona z ON a.id_zona = z.id_zona

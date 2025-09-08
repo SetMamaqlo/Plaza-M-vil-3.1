@@ -9,7 +9,11 @@ class UserModel extends Rol_Model
 
     // Buscar usuario por username o email
     public function getUserByUsernameOrEmail($usernameOrEmail) {
-        $stmt = $this->pdo->prepare("SELECT * FROM usuarios WHERE username = ? OR email = ?");
+        $stmt = $this->pdo->prepare("
+        SELECT u.*, a.id_agricultor
+        FROM usuarios u
+        LEFT JOIN agricultor a ON u.id_usuario = a.id_usuario
+        WHERE u.username = ? OR u.email = ?");
         $stmt->execute([$usernameOrEmail, $usernameOrEmail]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }

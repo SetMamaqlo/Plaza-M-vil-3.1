@@ -23,7 +23,7 @@ class LoginController {
                 $_SESSION['user_id_usuario'] = $user['id_usuario'];
                 $_SESSION['user_name'] = $user['username'];
                 $_SESSION['user_id_rol'] = $user['id_rol'];  // Guardar el rol del usuario
-                $_SESSION['user id_agricultor'] = $user['id_agricultor']; 
+                $_SESSION['user_id_agricultor'] = $user['id_agricultor']; 
 
              //   if (isset($_SESSION['user_id_usuario'])) {
               //   echo "Sesión iniciada correctamente. Usuario ID: " . $_SESSION['user_id_usuario']."  ". $_SESSION['user_name']."  ". $_SESSION['user_id_rol'];

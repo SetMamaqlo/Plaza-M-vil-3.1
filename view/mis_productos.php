@@ -1,22 +1,35 @@
 <?php
 session_start();
-require_once '../config/conexion.php';
 
+require_once '../config/conexion.php';
+require_once '../controller/medidas_controller.php';
+require_once '../controller/gestion_categorias.php';
 // Solo vendedores pueden acceder
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'vendedor') {
+if (!isset($_SESSION['user_id_usuario']) || $_SESSION['user_id_rol'] !== 3) {
     header("Location: ../index.php");
     exit;
 }
 
-$user_id = $_SESSION['user_id'];
-$role = $_SESSION['user_role'] ?? null;
+$user_id_usuario = $_SESSION['user_id_usuario'];
+$id_rol = $_SESSION['user_id_rol'] ?? null;
+$id_agricultor = $_SESSION['user_id_agricultor']; 
 
-// Obtener productos del vendedor
-$stmt = $pdo->prepare("SELECT * FROM productos WHERE id_usuario = ? ORDER BY fecha_publicacion DESC");
-$stmt->execute([$user_id]);
+
+// Obtener productos del agricultor logueado
+$stmt = $pdo->prepare("
+    SELECT p.*, c.nombre AS categoria_nombre
+    FROM productos p
+    INNER JOIN categoria c ON p.id_categoria = c.id_categoria
+    WHERE p.id_agricultor = ?
+    ORDER BY p.fecha_publicacion DESC
+");
+$stmt->execute([$_SESSION['user_id_agricultor']]);
 $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-$stmtCategorias = $pdo->query("SELECT DISTINCT categoria FROM productos ORDER BY categoria ASC");
+
+// Obtener TODAS las categorías
+$stmtCategorias = $pdo->query("SELECT id_categoria, nombre FROM categoria ORDER BY nombre ASC");
 $categorias = $stmtCategorias->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -50,15 +63,15 @@ $categorias = $stmtCategorias->fetchAll(PDO::FETCH_ASSOC);
             <?php foreach ($productos as $producto): ?>
                 <div class="col-md-4 mb-4">
                     <div class="card h-100 shadow-sm">
-                        <img src="../img/<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top"
+                        <img src="../img/<?php echo htmlspecialchars($producto['foto']); ?>" class="card-img-top"
                             alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
                         <div class="card-body">
                             <h5 class="card-title"><?php echo htmlspecialchars($producto['nombre']); ?></h5>
                             <p class="card-text"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
-                            <p class="card-text"><strong>Precio:</strong> $<?php echo number_format($producto['precio']); ?>
+                            <p class="card-text"><strong>Precio:</strong> $<?php echo number_format($producto['precio_unitario']); ?>
                             </p>
                             <p class="card-text"><strong>Categoría:</strong>
-                                <?php echo htmlspecialchars($producto['categoria']); ?></p>
+                                <?php echo htmlspecialchars($producto['categoria_nombre']); ?></p>
                             <button class="btn btn-outline-primary w-100 mt-2" onclick="editarProducto(
                                     <?php echo $producto['id']; ?>,
                                     '<?php echo htmlspecialchars(addslashes($producto['nombre'])); ?>',
@@ -101,8 +114,8 @@ $categorias = $stmtCategorias->fetchAll(PDO::FETCH_ASSOC);
                         <select class="form-select" id="edit_categoria" name="categoria" required>
                             <option value="" disabled>Selecciona una categoría</option>
                             <?php foreach ($categorias as $categoria): ?>
-                                <option value="<?php echo htmlspecialchars($categoria['categoria']); ?>">
-                                    <?php echo htmlspecialchars($categoria['categoria']); ?>
+                                <option value="<?php echo $row['id_categoria']; ?>">
+                                    <?php echo htmlspecialchars($row['nombre']); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -125,39 +138,56 @@ $categorias = $stmtCategorias->fetchAll(PDO::FETCH_ASSOC);
         <div class="modal-dialog">
             <form class="modal-content" id="formAgregarProducto" method="POST"
                 action="../controller/productcontroller.php" enctype="multipart/form-data">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalAgregarLabel">Añadir Producto</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="add_nombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="add_nombre" name="nombre" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="add_descripcion" class="form-label">Descripción</label>
-                        <textarea class="form-control" id="add_descripcion" name="descripcion" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="add_precio" class="form-label">Precio</label>
-                        <input type="number" class="form-control" id="add_precio" name="precio" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="add_categoria" class="form-label">Categoría</label>
-                        <select class="form-select" id="add_categoria" name="categoria" required>
-                            <option value="" disabled selected>Selecciona una categoría</option>
-                            <?php foreach ($categorias as $categoria): ?>
-                                <option value="<?php echo htmlspecialchars($categoria['categoria']); ?>">
-                                    <?php echo htmlspecialchars($categoria['categoria']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="add_imagen" class="form-label">Imagen</label>
-                        <input type="file" class="form-control" id="add_imagen" name="imagen" accept="image/*" required>
-                    </div>
-                </div>
+                <h2 class="text-center mb-4">Añadir Nuevo Producto</h2>
+                    <form action="../controller/productcontroller.php" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre del Producto</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="descripcion" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="precio_unitario" class="form-label">Precio Unitario</label>
+                            <input type="number" step="0.01" class="form-control" id="precio_unitario" name="precio_unitario" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="stock" class="form-label">Stock Disponible</label>
+                            <input type="number" class="form-control" id="stock" name="stock" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_unidad" class="form-label">Unidad de Medida</label>
+                            <select class="form-control" id="id_unidad" name="id_unidad" required>
+                                <option value="">-- Selecciona una unidad --</option>
+                                <?php foreach ($medidas as $medida): ?>
+                                    <option value="<?= htmlspecialchars($medida['id_unidad']) ?>">
+                                        <?= htmlspecialchars($medida['nombre']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_categoria" class="form-label">Categoría</label>
+                            <select class="form-control" id="id_categoria" name="id_categoria" required>
+                                <option value="">-- Selecciona una categoría --</option>
+                                <?php foreach ($categorias as $cat): ?>
+                                    <option value="<?= htmlspecialchars($cat['id_categoria']) ?>">
+                                        <?= htmlspecialchars($cat['nombre']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fecha_publicacion" class="form-label">Fecha de publicacion</label>
+                            <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="foto" class="form-label">Imagen del Producto</label>
+                            <input type="file" class="form-control" id="foto" name="foto" accept="image/*" required>
+                        </div>
+                        
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-success">Añadir Producto</button>
@@ -168,12 +198,12 @@ $categorias = $stmtCategorias->fetchAll(PDO::FETCH_ASSOC);
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function editarProducto(id, nombre, descripcion, precio, categoria) {
-            document.getElementById('edit_id_producto').value = id;
+        function editarProducto(id_producto, nombre, descripcion, precio_unitario, id_categoria) {
+            document.getElementById('edit_id_producto').value = id_producto;
             document.getElementById('edit_nombre').value = nombre;
             document.getElementById('edit_descripcion').value = descripcion;
-            document.getElementById('edit_precio').value = precio;
-            document.getElementById('edit_categoria').value = categoria;
+            document.getElementById('edit_precio').value = precio_unitario;
+            document.getElementById('edit_id_categoria').value = id_categoria;
             var modal = new bootstrap.Modal(document.getElementById('modalEditar'));
             modal.show();
         }
