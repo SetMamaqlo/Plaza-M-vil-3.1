@@ -1,6 +1,6 @@
 <?php
 session_start();
-var_dump($_SESSION);
+
 if (!isset($_SESSION['user_id_usuario']) || $_SESSION['user_id_rol'] !== 3) {
     header("Location: ../view/login.php");
     exit;

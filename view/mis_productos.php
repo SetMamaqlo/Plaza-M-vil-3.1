@@ -73,11 +73,11 @@ $categorias = $stmtCategorias->fetchAll(PDO::FETCH_ASSOC);
                             <p class="card-text"><strong>Categoría:</strong>
                                 <?php echo htmlspecialchars($producto['categoria_nombre']); ?></p>
                             <button class="btn btn-outline-primary w-100 mt-2" onclick="editarProducto(
-                                    <?php echo $producto['id']; ?>,
+                                    <?php echo $producto['id_producto']; ?>,
                                     '<?php echo htmlspecialchars(addslashes($producto['nombre'])); ?>',
                                     '<?php echo htmlspecialchars(addslashes($producto['descripcion'])); ?>',
-                                    '<?php echo $producto['precio']; ?>',
-                                    '<?php echo htmlspecialchars(addslashes($producto['categoria'])); ?>'
+                                    '<?php echo $producto['precio_unitario']; ?>',
+                                    '<?php echo htmlspecialchars(addslashes($producto['categoria_nombre'])); ?>'
                                 )">
                                 <i class="bi bi-pencil"></i> Editar
                             </button>
