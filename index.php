@@ -1,6 +1,6 @@
 <?php
 session_start();
-$id_rol = $_SESSION['user_id_role'] ?? null;
+$id_rol = $_SESSION['user_id_rol'] ?? null;
 if (!isset($_SESSION['user_id_rol'])) {
     header("Location: view/login.php");
     exit;
@@ -83,10 +83,10 @@ if (!isset($_SESSION['user_id_rol'])) {
             while ($producto = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 ?>
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch">
-                    <a href="view/producto_detalle.php?id=<?php echo $producto['id']; ?>"
+                    <a href="view/producto_detalle.php?id=<?php echo $producto['id_producto']; ?>"
                         class="w-100 text-decoration-none text-dark">
                         <div class="card h-100 border-0 shadow-sm minimal-card">
-                            <img src="img/<?php echo htmlspecialchars($producto['imagen']); ?>"
+                            <img src="img/<?php echo htmlspecialchars($producto['foto']); ?>"
                                 class="card-img-top rounded-top" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
                             <div class="card-body d-flex flex-column justify-content-between">
                                 <h5 class="card-title mb-2 fw-semibold text-truncate">
@@ -95,7 +95,7 @@ if (!isset($_SESSION['user_id_rol'])) {
                                     <?php echo htmlspecialchars($producto['descripcion']); ?>
                                 </p>
                                 <p class="card-text mb-0"><span
-                                        class="fw-bold text-success">$<?php echo number_format($producto['precio']); ?></span>
+                                        class="fw-bold text-success">$<?php echo number_format($producto['precio_unitario']); ?></span>
                                 </p>
                             </div>
                         </div>

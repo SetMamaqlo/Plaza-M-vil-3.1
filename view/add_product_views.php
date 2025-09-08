@@ -1,18 +1,18 @@
 <?php
 session_start();
+var_dump($_SESSION);
 if (!isset($_SESSION['user_id_usuario']) || $_SESSION['user_id_rol'] !== 3) {
     header("Location: ../view/login.php");
     exit;
 }
-include '../config/conexion.php';
-include '../controller/medidas_controller.php';
-include '../controller/gestion_categorias.php';
-include '../controller/productcontroller.php';
 
+require_once '../config/conexion.php';
+require_once '../controller/medidas_controller.php';
+require_once '../controller/gestion_categorias.php';
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -22,62 +22,66 @@ include '../controller/productcontroller.php';
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 </head>
 
-<body class="d-flex align-items-center justify-content-center vh-100">
+<body class="d-flex align-items-center justify-content-center vh-100 bg-light">
 
-    
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h2 class="text-center mb-4">Añadir Nuevo Producto</h2>
-                <form action="../controller/productcontroller.php" method="POST" enctype="multipart/form-data">
-                    <div class="mb-3">
-                        <label for="nombre" class="form-label">Nombre del Producto</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="descripcion" class="form-label">Descripción</label>
-                        <textarea class="form-control" id="descripcion" name="descripcion" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="precio" class="form-label">Precio</label>
-                        <input type="number" class="form-control" id="precio" name="precio" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="precio" class="form-label">Stock</label>
-                        <input type="number" class="form-control" id="precio" name="precio" required>
-                    </div>
-                     <div class="mb-3">
-						<label for="id_unidad" class="form-label">Unidad de medida</label>
-						<select class="form-control" id="id_unidad" name="id_unidad" required>
-							<option value="">-- Selecciona una unidad --</option>
-							<?php var_dump($medidas); ?>
-							<?php foreach ($medidas as $medida): ?>
-								<option value="<?= $medida['id_unidad'] ?>"><?= htmlspecialchars($medida['nombre']) ?></option>
-							<?php endforeach; ?>
-						</select>
-					</div>
-					<div class="mb-3">
-						<label for="id_categoria" class="form-label">Categoría</label>
-						<select class="form-control" id="id_categoria" name="id_categoria" required>
-							<option value="">-- Selecciona una categoría --</option>
-							<?php var_dump($categorias); ?>
-							<?php foreach ($categorias as $cat): ?>
-								<option value="<?= htmlspecialchars($cat['id_categoria']) ?>">
-									<?= htmlspecialchars($cat['nombre']) ?>
-								</option>
-							<?php endforeach; ?>
-						</select>
-					</div>
-					<div class="mb-3">
-                            <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
+            <div class="col-md-7">
+                <div class="card shadow-lg p-4 rounded-3">
+                    
+                    <h2 class="text-center mb-4">Añadir Nuevo Producto</h2>
+                    <form action="../controller/productcontroller.php" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre del Producto</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="descripcion" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="precio_unitario" class="form-label">Precio Unitario</label>
+                            <input type="number" step="0.01" class="form-control" id="precio_unitario" name="precio_unitario" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="stock" class="form-label">Stock Disponible</label>
+                            <input type="number" class="form-control" id="stock" name="stock" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_unidad" class="form-label">Unidad de Medida</label>
+                            <select class="form-control" id="id_unidad" name="id_unidad" required>
+                                <option value="">-- Selecciona una unidad --</option>
+                                <?php foreach ($medidas as $medida): ?>
+                                    <option value="<?= htmlspecialchars($medida['id_unidad']) ?>">
+                                        <?= htmlspecialchars($medida['nombre']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_categoria" class="form-label">Categoría</label>
+                            <select class="form-control" id="id_categoria" name="id_categoria" required>
+                                <option value="">-- Selecciona una categoría --</option>
+                                <?php foreach ($categorias as $cat): ?>
+                                    <option value="<?= htmlspecialchars($cat['id_categoria']) ?>">
+                                        <?= htmlspecialchars($cat['nombre']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fecha_publicacion" class="form-label">Fecha de publicacion</label>
                             <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" required>
                         </div>
-                    <div class="mb-3">
-                        <label for="imagen" class="form-label">Imagen del Producto</label>
-                        <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Añadir Producto</button>
-                </form>
+                        <div class="mb-3">
+                            <label for="foto" class="form-label">Imagen del Producto</label>
+                            <input type="file" class="form-control" id="foto" name="foto" accept="image/*" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">Añadir Producto</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
