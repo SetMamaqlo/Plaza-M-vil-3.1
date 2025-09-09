@@ -9,28 +9,27 @@ if (!isset($_SESSION['user_id_usuario'])) {
 }
 
 // Obtener los IDs de productos en el carrito
-$carrito = $_SESSION['carrito'] ?? []; // Asegúrate de que sea un array
+require_once '../model/carrito_model.php';
+require_once '../model/detalle_carrito_model.php';
+
+$carritoModel = new CarritoModel($pdo);
+$detalleModel = new DetalleCarritoModel($pdo);
+
+// Verificar usuario logueado
+$id_usuario = $_SESSION['user_id_usuario'];
+
+// Obtener carrito del usuario
+$carrito = $carritoModel->obtenerCarritoPorUsuario($id_usuario);
 $productos = [];
 
-if (!empty($carrito) && is_array($carrito)) { // Verifica que $carrito sea un array
-    // Prepara la consulta para obtener los productos del carrito
-    $placeholders = implode(',', array_fill(0, count($carrito), '?'));
-    try {
-        $stmt = $pdo->prepare("SELECT * FROM productos WHERE id IN ($placeholders)");
-        $stmt->execute($carrito);
-        $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        echo "Error en la consulta: " . $e->getMessage();
-        $productos = [];
-    }
-} else {
-    $productos = []; // Si $carrito no es válido, inicializa $productos como un array vacío
+if ($carrito) {
+    $productos = $detalleModel->obtenerProductos($carrito['id_carrito']);
 }
 
 // Calcular el total del carrito
 $total = 0;
 foreach ($productos as $producto) {
-    $total += $producto['precio'];
+    $total += $producto['precio_unitario'];
 }
 ?>
 
@@ -70,7 +69,7 @@ foreach ($productos as $producto) {
             <?php foreach ($productos as $producto): ?>
                 <div class="row align-items-center cart-product">
                     <div class="col-2">
-                        <img src="../img/<?php echo htmlspecialchars($producto['imagen']); ?>" class="cart-img"
+                        <img src="../img/<?php echo htmlspecialchars($producto['foto']); ?>" class="cart-img"
                             alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
                     </div>
                     <div class="col-6">
@@ -78,11 +77,11 @@ foreach ($productos as $producto) {
                         <div class="text-muted"><?php echo htmlspecialchars($producto['descripcion']); ?></div>
                     </div>
                     <div class="col-2 text-end">
-                        <span class="text-success fw-semibold">$<?php echo number_format($producto['precio']); ?></span>
+                        <span class="text-success fw-semibold">$<?php echo number_format($producto['precio_unitario']); ?></span>
                     </div>
                     <div class="col-2 text-end">
                         <form action="eliminar_del_carrito.php" method="POST" style="display:inline;">
-                            <input type="hidden" name="id_producto" value="<?php echo $producto['id']; ?>">
+                            <input type="hidden" name="id_producto" value="<?php echo $producto['id_producto']; ?>">
                             <button type="submit" class="btn btn-link cart-remove" title="Eliminar">
                                 <i class="bi bi-trash"></i>
                             </button>

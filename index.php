@@ -83,7 +83,7 @@ if (!isset($_SESSION['user_id_rol'])) {
             while ($producto = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 ?>
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch">
-                    <a href="view/producto_detalle.php?id=<?php echo $producto['id_producto']; ?>"
+                    <a href="view/producto_detalle.php?id_producto=<?php echo $producto['id_producto']; ?>"
                         class="w-100 text-decoration-none text-dark">
                         <div class="card h-100 border-0 shadow-sm minimal-card">
                             <img src="img/<?php echo htmlspecialchars($producto['foto']); ?>"
@@ -128,7 +128,7 @@ if (!isset($_SESSION['user_id_rol'])) {
                     while ($producto = $productosStmt->fetch(PDO::FETCH_ASSOC)) {
                         ?>
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch">
-                            <a href="view/producto_detalle.php?id=<?php echo $producto['id_producto']; ?>"
+                            <a href="view/producto_detalle.php?id_producto=<?php echo $producto['id_producto']; ?>"
                                 class="w-100 text-decoration-none text-dark">
                                 <div class="card h-100 border-0 shadow-sm minimal-card">
                                     <img src="img/<?php echo htmlspecialchars($producto['foto']); ?>"

@@ -1,29 +1,33 @@
 <?php
 session_start();
 require_once '../config/conexion.php';
-require_once '../model/categorias_model.php';
+require_once '../model/carrito_model.php';
+require_once '../model/detalle_carrito_model.php';
 
-$categoriasModel = new CategoriasModel();
+$carritoModel = new CarritoModel($pdo);
+$detalleModel = new DetalleCarritoModel($pdo);
 
-// Obtener categorías
-$categorias = $categoriasModel->obtenerCategorias();
-
-// Inicializar el carrito si no existe
-if (!isset($_SESSION['carrito'])) {
-    $_SESSION['carrito'] = [];
-}
-
-// Verificar si se ha enviado un ID de producto
-$id_producto = $_POST['id_producto'] ?? null;
-if (!$id_producto) {
-    header("Location: ../view/carritoview.php");
+// Verificar si usuario está logueado
+if (!isset($_SESSION['user_id_usuario'])) {
+    header("Location: ../view/login.php");
     exit;
 }
 
-// Agregar solo el ID del producto al carrito
-$_SESSION['carrito'][] = $id_producto;
+$id_usuario = $_SESSION['user_id_usuario'];
 
-// Redirigir al carrito
-header("Location: ../view/carritoview.php");
-exit;
-?>
+// Obtener o crear carrito
+$carrito = $carritoModel->obtenerCarritoPorUsuario($id_usuario);
+if (!$carrito) {
+    $id_carrito = $carritoModel->crearCarrito($id_usuario);
+} else {
+    $id_carrito = $carrito['id_carrito'];
+}
+
+// Acción: agregar producto
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_producto'])) {
+    $id_producto = $_POST['id_producto'];
+    $detalleModel->agregarProducto($id_carrito, $id_producto, 1);
+
+    header("Location: ../view/carritoview.php");
+    exit;
+}

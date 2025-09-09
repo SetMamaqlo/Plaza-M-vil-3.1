@@ -12,21 +12,25 @@ if ($id_producto) {
 }
 
 // Verificar si se ha pasado un ID de producto
-if (!isset($_GET['id'])) {
+if (!isset($_GET['id_producto'])) {
     echo "Producto no encontrado.";
     exit;
 }
 
 // Obtener el ID del producto
-$id_producto = $_GET['id'];
+$id_producto = $_GET['id_producto'];
 
 // Consultar los detalles del producto y del vendedor
-$stmt = $pdo->prepare("SELECT p.*, u.nombre_completo AS vendedor, u.telefono, u.foto 
-                       FROM productos p 
-                       JOIN usuarios u ON p.id_agricultor = u.id_usuario 
-                       WHERE p.id_producto = ?");
+$stmt = $pdo->prepare("
+    SELECT p.*, u.nombre_completo AS agricultor, u.telefono, u.foto
+    FROM productos p
+    JOIN agricultor a ON p.id_agricultor = a.id_agricultor
+    JOIN usuarios u ON a.id_usuario = u.id_usuario
+    WHERE p.id_producto = ?
+");
 $stmt->execute([$id_producto]);
 $producto = $stmt->fetch(PDO::FETCH_ASSOC);
+
 
 // Verificar si el producto existe
 if (!$producto) {
@@ -35,7 +39,7 @@ if (!$producto) {
 }
 
 // Obtener el rol del usuario si está logueado
-$role = $_SESSION['user_role'] ?? null;
+$id_rol = $_SESSION['user_id_rol'] ?? null;
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -66,7 +70,7 @@ $role = $_SESSION['user_role'] ?? null;
                     <div class="row">
                         <!-- Imagen del producto -->
                         <div class="col-md-6 d-flex align-items-center justify-content-center">
-                            <img src="../img/<?php echo htmlspecialchars($producto['imagen']); ?>" class="product-image"
+                            <img src="../img/<?php echo htmlspecialchars($producto['foto']); ?>" class="product-image"
                                 alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
                         </div>
                         <!-- Detalles del producto y vendedor -->
@@ -75,7 +79,7 @@ $role = $_SESSION['user_role'] ?? null;
                                 <h2><?php echo htmlspecialchars($producto['nombre']); ?></h2>
                                 <p><strong>Descripción:</strong>
                                     <?php echo htmlspecialchars($producto['descripcion']); ?></p>
-                                <p><strong>Precio:</strong> $<?php echo number_format($producto['precio']); ?></p>
+                                <p><strong>Precio_unitario:</strong> $<?php echo number_format($producto['precio_unitario']); ?></p>
                                 <p><strong>Fecha de publicación:</strong>
                                     <?php echo htmlspecialchars($producto['fecha_publicacion']); ?></p>
                                 <hr>
@@ -90,7 +94,7 @@ $role = $_SESSION['user_role'] ?? null;
                                     <?php endif; ?>
                                     <div>
                                         <span
-                                            class="fw-bold"><?php echo htmlspecialchars($producto['vendedor']); ?></span><br>
+                                            class="fw-bold"><?php echo htmlspecialchars($producto['agricultor']); ?></span><br>
                                         <small class="text-muted"><i class="bi bi-telephone"></i>
                                             <?php echo htmlspecialchars($producto['telefono']); ?></small>
                                     </div>
@@ -116,23 +120,23 @@ $role = $_SESSION['user_role'] ?? null;
                     <div class="row">
                         <?php
                         // Consulta para obtener 3 productos aleatorios, excluyendo el actual
-                        $stmtRecomendados = $pdo->prepare("SELECT id_producto, nombre, imagen, precio FROM productos WHERE id_producto != ? ORDER BY RAND() LIMIT 3");
+                        $stmtRecomendados = $pdo->prepare("SELECT id_producto, nombre, foto, precio_unitario FROM productos WHERE id_producto != ? ORDER BY RAND() LIMIT 3");
                         $stmtRecomendados->execute([$producto['id_producto']]);
                         $recomendados = $stmtRecomendados->fetchAll(PDO::FETCH_ASSOC);
 
                         foreach ($recomendados as $reco): ?>
                             <div class="col-md-4 mb-4">
-                                <a href="producto_detalle.php?id=<?php echo $reco['id_producto']; ?>"
+                                <a href="producto_detalle.php?id_producto=<?php echo $reco['id_producto']; ?>"
                                     style="text-decoration:none; color:inherit;">
                                     <div class="card h-100 shadow-sm">
-                                        <img src="../img/<?php echo htmlspecialchars($reco['imagen']); ?>"
+                                        <img src="../img/<?php echo htmlspecialchars($reco['foto']); ?>"
                                             class="card-img-top" style="height:200px; object-fit:cover;"
                                             alt="<?php echo htmlspecialchars($reco['nombre']); ?>">
                                         <div class="card-body text-center">
                                             <h5 class="card-title"><?php echo htmlspecialchars($reco['nombre']); ?></h5>
                                             <p class="card-text text-success fw-bold">
-                                                $<?php echo number_format($reco['precio']); ?></p>
-                                            <a href="producto_detalle.php?id=<?php echo $reco['id_producto']; ?>"
+                                                $<?php echo number_format($reco['precio_unitario']); ?></p>
+                                            <a href="producto_detalle.php?id_producto=<?php echo $reco['id_producto']; ?>"
                                                 class="btn btn-outline-primary btn-sm">Ver Detalles</a>
                                         </div>
                                     </div>
