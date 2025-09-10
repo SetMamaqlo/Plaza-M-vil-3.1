@@ -33,13 +33,13 @@ class LoginController {
                 // 🔥 Redirigir según el rol
                 switch ($user['id_rol']) {
                     case 1: // Admin
-                        header("Location: ../view/dashboard_admin.php");
+                        header("Location: ../index.php");
                         break;
                     case 2: // Vendedor
-                        header("Location: ../view/dashboard_vendedor.php");
+                        header("Location: ../index.php");
                         break;
                     case 3: // Agricultor
-                        header("Location: ../view/mis_productos.php");
+                        header("Location: ../index.php");
                         break;
                     default:
                         header("Location: ../index.php");

@@ -14,7 +14,7 @@ class UserModel extends Rol_Model
         $stmt = $this->pdo->prepare("
         SELECT u.*, a.id_agricultor
         FROM usuarios u
-        LEFT JOIN agricultores a ON a.id_usuario = u.id_usuario
+        LEFT JOIN agricultor a ON a.id_usuario = u.id_usuario
         WHERE u.username = ? OR u.email = ?
         LIMIT 1
     ");
