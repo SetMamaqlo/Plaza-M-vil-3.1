@@ -1,7 +1,26 @@
 <?php
+<<<<<<< HEAD
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+=======
+// Asegurarse de que no haya salidas antes de modificar encabezados
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+require_once __DIr__. '../config/conexion.php';
+
+
+
+$categorias = [];
+
+try {
+    $stmt = $pdo->query("SELECT id_categoria, nombre AS nombre_categoria FROM categoria ORDER BY nombre ASC");
+    $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    error_log("Error al obtener categorías: " . $e->getMessage());
+}
+>>>>>>> 92ab89c9009590a8c09f6f208a61171111e0e0c5
 ?>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
@@ -35,14 +54,22 @@ if (session_status() === PHP_SESSION_NONE) {
 
                 <!-- Categorías -->
                 <li class="nav-item dropdown">
+<<<<<<< HEAD
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Categorías</a>
+=======
+                    <a class="nav-link dropdown-toggle" href="#" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Categorías
+                    </a>
+>>>>>>> 92ab89c9009590a8c09f6f208a61171111e0e0c5
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Frutas</a></li>
-                        <li><a class="dropdown-item" href="#">Verduras</a></li>
-                        <li><a class="dropdown-item" href="#">Lácteos</a></li>
-                        <li><a class="dropdown-item" href="#">Bebidas</a></li>
-                        <li><a class="dropdown-item" href="#">Carnes</a></li>
-                        <li><a class="dropdown-item" href="#">Legumbres</a></li>
+                        <?php foreach ($categorias as $cat): ?>
+                            <li>
+                                <a class="dropdown-item" href="/Plaza-M-vil-3.1/index.php?id_categoria=<?php echo $cat['id_categoria']; ?>">
+                                    <?php echo htmlspecialchars($cat['nombre_categoria']); ?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
                     </ul>
                 </li>
 

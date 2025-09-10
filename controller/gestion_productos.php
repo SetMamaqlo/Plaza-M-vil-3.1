@@ -63,10 +63,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
 
     header("Location: ../view/gestion_productos.php");
     exit;
+
+    
 }
 
-// Obtener productos para la vista
 $productos = $productosModel->obtenerProductos();
+// Obtener productos para la vista
 
-// (Opcional: si usas ENUM en alguna columna de productos)
-$categorias = $productosModel->obtenerValoresEnum('productos', 'categoria');
+
+
+

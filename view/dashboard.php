@@ -58,6 +58,18 @@ if ($id_rol !== 1) {
                 </div>
             </div>
 
+            <!-- gestion unidades de medida -->
+             <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="bi bi-box-seam" style="font-size: 3rem; color: #28a745;"></i>
+                        <h5 class="card-title mt-3">Gestión de medidas</h5>
+                        <p class="card-text">Administra las unidades de medida publicadas en el sistema.</p>
+                        <a href="gestion_medidas.php" class="btn btn-success">Ir</a>
+                    </div>
+                </div>
+            </div>
+
             <!-- Gestión de Categorías -->
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm">
