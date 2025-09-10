@@ -1,5 +1,5 @@
 <?php
-require_once '../config/conexion.php';
+require_once __DIR__.'/../config/conexion.php';
 
 class DetalleCarritoModel {
     private $pdo;
@@ -37,12 +37,25 @@ class DetalleCarritoModel {
         $stmt->execute([$id_carrito]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function actualizarCantidad($id_detalle, $cantidad) {
+        $sql = "UPDATE carrito_detalle SET cantidad = ? WHERE id_detalle = ?";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([$cantidad, $id_detalle]);
+    }
 
     // Eliminar producto del carrito
     public function eliminarProducto($id_detalle) {
         $sql = "DELETE FROM carrito_detalle WHERE id_detalle = ?";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([$id_detalle]);
+    }
+
+    public function contarProductosUnicos($id_carrito) {
+        $sql = "SELECT COUNT(*) as total FROM carrito_detalle WHERE id_carrito = ?";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$id_carrito]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ? intval($row['total']) : 0;
     }
 }
 

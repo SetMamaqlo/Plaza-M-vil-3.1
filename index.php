@@ -1,9 +1,42 @@
 <?php
-session_start();
+// index.php (corregido)
+
+// Iniciar sesión solo si aún no existe
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Cargar conexión a la base de datos ANTES de usar $pdo
+require_once __DIR__ . '/config/conexion.php';
+
+// Verificar login (si esto debe estar aquí)
 $id_rol = $_SESSION['user_id_rol'] ?? null;
 if (!isset($_SESSION['user_id_rol'])) {
     header("Location: view/login.php");
     exit;
+}
+
+// Leer id_categoria de GET y asegurarse de que sea entero
+$id_categoria = isset($_GET['id_categoria']) ? (int) $_GET['id_categoria'] : null;
+
+try {
+    if ($id_categoria) {
+        // Productos de una categoría específica (prepared statement)
+        $stmt = $pdo->prepare("SELECT * FROM productos WHERE id_categoria = ? ORDER BY fecha_publicacion DESC");
+        $stmt->execute([$id_categoria]);
+
+        // Traer el nombre de la categoría seleccionada
+        $catStmt = $pdo->prepare("SELECT nombre FROM categoria WHERE id_categoria = ?");
+        $catStmt->execute([$id_categoria]);
+        $categoriaSeleccionada = $catStmt->fetchColumn();
+    } else {
+        // Todos los productos
+        $stmt = $pdo->query("SELECT * FROM productos ORDER BY fecha_publicacion DESC");
+    }
+} catch (PDOException $e) {
+    // Manejo sencillo del error: log y mostrar mensaje mínimo
+    error_log("Error BD en index.php: " . $e->getMessage());
+    die("Error al cargar los productos. Revisa el log del servidor.");
 }
 ?>
 
@@ -163,6 +196,7 @@ if (!isset($_SESSION['user_id_rol'])) {
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+    
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>
 </body>

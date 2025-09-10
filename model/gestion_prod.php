@@ -14,15 +14,22 @@ class ProductosModel
     public function obtenerProductos()
     {
         $stmt = $this->pdo->prepare("
-        SELECT 
-            p.id_producto AS id, 
-            p.nombre, 
-            p.descripcion, 
-            p.precio_unitario AS precio, 
-            p.id_categoria AS categoria, 
-            u.nombre_completo AS vendedor
+            SELECT 
+            p.id_producto,
+            p.nombre,
+            p.descripcion,
+            p.precio_unitario,
+            p.stock,
+            p.foto,
+            p.fecha_publicacion,
+            c.nombre AS categoria,
+            u.nombre_completo AS agricultor,
+            m.nombre AS unidades_de_medida
         FROM productos p
-        LEFT JOIN usuarios u ON p.id_agricultor = u.id_usuario
+        LEFT JOIN categoria c ON p.id_categoria = c.id_categoria
+        LEFT JOIN unidades_de_medida m ON p.id_unidad = m.id_unidad
+        LEFT JOIN agricultor a ON p.id_agricultor = a.id_agricultor
+        LEFT JOIN usuarios u ON a.id_usuario = u.id_usuario;
     ");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -65,36 +72,13 @@ class ProductosModel
 
     public function eliminarProducto($id)
     {
+        // Primero eliminamos los detalles del carrito asociados
+        $stmt = $this->pdo->prepare("DELETE FROM carrito_detalle WHERE id_producto = ?");
+        $stmt->execute([$id]);
+
+        // Luego eliminamos el producto
         $stmt = $this->pdo->prepare("DELETE FROM productos WHERE id_producto = ?");
         return $stmt->execute([$id]);
     }
-
-    public function obtenerValoresEnum($tabla, $columna)
-    {
-        $stmt = $this->pdo->prepare("SHOW COLUMNS FROM $tabla LIKE ?");
-        $stmt->execute([$columna]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Verificar si la consulta devolvió resultados antes de acceder a los datos
-        if (!$row) {
-            error_log("No se encontraron resultados para la columna especificada.");
-            return [];
-        }
-
-        // Extraer los valores del ENUM
-        preg_match("/^enum\((.*)\)$/", $row['Type'], $matches);
-        
-        // Verificar si la clave del array existe antes de acceder a ella
-        if (!isset($matches[1])) {
-            error_log("La clave '1' no está definida en el array.");
-            // Manejo de error o valor predeterminado
-            $matches[1] = null;
-        }
-
-        $enumValues = array_map(function ($value) {
-            return trim($value, "'");
-        }, explode(',', $matches[1]));
-
-        return $enumValues;
-    }
+    
 }

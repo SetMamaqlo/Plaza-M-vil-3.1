@@ -8,7 +8,7 @@ class Medidas_model {
 
     // Obtener todas los medidas
     public function Consultarmedidas(): array {
-    $stmt = $this->pdo->query("SELECT id_unidad, nombre FROM unidades_de_medida ORDER BY nombre ASC");
+    $stmt = $this->pdo->query("SELECT id_unidad, nombre FROM unidades_de_medida ORDER BY id_unidad ASC");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

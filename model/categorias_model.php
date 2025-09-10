@@ -18,7 +18,7 @@ class CategoriasModel
         $stmt = $this->pdo->query(
             "SELECT id_categoria, nombre, descripcion
              FROM categoria
-             ORDER BY nombre ASC"
+             ORDER BY id_categoria ASC"
         );
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -29,7 +29,7 @@ class CategoriasModel
         $stmt = $this->pdo->query(
             "SELECT id_categoria, nombre
              FROM categoria
-             ORDER BY nombre ASC"
+             ORDER BY id_categoria ASC"
         );
         return $stmt->fetchAll(PDO::FETCH_ASSOC); 
         // devuelve id + nombre

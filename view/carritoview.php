@@ -29,7 +29,7 @@ if ($carrito) {
 // Calcular el total del carrito
 $total = 0;
 foreach ($productos as $producto) {
-    $total += $producto['precio_unitario'];
+    $total += $producto['precio_unitario'] * $producto['cantidad'];
 }
 ?>
 
@@ -72,16 +72,28 @@ foreach ($productos as $producto) {
                         <img src="../img/<?php echo htmlspecialchars($producto['foto']); ?>" class="cart-img"
                             alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
                     </div>
-                    <div class="col-6">
+                    <div class="col-4">
                         <div class="fw-bold"><?php echo htmlspecialchars($producto['nombre']); ?></div>
                         <div class="text-muted"><?php echo htmlspecialchars($producto['descripcion']); ?></div>
                     </div>
-                    <div class="col-2 text-end">
-                        <span class="text-success fw-semibold">$<?php echo number_format($producto['precio_unitario']); ?></span>
+                    <div class="col-2">
+                        <!-- Formulario para editar cantidad -->
+                        <form action="../controller/editar_cantidad.php" method="POST" class="d-flex">
+                            <input type="hidden" name="id_detalle" value="<?php echo $producto['id_detalle']; ?>">
+                            <input type="number" name="cantidad" value="<?php echo $producto['cantidad']; ?>" 
+                                min="1" class="form-control form-control-sm text-center me-2" style="width:80px;">
+                            <button type="submit" class="btn btn-sm btn-outline-success">Actualizar</button>
+                        </form>
                     </div>
                     <div class="col-2 text-end">
-                        <form action="eliminar_del_carrito.php" method="POST" style="display:inline;">
-                            <input type="hidden" name="id_producto" value="<?php echo $producto['id_producto']; ?>">
+                        <span class="text-success fw-semibold">
+                            $<?php echo number_format($producto['precio_unitario'] * $producto['cantidad']); ?>
+                        </span>
+                    </div>
+                    <div class="col-2 text-end">
+                        <!-- Formulario para eliminar producto -->
+                        <form action="../controller/eliminar_del_carrito.php" method="POST" style="display:inline;">
+                            <input type="hidden" name="id_detalle" value="<?php echo $producto['id_detalle']; ?>">
                             <button type="submit" class="btn btn-link cart-remove" title="Eliminar">
                                 <i class="bi bi-trash"></i>
                             </button>
@@ -91,10 +103,12 @@ foreach ($productos as $producto) {
             <?php endforeach; ?>
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <span class="cart-total">Total: $<?php echo number_format($total); ?></span>
-                <a href="../controller/procesar_compra.php" class="btn btn-checkout btn-lg text-white">
+                <a href="../view/confirmacion.php" class="btn btn-checkout btn-lg text-white">
                     <i class="bi bi-credit-card"></i> Comprar ahora
                 </a>
             </div>
+                <a href="../index.php" class="btn btn-outline-success mt-2"><i class="bi bi-arrow-left"></i> Seguir
+                    comprando</a>
         <?php endif; ?>
     </div>
 </body>
