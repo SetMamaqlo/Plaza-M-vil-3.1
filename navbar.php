@@ -4,6 +4,8 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 require_once __DIr__. '../config/conexion.php';
+require_once __DIR__. '../model/carrito_model.php';
+require_once __DIR__.'../model/detalle_carrito_model.php';
 
 
 
@@ -15,6 +17,21 @@ try {
 } catch (PDOException $e) {
     error_log("Error al obtener categorías: " . $e->getMessage());
 }
+     $carritoModel = new CarritoModel($pdo);
+    $detalleModel = new DetalleCarritoModel($pdo);
+
+    $totalProductos = 0;
+
+    if (isset($_SESSION['user_id_usuario'])) {
+        $id_usuario = $_SESSION['user_id_usuario'];
+        $carrito = $carritoModel->obtenerCarritoPorUsuario($id_usuario);
+
+        if ($carrito) {
+            $totalProductos = $detalleModel->contarProductosUnicos($carrito['id_carrito']);
+        }
+    }
+   
+
 ?>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+3i9zYkGm60D9e5e5e5e5e5e5e5e5" crossorigin="anonymous"></script>
@@ -57,6 +74,7 @@ try {
 
                 <!-- Enlace de Categorías -->
                 <li class="nav-item dropdown">
+                    
                     <a class="nav-link dropdown-toggle" href="#" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         Categorías
@@ -69,6 +87,7 @@ try {
                                 </a>
                             </li>
                         <?php endforeach; ?>
+                        
                     </ul>
                 </li>
 
@@ -105,12 +124,11 @@ try {
 
                 <!-- Botón Carrito de Compras -->
                 <li class="nav-item">
-                    <a class="nav-link position-relative" href="/Plaza-M-vil-3.1/view/carritoview.php">
-                        <i class="bi bi-cart3" style="font-size: 1.5rem;"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                            id="cart-count">
-                            <?php echo isset($_SESSION['carrito']) ? count($_SESSION['carrito']) : 0; ?>
-                        </span>
+                    <a class="nav-link" href="/Plaza-M-vil-3.1/view/carritoview.php">
+                        <i class="bi bi-cart3"></i>
+                        <?php if ($totalProductos > 0): ?>
+                            <span class="badge bg-danger rounded-pill"><?php echo $totalProductos; ?></span>
+                        <?php endif; ?>
                     </a>
                 </li>
 
