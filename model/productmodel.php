@@ -15,7 +15,10 @@ class ProductModel {
             return false;
         }
     }
+
+    public function getPdo() {
+        return $this->pdo;
+    }
 }
 
-    
- 
+

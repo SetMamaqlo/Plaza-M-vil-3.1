@@ -9,17 +9,16 @@ class UserModel extends Rol_Model
     }
 
     // Buscar usuario por username o email
-    public function getUserByUsernameOrEmail($usernameOrEmail)
-    {
-        $stmt = $this->pdo->prepare("
+    public function getUserByUsernameOrEmail($usernameOrEmail) {
+    $stmt = $this->pdo->prepare("
         SELECT u.*, a.id_agricultor
         FROM usuarios u
-        LEFT JOIN agricultor a ON a.id_usuario = u.id_usuario
+        LEFT JOIN agricultor a ON u.id_usuario = a.id_usuario
         WHERE u.username = ? OR u.email = ?
         LIMIT 1
     ");
-        $stmt->execute([$usernameOrEmail, $usernameOrEmail]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->execute([$usernameOrEmail, $usernameOrEmail]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     // Agregar usuario
