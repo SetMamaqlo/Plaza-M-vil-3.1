@@ -100,7 +100,7 @@ if ($id_rol !== 1) {
                                         aria-label="Cerrar"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <input type="hidden" name="accion" value="editar">
+                                    <input type="hidden" name="accion" value="actualizar">
                                     <input type="hidden" name="id_categoria"
                                         value="<?= $categoria['id_categoria']; ?>">
 

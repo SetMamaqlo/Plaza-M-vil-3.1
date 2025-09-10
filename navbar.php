@@ -1,6 +1,20 @@
 <?php
 // Asegurarse de que no haya salidas antes de modificar encabezados
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+require_once __DIr__. '../config/conexion.php';
+
+
+
+$categorias = [];
+
+try {
+    $stmt = $pdo->query("SELECT id_categoria, nombre AS nombre_categoria FROM categoria ORDER BY nombre ASC");
+    $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    error_log("Error al obtener categorías: " . $e->getMessage());
+}
 ?>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+3i9zYkGm60D9e5e5e5e5e5e5e5e5" crossorigin="anonymous"></script>
@@ -43,17 +57,18 @@ session_start();
 
                 <!-- Enlace de Categorías -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         Categorías
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Frutas</a></li>
-                        <li><a class="dropdown-item" href="#">Verduras</a></li>
-                        <li><a class="dropdown-item" href="#">Lácteos</a></li>
-                        <li><a class="dropdown-item" href="#">Bebidas</a></li>
-                        <li><a class="dropdown-item" href="#">Carnes</a></li>
-                        <li><a class="dropdown-item" href="#">Legumbres</a></li>
+                        <?php foreach ($categorias as $cat): ?>
+                            <li>
+                                <a class="dropdown-item" href="/Plaza-M-vil-3.1/index.php?id_categoria=<?php echo $cat['id_categoria']; ?>">
+                                    <?php echo htmlspecialchars($cat['nombre_categoria']); ?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
                     </ul>
                 </li>
 
