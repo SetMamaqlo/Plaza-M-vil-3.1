@@ -33,14 +33,18 @@ class ProductController
     public function addProduct()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id_agricultor = $_SESSION['user_id_agricultor'] ?? null;
+
+            if (!$id_agricultor) {
+                die("Error: No se pudo identificar al agricultor.");
+            }
+
             $nombre       = $_POST['nombre'];
             $descripcion  = $_POST['descripcion'];
             $precio       = $_POST['precio_unitario'];
             $stock        = $_POST['stock'];
             $id_categoria = $_POST['id_categoria'];
             $id_unidad    = $_POST['id_unidad'];
-            $id_agricultor = $_SESSION['user_id_agricultor'];
-            var_dump($_SESSION);
             $fecha_publicacion = date("Y-m-d H:i:s");
 
             $foto = $this->uploadImage('foto');

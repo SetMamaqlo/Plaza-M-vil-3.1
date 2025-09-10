@@ -4,16 +4,20 @@ session_start();
 require_once '../config/conexion.php';
 require_once '../controller/medidas_controller.php';
 require_once '../controller/gestion_categorias.php';
-// Solo vendedores pueden acceder
-if (!isset($_SESSION['user_id_usuario']) || $_SESSION['user_id_rol'] !== 3) {
+
+// Validar sesión y rol
+if (!isset($_SESSION['user_id_usuario']) || empty($_SESSION['user_id_agricultor'])) {
     header("Location: ../index.php");
     exit;
 }
 
 $user_id_usuario = $_SESSION['user_id_usuario'];
 $id_rol = $_SESSION['user_id_rol'] ?? null;
-$id_agricultor = $_SESSION['user_id_agricultor']; 
+$id_agricultor = $_SESSION['user_id_agricultor'] ?? null;
 
+// Depuración
+error_log("ID Usuario: " . ($user_id_usuario ?? 'No definido'));
+error_log("Rol: " . ($id_rol ?? 'No definido'));
 
 // Obtener productos del agricultor logueado
 $stmt = $pdo->prepare("
@@ -23,8 +27,19 @@ $stmt = $pdo->prepare("
     WHERE p.id_agricultor = ?
     ORDER BY p.fecha_publicacion DESC
 ");
-$stmt->execute([$_SESSION['user_id_agricultor']]);
+$stmt->execute([$id_agricultor]);
 $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Depuración para verificar el ID del agricultor
+error_log("ID Agricultor: " . ($id_agricultor ?? 'No definido'));
+
+// Obtener productos del agricultor logueado
+$stmt = $pdo->prepare("SELECT p.*, c.nombre AS categoria_nombre FROM productos p INNER JOIN categoria c ON p.id_categoria = c.id_categoria WHERE p.id_agricultor = ? ORDER BY p.fecha_publicacion DESC");
+$stmt->execute([$id_agricultor]);
+$productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Depuración para verificar los productos obtenidos
+error_log("Productos obtenidos: " . json_encode($productos));
 
 // Obtener TODAS las categorías
 $stmtCategorias = $pdo->query("SELECT id_categoria, nombre FROM categoria ORDER BY nombre ASC");

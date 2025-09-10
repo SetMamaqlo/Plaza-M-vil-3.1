@@ -12,29 +12,43 @@ class LoginController {
 
     public function login() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $usernameOrEmail = $_POST['username']; // Puede ser username o email
-            $password = $_POST['password'];
+            $usernameOrEmail = trim($_POST['username']); // Puede ser username o email
+            $password = trim($_POST['password']);
 
-            // Buscar usuario por username o email
+            // Buscar usuario por username o email (con id_agricultor incluido)
             $user = $this->model->getUserByUsernameOrEmail($usernameOrEmail);
 
             if ($user && password_verify($password, $user['password'])) {
                 // Iniciar sesión
                 $_SESSION['user_id_usuario'] = $user['id_usuario'];
                 $_SESSION['user_name'] = $user['username'];
-                $_SESSION['user_id_rol'] = $user['id_rol'];  // Guardar el rol del usuario
-                $_SESSION['user_id_agricultor'] = $user['id_agricultor']; 
+                $_SESSION['user_id_rol'] = $user['id_rol'];
+                
 
-             //   if (isset($_SESSION['user_id_usuario'])) {
-              //   echo "Sesión iniciada correctamente. Usuario ID: " . $_SESSION['user_id_usuario']."  ". $_SESSION['user_name']."  ". $_SESSION['user_id_rol'];
-                //} else {
-                 //echo "Error: la sesión no se inició.";
-                //}
-                header("Location: ../index.php");
+                // 🔥 Guardamos id_agricultor si existe
+                if (!empty($user['id_agricultor'])) {
+                    $_SESSION['user_id_agricultor'] = $user['id_agricultor'];
+                }
+
+                // 🔥 Redirigir según el rol
+                switch ($user['id_rol']) {
+                    case 1: // Admin
+                        header("Location: ../view/dashboard_admin.php");
+                        break;
+                    case 2: // Vendedor
+                        header("Location: ../view/dashboard_vendedor.php");
+                        break;
+                    case 3: // Agricultor
+                        header("Location: ../view/mis_productos.php");
+                        break;
+                    default:
+                        header("Location: ../index.php");
+                        break;
+                }
                 exit;
             } else {
-                //Error de login
-              header("Location: ../view/login.php?error=1");
+                // Error de login
+                header("Location: ../view/login.php?error=1");
                 exit;
             }
         }
