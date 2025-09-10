@@ -1,24 +1,24 @@
 <?php
 require_once '../config/conexion.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_usuario'])) {
-    $id_usuario = $_POST['id_usuario'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id_usuario = $_POST['id_usuario'] ?? null;
 
-    try {
-        // Eliminar el usuario de la base de datos
-        $stmt = $pdo->prepare("DELETE FROM usuarios WHERE id = ?");
-        $stmt->execute([$id_usuario]);
+    if ($id_usuario) {
+        try {
+            $stmt = $pdo->prepare("DELETE FROM usuarios WHERE id_usuario = ?");
+            $stmt->execute([$id_usuario]);
 
-        // Redirigir con el parámetro deleted=1
-        header("Location: ../view/gestion_usuarios.php?deleted=1");
-        exit;
-    } catch (PDOException $e) {
-        // Redirigir con un mensaje de error
-        header("Location: ../view/gestion_usuarios.php?error=" . urlencode($e->getMessage()));
-        exit;
+            // Redirigir de vuelta a la página de gestión de usuarios con éxito
+            header("Location: ../view/gestion_usuarios.php?deleted=1");
+            exit;
+        } catch (PDOException $e) {
+            error_log("Error al eliminar el usuario: " . $e->getMessage());
+            echo "Error al eliminar el usuario.";
+        }
+    } else {
+        echo "ID de usuario no proporcionado.";
     }
 } else {
-    // Redirigir si la solicitud no es válida
-    header("Location: ../view/gestion_usuarios.php?error=Solicitud no válida");
-    exit;
+    echo "Método no permitido.";
 }
