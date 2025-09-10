@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-09-2025 a las 10:07:49
+-- Tiempo de generación: 10-09-2025 a las 15:06:19
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -44,7 +44,8 @@ CREATE TABLE `agricultor` (
 INSERT INTO `agricultor` (`id_agricultor`, `id_usuario`, `id_zona`, `certificaciones`, `fotos`, `metodo_entrega`, `metodos_de_pago`) VALUES
 (4, 15, 1, NULL, NULL, NULL, NULL),
 (5, 16, 1, NULL, NULL, NULL, NULL),
-(6, 17, 1, NULL, NULL, NULL, NULL);
+(6, 17, 1, NULL, NULL, NULL, NULL),
+(7, 21, 1, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -81,7 +82,8 @@ INSERT INTO `carrito` (`id_carrito`, `id_usuario`, `fecha_creacion`) VALUES
 (2, 15, '2025-09-09'),
 (3, 12, '2025-09-09'),
 (4, 18, '2025-09-10'),
-(5, 19, '2025-09-10');
+(5, 19, '2025-09-10'),
+(6, 20, '2025-09-10');
 
 -- --------------------------------------------------------
 
@@ -107,7 +109,9 @@ INSERT INTO `carrito_detalle` (`id_detalle`, `id_carrito`, `id_producto`, `canti
 (15, 4, 18, 1),
 (16, 2, 19, 1),
 (19, 5, 19, 2),
-(20, 5, 20, 1);
+(20, 5, 20, 1),
+(21, 6, 19, 5),
+(22, 6, 18, 1);
 
 -- --------------------------------------------------------
 
@@ -126,9 +130,9 @@ CREATE TABLE `categoria` (
 --
 
 INSERT INTO `categoria` (`id_categoria`, `nombre`, `descripcion`) VALUES
-(1, 'Mango tomi', 'Variedad de mango pequeño y dulce'),
-(2, 'papa de año', 'Variedad de papa gruesa '),
-(5, 'freza', 'frezas de cundinamarca');
+(1, 'Verduras', 'Variedad de Verduras'),
+(2, 'Tuberculos', 'Tuberculos varios'),
+(5, 'Frutas', 'Las mejores Frutas');
 
 -- --------------------------------------------------------
 
@@ -264,7 +268,14 @@ INSERT INTO `productos` (`id_producto`, `id_agricultor`, `id_categoria`, `descri
 (13, 4, 1, 'mango manguito', 'Mango  ', 500, 17000, 2, '68be360ba62ad_mango tomi.webp', '2025-09-10'),
 (18, 4, 2, 'otra papa ', 'papa', 500, 10000, 4, '68c0fab3a72f3_mucha papa.jpg', '2025-09-10'),
 (19, 4, 5, 'freza directamente traída del campo, la mejor freza de la región. ', 'freza', 500, 10000, 2, '68c1184d6de9d_freza.jpeg', '2025-09-10'),
-(20, 6, 2, 'los mejores frijoles bola roja que te puedes comer ', 'frijoles', 1000, 5000, 2, '68c119e129caa_3000.jpg', '2025-09-10');
+(20, 6, 2, 'los mejores frijoles bola roja que te puedes comer ', 'frijoles', 1000, 5000, 2, '68c119e129caa_3000.jpg', '2025-09-10'),
+(21, 7, 5, 'Limones verdes', 'Limon', 500, 2000, 3, '68c1706eaa8a2_Limon-600x473.jpg', '2025-09-10'),
+(22, 7, 1, 'Muy moradas', 'Berenjenas', 300, 5000, 3, '68c170dd7391a_Berenjena-1.jpg', '2025-09-10'),
+(23, 7, 1, 'Zanahorias', 'Zanahorias', 2000, 5000, 2, '68c1712b65810_carousel1.jpg', '2025-09-10'),
+(24, 7, 2, 'Bola Roja', 'Frijoles', 500, 2000, 3, '68c17175c5a3a_68c0fadc338e9_pexels-arina-krasnikova-6316686.jpg', '2025-09-10'),
+(25, 7, 1, 'Esta verde', 'Brocoli', 300, 5000, 2, '68c171b00328b_68c126723ccea_pexels-cup-of-couple-7657091.jpg', '2025-09-10'),
+(26, 7, 5, 'Se llaman naranjas a pesar de que son amarillas', 'Naranjas', 500, 6000, 2, '68c174f9eaeb4_carousel3.jpg', '2025-09-10'),
+(27, 7, 5, 'Son rojas y ricas', 'Manzanas', 300, 2800, 3, '68c1759173cb0_Manzanas.jpg', '2025-09-10');
 
 -- --------------------------------------------------------
 
@@ -330,7 +341,7 @@ CREATE TABLE `usuarios` (
   `id_usuario` int(11) NOT NULL,
   `nombre_completo` varchar(50) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
-  `telefono` int(20) DEFAULT NULL,
+  `telefono` varchar(20) DEFAULT NULL,
   `id_rol` int(2) DEFAULT NULL,
   `numero_documento` varchar(50) DEFAULT NULL,
   `username` varchar(50) DEFAULT NULL,
@@ -345,12 +356,14 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `nombre_completo`, `email`, `telefono`, `id_rol`, `numero_documento`, `username`, `password`, `tipo_documento`, `fecha_nacimiento`, `Foto`) VALUES
-(12, 'admin', 'ujiht3d5@gmil.com', 35345345, 1, '1209930219', 'admin ', '$2y$10$esrEadfU98MFN5aL7DK7JutaraCsgmEXGVxAkItGUZfckGoSBrIve', 'Cédula de Ciudadanía', '2025-09-23', NULL),
-(15, 'juan', 'ujiht3d5@gmail.com', 2147483647, 3, '80821459', 'juanvende', '$2y$10$62LFc9It39LEQDsF3l8blelHDyWW7PzyXNa1y/K5wHAGbQyqidVrW', 'Cédula de Ciudadanía', '2025-09-15', '68c09b902aff3_papa.jpg'),
-(16, 'juan', 'dslajdla@gmail.com', 312321433, 3, '1212343214', 'Juanagro', '$2y$10$k37KuW.hQKb5clt4FoZzAOpoV08BjCDJpuiO2HKoLZw3JiW5UTF3W', 'Cédula de Ciudadanía', '2025-09-25', '68c10a8aa4f85_papa.jpg'),
-(17, 'usuario1', 'asdfafds@gmail.com', 324363454, 3, '1243214214', 'usuario1', '$2y$10$2gZyn6wFGrZNTN6WcUPuUe4mIHCy80XK5s7tQlnXV4BTBqQlRYjga', 'Cédula de Ciudadanía', '2025-09-10', NULL),
-(18, 'comprador', 'jsdijasiujdq2@gmail.com', 12324314, 2, '9827979842', 'comprador', '$2y$10$v.2ByRZi0CSLQzhfPBwSaewdcU1IO55gJxTwVVdWQSFqyu6T2k11G', 'Pasaporte', '2025-09-10', NULL),
-(19, 'usuario2', 'asdsadas@gmail.com', 124221412, 2, '421423142', 'usuario2', '$2y$10$3P5oEuHTHYa0Da7v5jhdmOliqGnsivtvnymQnXuIb1lhMJIHqVLI.', 'Cédula de Ciudadanía', '2025-09-10', NULL);
+(12, 'admin', 'ujiht3d5@gmil.com', '35345345', 1, '1209930219', 'admin ', '$2y$10$esrEadfU98MFN5aL7DK7JutaraCsgmEXGVxAkItGUZfckGoSBrIve', 'Cédula de Ciudadanía', '2025-09-23', NULL),
+(15, 'juan', 'ujiht3d5@gmail.com', '2147483647', 3, '80821459', 'juanvende', '$2y$10$62LFc9It39LEQDsF3l8blelHDyWW7PzyXNa1y/K5wHAGbQyqidVrW', 'Cédula de Ciudadanía', '2025-09-15', '68c09b902aff3_papa.jpg'),
+(16, 'juan', 'dslajdla@gmail.com', '312321433', 3, '1212343214', 'Juanagro', '$2y$10$k37KuW.hQKb5clt4FoZzAOpoV08BjCDJpuiO2HKoLZw3JiW5UTF3W', 'Cédula de Ciudadanía', '2025-09-25', '68c10a8aa4f85_papa.jpg'),
+(17, 'usuario1', 'asdfafds@gmail.com', '324363454', 3, '1243214214', 'usuario1', '$2y$10$2gZyn6wFGrZNTN6WcUPuUe4mIHCy80XK5s7tQlnXV4BTBqQlRYjga', 'Cédula de Ciudadanía', '2025-09-10', NULL),
+(18, 'comprador', 'jsdijasiujdq2@gmail.com', '12324314', 2, '9827979842', 'comprador', '$2y$10$v.2ByRZi0CSLQzhfPBwSaewdcU1IO55gJxTwVVdWQSFqyu6T2k11G', 'Pasaporte', '2025-09-10', NULL),
+(19, 'usuario2', 'asdsadas@gmail.com', '124221412', 2, '421423142', 'usuario2', '$2y$10$3P5oEuHTHYa0Da7v5jhdmOliqGnsivtvnymQnXuIb1lhMJIHqVLI.', 'Cédula de Ciudadanía', '2025-09-10', NULL),
+(20, 'Juan Felipe Prado Yemayusa', 'felixxd722@gmail.com', '3003889780', 1, '1053323936', 'Felpa Admin', '$2y$10$ktpqrELucIH9bEqzJNDdpu0MOlSeL6wrpq0r4fTDBkddebWRb6gRW', 'Cédula de Ciudadanía', '2004-06-23', '68c16e6594559_68bee552b2243_perfil_2_1752074078.jpeg'),
+(21, 'Felipe Prado', 'pradoyemayusafelipe@gmail.com', '3225003395', 3, '1053323936', 'Felpa Vendedor', '$2y$10$6fEK3Al34uRYT9K39ewtqujgQUTYovQr8AZ6vc2MS0GEpb81UMu.y', 'Cédula de Ciudadanía', '2022-06-23', NULL);
 
 -- --------------------------------------------------------
 
@@ -539,19 +552,19 @@ ALTER TABLE `zona`
 -- AUTO_INCREMENT de la tabla `agricultor`
 --
 ALTER TABLE `agricultor`
-  MODIFY `id_agricultor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_agricultor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `carrito`
 --
 ALTER TABLE `carrito`
-  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `carrito_detalle`
 --
 ALTER TABLE `carrito_detalle`
-  MODIFY `id_detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `categoria`
@@ -563,7 +576,7 @@ ALTER TABLE `categoria`
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de la tabla `unidades_de_medida`
@@ -575,7 +588,7 @@ ALTER TABLE `unidades_de_medida`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- Restricciones para tablas volcadas
