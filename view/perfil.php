@@ -20,72 +20,60 @@ if (!$user) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Perfil</title>
+    <title>Perfil de Usuario</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/perfil.css"> <!-- Archivo CSS específico para este view -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    </style>
 </head>
 
 <body>
     <!-- Navbar -->
     <?php include '../navbar.php'; ?>
 
-    <?php if (isset($_SESSION['success'])): ?>
-        <div class="alert alert-success">
-            <?php echo $_SESSION['success'];
-            unset($_SESSION['success']); ?>
-        </div>
-    <?php endif; ?>
+    <!-- Espacio para que el contenido no quede oculto bajo la navbar fija -->
+    <div style="height:70px"></div>
 
-    <?php if (isset($_SESSION['error'])): ?>
-        <div class="alert alert-danger">
-            <?php echo $_SESSION['error'];
-            unset($_SESSION['error']); ?>
-        </div>
-    <?php endif; ?>
+    <div class="container mt-5">
+        <div class="card p-4">
+            <div class="text-center">
+                <img src="<?php echo !empty($user['Foto']) ? '../img/' . htmlspecialchars($user['Foto']) : '../img/default_profile.png'; ?>"
+                    alt="Foto de perfil" class="profile-img mb-3">
+                <h2><?php echo htmlspecialchars($user['nombre_completo']); ?></h2>
+                <p class="text-muted">Usuario: <?php echo htmlspecialchars($user['username']); ?></p>
+                <p class="text-muted">Rol: <?php echo htmlspecialchars($user['id_rol']); ?></p>
+            </div>
 
-    <div class="container perfil-container">
-        <h2 class="mb-4 text-center">Mi Perfil</h2>
-        <div class="text-center mb-4">
-            <?php 
-            $foto = isset($user['foto']) ? $user['foto'] : '';
-            if (!empty($foto) && file_exists("../img/" . $foto)) : ?>
-                <img src="<?php echo "../img/" . htmlspecialchars($foto); ?>" alt="Foto de perfil" class="rounded-circle shadow perfil-foto">
-            <?php else: ?>
-                <img src="../img/default_profile.png" alt="Foto de perfil" class="rounded-circle shadow perfil-foto">
-            <?php endif; ?>
-        </div>
-        <table class="table table-bordered perfil-tabla">
-            <tr>
-                <th>ID</th>
-                <td><?php echo htmlspecialchars($user['id_usuario']); ?></td>
-            </tr>
-            <tr>
-                <th>Nombre</th>
-                <td><?php echo htmlspecialchars($user['nombre_completo']); ?></td>
-            </tr>
-            <tr>
-                <th>Correo</th>
-                <td><?php echo htmlspecialchars($user['email']); ?></td>
-            </tr>
-            <tr>
-                <th>Usuario</th>
-                <td><?php echo htmlspecialchars($user['username']); ?></td>
-            </tr>
-            <tr>
-                <th>Teléfono</th>
-                <td><?php echo htmlspecialchars($user['telefono']); ?></td>
-            </tr>
-            <tr>
-                <th>Rol</th>
-                <td><?php echo htmlspecialchars($user['id_rol']); ?></td>
-            </tr>
-        </table>
-        <div class="text-center mt-4">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEditarPerfil"><i
-                    class="bi bi-pencil"></i> Editar Datos</button>
-            <a href="../index.php" class="btn btn-secondary ms-2"><i class="bi bi-arrow-left"></i> Volver</a>
+            <div class="mt-4">
+                <h4>Información Personal</h4>
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></li>
+                    <li class="list-group-item"><strong>Teléfono:</strong>
+                        <?php echo htmlspecialchars($user['telefono'] ?? 'No disponible'); ?></li>
+                    <li class="list-group-item"><strong>Dirección:</strong>
+                        <?php echo htmlspecialchars($user['direccion'] ?? 'No disponible'); ?></li>
+                </ul>
+            </div>
+
+            <div class="mt-4 text-center">
+                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarPerfil"><i
+                        class="bi bi-pencil"></i> Editar Perfil</button>
+            </div>
         </div>
     </div>
 

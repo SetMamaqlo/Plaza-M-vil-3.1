@@ -6,20 +6,25 @@ if (!isset($pdo)) {
 
 // Verificar si se recibieron los datos
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Depuración: Verificar los datos recibidos
+    error_log("Datos recibidos: " . print_r($_POST, true));
+
     $nombre_completo = trim($_POST['nombre_completo'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $password = trim($_POST['password'] ?? '');
+    $username = trim($_POST['username'] ?? '');
     $rol = trim($_POST['rol'] ?? '');
 
     // Validar que todos los campos estén completos
-    if (!empty($nombre_completo) && !empty($email) && !empty($password) && !empty($rol)) {
+    if (!empty($nombre_completo) && !empty($email) && !empty($password) && !empty($username) && !empty($rol)) {
         try {
             // Insertar el usuario en la base de datos
-            $stmt = $pdo->prepare("INSERT INTO usuarios (nombre_completo, email, password, id_rol) VALUES (?, ?, ?, ?)");
+            $stmt = $pdo->prepare("INSERT INTO usuarios (nombre_completo, email, password, username, id_rol) VALUES (?, ?, ?, ?, ?)");
             $stmt->execute([
                 $nombre_completo,
                 $email,
                 password_hash($password, PASSWORD_DEFAULT),
+                $username,
                 $rol
             ]);
 
@@ -31,7 +36,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "Error al crear el usuario. Por favor, inténtelo de nuevo.";
         }
     } else {
-        echo "Todos los campos son obligatorios.";
+        // Depuración: Mostrar qué campos están vacíos
+        $campos_faltantes = [];
+        if (empty($nombre_completo)) $campos_faltantes[] = 'nombre_completo';
+        if (empty($email)) $campos_faltantes[] = 'email';
+        if (empty($password)) $campos_faltantes[] = 'password';
+        if (empty($username)) $campos_faltantes[] = 'username';
+        if (empty($rol)) $campos_faltantes[] = 'rol';
+
+        error_log("Campos faltantes: " . implode(", ", $campos_faltantes));
+        echo "Todos los campos son obligatorios. Faltan: " . implode(", ", $campos_faltantes);
     }
 } else {
     echo "Método no permitido.";

@@ -15,14 +15,14 @@ class ProductosModel
     {
         $stmt = $this->pdo->prepare("
         SELECT 
-            p.id, 
+            p.id_producto AS id, 
             p.nombre, 
             p.descripcion, 
-            p.precio, 
-            p.categoria, 
+            p.precio_unitario AS precio, 
+            p.id_categoria AS categoria, 
             u.nombre_completo AS vendedor
         FROM productos p
-        LEFT JOIN usuarios u ON p.id_usuario = u.id
+        LEFT JOIN usuarios u ON p.id_agricultor = u.id_usuario
     ");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -74,6 +74,12 @@ class ProductosModel
         $stmt = $this->pdo->prepare("SHOW COLUMNS FROM $tabla LIKE ?");
         $stmt->execute([$columna]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Verificar si la consulta devolvió resultados antes de acceder a los datos
+        if (!$row) {
+            error_log("No se encontraron resultados para la columna especificada.");
+            return [];
+        }
 
         // Extraer los valores del ENUM
         preg_match("/^enum\((.*)\)$/", $row['Type'], $matches);

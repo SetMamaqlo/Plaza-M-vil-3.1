@@ -1,7 +1,6 @@
 <?php
 // Asegurarse de que no haya salidas antes de modificar encabezados
 session_start();
-$id_rol = $_SESSION['user_id_rol'] ?? null;
 ?>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+3i9zYkGm60D9e5e5e5e5e5e5e5e5" crossorigin="anonymous"></script>
@@ -59,10 +58,13 @@ $id_rol = $_SESSION['user_id_rol'] ?? null;
                 </li>
 
                 <!-- Opciones según el rol -->
-                <?php if ($id_rol === 1): ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Plaza-M-vil-3.1/view/dashboard.php">Dashboard</a>
-                    </li>
+                <?php if (isset($_SESSION['user_id_rol'])): ?>
+                    <?php $id_rol = $_SESSION['user_id_rol']; ?>
+                    <?php if ($id_rol === 1): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Plaza-M-vil-3.1/view/dashboard.php">Dashboard</a>
+                        </li>
+                    <?php endif; ?>
                 <?php endif; ?>
 
                 <!-- Botón de Notificaciones -->
@@ -84,7 +86,7 @@ $id_rol = $_SESSION['user_id_rol'] ?? null;
                             <li><span class="dropdown-item text-muted">No hay notificaciones</span></li>
                         ?php endif; ?>
                     </ul>
-                </li>
+                </li> -->
 
                 <!-- Botón Carrito de Compras -->
                 <li class="nav-item">
@@ -105,8 +107,11 @@ $id_rol = $_SESSION['user_id_rol'] ?? null;
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end"> <!-- Alinea el menú hacia la derecha -->
                         <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/perfil.php">Mi Perfil</a></li>
-                        <?php if ($id_rol === 3): ?>
+                        <?php if (isset($id_rol) && $id_rol == 3): ?>
                             <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/mis_productos.php">Mis Productos</a></li>
+                        <?php endif; ?>
+                        <?php if (isset($id_rol) && $id_rol == 1): ?>
+                            <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/dashboard.php">Dashboard</a></li>
                         <?php endif; ?>
                         <li>
                             <hr class="dropdown-divider">

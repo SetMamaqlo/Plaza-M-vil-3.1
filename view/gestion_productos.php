@@ -135,7 +135,7 @@ ob_start();
                     <!-- Botón para eliminar -->
                     <form action="../controller/gestion_productos.php" method="POST" class="d-inline">
                         <input type="hidden" name="accion" value="eliminar">
-                        <input type="hidden" name="id" value="<?php echo $producto['id']; ?>">
+                        <input type="hidden" name="id" value="<?php echo htmlspecialchars($producto['id']); ?>">
                         <button type="submit" class="btn btn-danger btn-sm"
                             onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?');">
                             <i class="bi bi-trash"></i> Eliminar
