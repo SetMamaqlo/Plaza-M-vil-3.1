@@ -74,8 +74,7 @@ try {
 
                 <!-- Enlace de Categorías -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    
                     <a class="nav-link dropdown-toggle" href="#" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         Categorías
@@ -88,13 +87,7 @@ try {
                                 </a>
                             </li>
                         <?php endforeach; ?>
-                        <?php foreach ($categorias as $cat): ?>
-                            <li>
-                                <a class="dropdown-item" href="/Plaza-M-vil-3.1/index.php?id_categoria=<?php echo $cat['id_categoria']; ?>">
-                                    <?php echo htmlspecialchars($cat['nombre_categoria']); ?>
-                                </a>
-                            </li>
-                        <?php endforeach; ?>
+                        
                     </ul>
                 </li>
 
