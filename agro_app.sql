@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-09-2025 a las 05:36:20
+-- Tiempo de generación: 10-09-2025 a las 10:07:49
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -43,7 +43,8 @@ CREATE TABLE `agricultor` (
 
 INSERT INTO `agricultor` (`id_agricultor`, `id_usuario`, `id_zona`, `certificaciones`, `fotos`, `metodo_entrega`, `metodos_de_pago`) VALUES
 (4, 15, 1, NULL, NULL, NULL, NULL),
-(5, 16, 1, NULL, NULL, NULL, NULL);
+(5, 16, 1, NULL, NULL, NULL, NULL),
+(6, 17, 1, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -67,10 +68,20 @@ CREATE TABLE `calificaciones` (
 --
 
 CREATE TABLE `carrito` (
-  `id_carrito` int(10) NOT NULL,
+  `id_carrito` int(11) NOT NULL,
   `id_usuario` int(10) DEFAULT NULL,
   `fecha_creacion` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `carrito`
+--
+
+INSERT INTO `carrito` (`id_carrito`, `id_usuario`, `fecha_creacion`) VALUES
+(2, 15, '2025-09-09'),
+(3, 12, '2025-09-09'),
+(4, 18, '2025-09-10'),
+(5, 19, '2025-09-10');
 
 -- --------------------------------------------------------
 
@@ -79,11 +90,24 @@ CREATE TABLE `carrito` (
 --
 
 CREATE TABLE `carrito_detalle` (
-  `id_detalle` int(10) NOT NULL,
+  `id_detalle` int(11) NOT NULL,
   `id_carrito` int(10) DEFAULT NULL,
   `id_producto` int(10) DEFAULT NULL,
   `cantidad` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `carrito_detalle`
+--
+
+INSERT INTO `carrito_detalle` (`id_detalle`, `id_carrito`, `id_producto`, `cantidad`) VALUES
+(11, 4, 19, 3),
+(13, 4, 13, 1),
+(14, 4, 20, 5),
+(15, 4, 18, 1),
+(16, 2, 19, 1),
+(19, 5, 19, 2),
+(20, 5, 20, 1);
 
 -- --------------------------------------------------------
 
@@ -103,7 +127,8 @@ CREATE TABLE `categoria` (
 
 INSERT INTO `categoria` (`id_categoria`, `nombre`, `descripcion`) VALUES
 (1, 'Mango tomi', 'Variedad de mango pequeño y dulce'),
-(2, 'papa de año', 'Variedad de papa gruesa ');
+(2, 'papa de año', 'Variedad de papa gruesa '),
+(5, 'freza', 'frezas de cundinamarca');
 
 -- --------------------------------------------------------
 
@@ -236,10 +261,10 @@ CREATE TABLE `productos` (
 --
 
 INSERT INTO `productos` (`id_producto`, `id_agricultor`, `id_categoria`, `descripcion`, `nombre`, `stock`, `precio_unitario`, `id_unidad`, `foto`, `fecha_publicacion`) VALUES
-(13, 4, 1, 'sadasdasdasd', 'Mango  ', 500, 17000, 4, '68be360ba62ad_mango tomi.webp', '2025-09-08'),
-(14, NULL, 1, 'Mucha papa ', 'papa', 1000, 65000, 4, '68be389968c06_mango tomi.webp', '2025-09-08'),
-(15, NULL, 2, 'mucha mucha papa so ', 'papa', 1000, 65000, 4, '68be3f93b8e10_mucha papa.jpg', '2025-09-08'),
-(16, NULL, 2, 'Juan pablo segundo', 'papa', 1, 10000, 2, '68be4d3bbb85e_papa.jpg', '2025-09-08');
+(13, 4, 1, 'mango manguito', 'Mango  ', 500, 17000, 2, '68be360ba62ad_mango tomi.webp', '2025-09-10'),
+(18, 4, 2, 'otra papa ', 'papa', 500, 10000, 4, '68c0fab3a72f3_mucha papa.jpg', '2025-09-10'),
+(19, 4, 5, 'freza directamente traída del campo, la mejor freza de la región. ', 'freza', 500, 10000, 2, '68c1184d6de9d_freza.jpeg', '2025-09-10'),
+(20, 6, 2, 'los mejores frijoles bola roja que te puedes comer ', 'frijoles', 1000, 5000, 2, '68c119e129caa_3000.jpg', '2025-09-10');
 
 -- --------------------------------------------------------
 
@@ -321,8 +346,11 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id_usuario`, `nombre_completo`, `email`, `telefono`, `id_rol`, `numero_documento`, `username`, `password`, `tipo_documento`, `fecha_nacimiento`, `Foto`) VALUES
 (12, 'admin', 'ujiht3d5@gmil.com', 35345345, 1, '1209930219', 'admin ', '$2y$10$esrEadfU98MFN5aL7DK7JutaraCsgmEXGVxAkItGUZfckGoSBrIve', 'Cédula de Ciudadanía', '2025-09-23', NULL),
-(15, 'juan2', 'admin@gmil.com', 2147483647, 3, '80821459', 'juanadmin1', '$2y$10$62LFc9It39LEQDsF3l8blelHDyWW7PzyXNa1y/K5wHAGbQyqidVrW', 'Cédula de Ciudadanía', '2025-09-15', NULL),
-(16, 'juan', 'dslajdla@gmail.com', 312321433, 3, '1212343214', 'Juanagro', '$2y$10$k37KuW.hQKb5clt4FoZzAOpoV08BjCDJpuiO2HKoLZw3JiW5UTF3W', 'Cédula de Ciudadanía', '2025-09-25', NULL);
+(15, 'juan', 'ujiht3d5@gmail.com', 2147483647, 3, '80821459', 'juanvende', '$2y$10$62LFc9It39LEQDsF3l8blelHDyWW7PzyXNa1y/K5wHAGbQyqidVrW', 'Cédula de Ciudadanía', '2025-09-15', '68c09b902aff3_papa.jpg'),
+(16, 'juan', 'dslajdla@gmail.com', 312321433, 3, '1212343214', 'Juanagro', '$2y$10$k37KuW.hQKb5clt4FoZzAOpoV08BjCDJpuiO2HKoLZw3JiW5UTF3W', 'Cédula de Ciudadanía', '2025-09-25', '68c10a8aa4f85_papa.jpg'),
+(17, 'usuario1', 'asdfafds@gmail.com', 324363454, 3, '1243214214', 'usuario1', '$2y$10$2gZyn6wFGrZNTN6WcUPuUe4mIHCy80XK5s7tQlnXV4BTBqQlRYjga', 'Cédula de Ciudadanía', '2025-09-10', NULL),
+(18, 'comprador', 'jsdijasiujdq2@gmail.com', 12324314, 2, '9827979842', 'comprador', '$2y$10$v.2ByRZi0CSLQzhfPBwSaewdcU1IO55gJxTwVVdWQSFqyu6T2k11G', 'Pasaporte', '2025-09-10', NULL),
+(19, 'usuario2', 'asdsadas@gmail.com', 124221412, 2, '421423142', 'usuario2', '$2y$10$3P5oEuHTHYa0Da7v5jhdmOliqGnsivtvnymQnXuIb1lhMJIHqVLI.', 'Cédula de Ciudadanía', '2025-09-10', NULL);
 
 -- --------------------------------------------------------
 
@@ -511,19 +539,31 @@ ALTER TABLE `zona`
 -- AUTO_INCREMENT de la tabla `agricultor`
 --
 ALTER TABLE `agricultor`
-  MODIFY `id_agricultor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_agricultor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT de la tabla `carrito`
+--
+ALTER TABLE `carrito`
+  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `carrito_detalle`
+--
+ALTER TABLE `carrito_detalle`
+  MODIFY `id_detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `categoria`
 --
 ALTER TABLE `categoria`
-  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `unidades_de_medida`
@@ -535,7 +575,7 @@ ALTER TABLE `unidades_de_medida`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- Restricciones para tablas volcadas
@@ -644,10 +684,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-CREATE TABLE agricultores (
-    id_agricultor INT AUTO_INCREMENT PRIMARY KEY,
-    id_usuario INT NOT NULL,
-    nombre VARCHAR(100) NOT NULL,
-    zona VARCHAR(100),
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
-);

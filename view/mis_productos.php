@@ -60,7 +60,7 @@ $categorias = $stmtCategorias->fetchAll(PDO::FETCH_ASSOC);
             <?php foreach ($productos as $producto): ?>
                 <div class="col-md-4 mb-4">
                     <div class="card h-100 shadow-sm">
-                        <img src="../img/<?php echo htmlspecialchars($producto['foto']); ?>" class="card-img-top"
+                        <img src="<?php echo !empty($producto['foto']) ? '../img/' . htmlspecialchars($producto['foto']) : '../img/default.png'; ?>" class="card-img-top"
                              alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
                         <div class="card-body">
                             <h5 class="card-title">

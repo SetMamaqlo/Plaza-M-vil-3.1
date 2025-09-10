@@ -68,6 +68,14 @@ class CategoriasModel
 
     public function eliminarCategoria($id_categoria)
     {
+        // Verificar si existen productos asociados a la categoría
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM productos WHERE id_categoria = ?");
+        $stmt->execute([$id_categoria]);
+        $count = $stmt->fetchColumn();
+        if ($count > 0) {
+            throw new Exception("No se puede eliminar la categoría porque tiene productos asociados.");
+        }
+
         $stmt = $this->pdo->prepare("DELETE FROM categoria WHERE id_categoria = ?");
         return $stmt->execute([$id_categoria]);
     }

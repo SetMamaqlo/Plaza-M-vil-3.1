@@ -69,7 +69,7 @@ try {
 
                 <!-- Enlace de ¿Quienes Somos? -->
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">¿Quienes Somos?</a>
+                    <a class="nav-link active" aria-current="page" href="/Plaza-M-vil-3.1/view/quienes_somos.php">¿Quienes Somos?</a>
                 </li>
 
                 <!-- Enlace de Categorías -->

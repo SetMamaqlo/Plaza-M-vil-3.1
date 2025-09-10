@@ -23,7 +23,14 @@ class CategoriasController {
     }
 
     public function eliminarCategoria($id_categoria): void {
-        $this->model->eliminarCategoria($id_categoria);
+        try {
+            $this->model->eliminarCategoria($id_categoria);
+            header("Location: ../view/gestion_categorias.php?delete=ok");
+            exit;
+        } catch (Exception $e) {
+            header("Location: ../view/gestion_categorias.php?error=" . urlencode($e->getMessage()));
+            exit;
+        }
     }
 
     public function actualizarCategoria($id_categoria, $nombre, $descripcion): void {

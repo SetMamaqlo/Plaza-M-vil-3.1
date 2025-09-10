@@ -2,6 +2,7 @@
 // filepath: c:\xampp\htdocs\Plaza_Movil\view\gestion_categorias.php
 session_start();
 require_once '../controller/gestion_categorias.php';
+require_once '../model/categorias_model.php';
 
 // Asegurarse de que $id_rol sea un entero para evitar problemas de comparación estricta
 $id_rol = isset($_SESSION['user_id_rol']) ? (int) $_SESSION['user_id_rol'] : null;
@@ -11,6 +12,9 @@ if ($id_rol !== 1) {
     header("Location: ../index.php");
     exit;
 }
+
+$model = new CategoriasModel($pdo);
+$categorias = $model->obtenerCategorias();
 ?>
 
 <!DOCTYPE html>
@@ -67,8 +71,12 @@ if ($id_rol !== 1) {
                 <?php foreach ($categorias as $categoria): ?>
                 <tr>
                     <td><?= htmlspecialchars($categoria['id_categoria']); ?></td>
-                    <td><?= htmlspecialchars($categoria['nombre']); ?></td>
-                    <td><?= htmlspecialchars($categoria['descripcion']); ?></td>
+                    <td>
+                        <?= !empty($categoria['nombre']) ? htmlspecialchars($categoria['nombre']) : '<span class="text-danger">Sin nombre</span>'; ?>
+                    </td>
+                    <td>
+                        <?= !empty($categoria['descripcion']) ? htmlspecialchars($categoria['descripcion']) : '<span class="text-danger">Sin descripción</span>'; ?>
+                    </td>
                     <td class="text-center">
                         <!-- Botón editar (abre modal) -->
                         <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
@@ -107,12 +115,14 @@ if ($id_rol !== 1) {
                                     <div class="mb-3">
                                         <label class="form-label">Nombre</label>
                                         <input type="text" name="nombre" class="form-control"
-                                            value="<?= htmlspecialchars($categoria['nombre']); ?>" required>
+                                            value="<?= isset($categoria['nombre']) ? htmlspecialchars($categoria['nombre']) : ''; ?>"
+                                            required>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Descripción</label>
                                         <input type="text" name="descripcion" class="form-control"
-                                            value="<?= htmlspecialchars($categoria['descripcion']); ?>" required>
+                                            value="<?= isset($categoria['descripcion']) ? htmlspecialchars($categoria['descripcion']) : ''; ?>"
+                                            required>
                                     </div>
                                 </div>
                                 <div class="modal-footer">

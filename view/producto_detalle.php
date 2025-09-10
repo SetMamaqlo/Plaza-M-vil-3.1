@@ -70,7 +70,13 @@ $id_rol = $_SESSION['user_id_rol'] ?? null;
                     <div class="row">
                         <!-- Imagen del producto -->
                         <div class="col-md-6 d-flex align-items-center justify-content-center">
-                            <img src="../img/<?php echo htmlspecialchars($producto['foto']); ?>" class="product-image"
+                            <?php
+                            $imgPath = '../img/' . $producto['foto'];
+                            if (empty($producto['foto']) || !file_exists($imgPath)) {
+                                $imgPath = '../img/default.png';
+                            }
+                            ?>
+                            <img src="<?php echo $imgPath; ?>" class="product-image"
                                 alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
                         </div>
                         <!-- Detalles del producto y vendedor -->
