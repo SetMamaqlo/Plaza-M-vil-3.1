@@ -110,7 +110,7 @@
                             <select class="form-control" id="id_rol" name="id_rol" required>
                                 <option value="2">Comprador</option>
                                 <option value="3">Agricultor</option>
-                                <option value="1">Administrador</option>
+                               <!-- <option value="1">Administrador</option> -->
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Registrarse</button>
