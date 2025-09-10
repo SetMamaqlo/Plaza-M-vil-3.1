@@ -3,33 +3,33 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-require_once __DIr__. '../config/conexion.php';
-require_once __DIR__. '../model/carrito_model.php';
-require_once __DIR__.'../model/detalle_carrito_model.php';
+require_once __DIR__. '/config/conexion.php';
+require_once __DIR__. '/model/carrito_model.php';
+require_once __DIR__.'/model/detalle_carrito_model.php';
 
 
 
-$categorias = [];
+//$categorias = [];
 
-try {
-    $stmt = $pdo->query("SELECT id_categoria, nombre AS nombre_categoria FROM categoria ORDER BY nombre ASC");
-    $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    error_log("Error al obtener categorías: " . $e->getMessage());
-}
-     $carritoModel = new CarritoModel($pdo);
+//try {
+  //  $stmt = $pdo->query("SELECT id_categoria, nombre AS nombre FROM categoria ORDER BY nombre ASC");
+    //$categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+//} catch (PDOException $e) {
+  //  error_log("Error al obtener categorías: " . $e->getMessage());
+//}
+    $carritoModel = new CarritoModel($pdo);
     $detalleModel = new DetalleCarritoModel($pdo);
 
     $totalProductos = 0;
 
-    if (isset($_SESSION['user_id_usuario'])) {
-        $id_usuario = $_SESSION['user_id_usuario'];
-        $carrito = $carritoModel->obtenerCarritoPorUsuario($id_usuario);
+if (isset($_SESSION['user_id_usuario'])) {
+    $id_usuario = $_SESSION['user_id_usuario'];
+    $carrito = $carritoModel->obtenerCarritoPorUsuario($id_usuario);
 
-        if ($carrito) {
-            $totalProductos = $detalleModel->contarProductosUnicos($carrito['id_carrito']);
-        }
+    if ($carrito) {
+        $totalProductos = $detalleModel->contarProductosUnicos($carrito['id_carrito']);
     }
+}
    
 
 ?>
@@ -72,24 +72,23 @@ try {
                     <a class="nav-link active" aria-current="page" href="/Plaza-M-vil-3.1/view/quienes_somos.php">¿Quienes Somos?</a>
                 </li>
 
-                <!-- Enlace de Categorías -->
-                <li class="nav-item dropdown">
-                    
+                <!-- Enlace de Categorías
+                <li class="nav-item dropdown">               
                     <a class="nav-link dropdown-toggle" href="#" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         Categorías
                     </a>
                     <ul class="dropdown-menu">
-                        <?php foreach ($categorias as $cat): ?>
+                       // php foreach ($categorias as $cat): ?>
                             <li>
-                                <a class="dropdown-item" href="/Plaza-M-vil-3.1/index.php?id_categoria=<?php echo $cat['id_categoria']; ?>">
-                                    <?php echo htmlspecialchars($cat['nombre_categoria']); ?>
+                                <a class="dropdown-item" href="/Plaza-M-vil-3.1/index.php?id_categoria=php echo $cat['id_categoria']; ?>">
+                                    php echo htmlspecialchars($cat['nombre']); ?>
                                 </a>
                             </li>
-                        <?php endforeach; ?>
+                        php endforeach; ?>
                         
                     </ul>
-                </li>
+                </li> 
 
                 <!-- Opciones según el rol -->
                 <?php if (isset($_SESSION['user_id_rol'])): ?>

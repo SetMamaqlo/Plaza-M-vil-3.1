@@ -44,10 +44,14 @@ $categorias = $model->obtenerCategorias();
             <form action="../controller/gestion_categorias.php" method="POST" class="row g-2">
                 <input type="hidden" name="accion" value="agregar">
                 <div class="col-md-4">
-                    <input type="text" name="nombre" class="form-control" placeholder="Nombre de la categoría" required>
+                    <input type="text" name="nombre" class="form-control"
+                           placeholder="Nombre de la categoría"
+                           value="<?= htmlspecialchars($_POST['nombre'] ?? '', ENT_QUOTES); ?>" required>
                 </div>
                 <div class="col-md-6">
-                    <input type="text" name="descripcion" class="form-control" placeholder="Descripción" required>
+                    <input type="text" name="descripcion" class="form-control"
+                           placeholder="Descripción"
+                           value="<?= htmlspecialchars($_POST['descripcion'] ?? '', ENT_QUOTES); ?>" required>
                 </div>
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-primary w-100">
@@ -141,5 +145,4 @@ $categorias = $model->obtenerCategorias();
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
