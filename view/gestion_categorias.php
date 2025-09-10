@@ -36,7 +36,26 @@ if ($id_rol !== 1) {
         <h1 class="text-center mb-4">Gestión de Categorías</h1>
 
         <!-- Formulario para agregar una nueva categoría -->
-       value="<?php echo $_POST['nombre'] ?? ''; ?>"
+        <div class="mb-4">
+            <form action="../controller/gestion_categorias.php" method="POST" class="row g-2">
+                <input type="hidden" name="accion" value="agregar">
+                <div class="col-md-4">
+                    <input type="text" name="nombre" class="form-control"
+                           placeholder="Nombre de la categoría"
+                           value="<?= htmlspecialchars($_POST['nombre'] ?? '', ENT_QUOTES); ?>" required>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" name="descripcion" class="form-control"
+                           placeholder="Descripción"
+                           value="<?= htmlspecialchars($_POST['descripcion'] ?? '', ENT_QUOTES); ?>" required>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-plus-circle"></i> Agregar
+                    </button>
+                </div>
+            </form>
+        </div>
 
         <!-- Tabla de categorías -->
         <table class="table table-bordered table-hover align-middle">
@@ -116,5 +135,4 @@ if ($id_rol !== 1) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
