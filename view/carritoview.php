@@ -80,8 +80,8 @@ foreach ($productos as $producto) {
                         <!-- Formulario para editar cantidad -->
                         <form action="../controller/editar_cantidad.php" method="POST" class="d-flex">
                             <input type="hidden" name="id_detalle" value="<?php echo $producto['id_detalle']; ?>">
-                            <input type="number" name="cantidad" value="<?php echo $producto['cantidad']; ?>" 
-                                min="1" class="form-control form-control-sm text-center me-2" style="width:80px;">
+                            <input type="number" name="cantidad" value="<?php echo $producto['cantidad']; ?>" min="1"
+                                class="form-control form-control-sm text-center me-2" style="width:80px;">
                             <button type="submit" class="btn btn-sm btn-outline-success">Actualizar</button>
                         </form>
                     </div>
@@ -103,12 +103,12 @@ foreach ($productos as $producto) {
             <?php endforeach; ?>
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <span class="cart-total">Total: $<?php echo number_format($total); ?></span>
-                <a href="../view/confirmacion.php" class="btn btn-checkout btn-lg text-white">
+                <a href="../view/pago.php" class="btn btn-checkout btn-lg text-white">
                     <i class="bi bi-credit-card"></i> Comprar ahora
                 </a>
             </div>
-                <a href="../index.php" class="btn btn-outline-success mt-2"><i class="bi bi-arrow-left"></i> Seguir
-                    comprando</a>
+            <a href="../index.php" class="btn btn-outline-success mt-2"><i class="bi bi-arrow-left"></i> Seguir
+                comprando</a>
         <?php endif; ?>
     </div>
 </body>
