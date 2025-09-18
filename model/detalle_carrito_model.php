@@ -57,5 +57,12 @@ class DetalleCarritoModel {
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return $row ? intval($row['total']) : 0;
     }
+
+    public function vaciarCarrito($id_carrito) {
+        $sql = "DELETE FROM carrito_detalle WHERE id_carrito = :id_carrito";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':id_carrito', $id_carrito, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
 }
 

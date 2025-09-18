@@ -19,6 +19,19 @@ class ProductModel {
     public function getPdo() {
         return $this->pdo;
     }
+
+    // obtiene un producto por su id (precio, unidad y stock)
+    public function obtenerProductoPorId($id_producto) {
+        $stmt = $this->pdo->prepare("
+            SELECT id_producto, nombre, precio_unitario, id_unidad, stock
+            FROM productos
+            WHERE id_producto = ?
+            LIMIT 1
+        ");
+        $stmt->execute([$id_producto]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
 }
 
 

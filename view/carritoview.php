@@ -102,10 +102,13 @@ foreach ($productos as $producto) {
                 </div>
             <?php endforeach; ?>
             <div class="d-flex justify-content-between align-items-center mt-4">
-                <span class="cart-total">Total: $<?php echo number_format($total); ?></span>
-                <a href="../view/pago.php" class="btn btn-checkout btn-lg text-white">
-                    <i class="bi bi-credit-card"></i> Comprar ahora
-                </a>
+                <form action="../controller/crear_pedido.php" method="POST">
+                    <input type="hidden" name="id_carrito" value="<?php echo $carrito['id_carrito']; ?>">
+                    <button type="submit" class="btn btn-checkout btn-lg text-white">
+                        <i class="bi bi-credit-card"></i> Comprar ahora
+                    </button>
+                </form>
+
             </div>
             <a href="../index.php" class="btn btn-outline-success mt-2"><i class="bi bi-arrow-left"></i> Seguir
                 comprando</a>
