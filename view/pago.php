@@ -10,18 +10,32 @@ if (!isset($_SESSION['user_id_usuario'])) {
 
 $id_usuario = $_SESSION['user_id_usuario'];
 
-// 1. Buscar el último pedido pendiente del usuario
-$stmt = $pdo->prepare("SELECT * FROM pedidos WHERE id_usuario = ? AND estado = 'pendiente' ORDER BY fecha DESC LIMIT 1");
-$stmt->execute([$id_usuario]);
-$pedido = $stmt->fetch(PDO::FETCH_ASSOC);
+// Verifica si se recibe id_pedido por GET
+$id_pedido = isset($_GET['id_pedido']) ? intval($_GET['id_pedido']) : null;
 
-$id_pedido = $_GET['id_pedido'] ?? null;
-if (!$id_pedido) {
-    die("No se recibió un pedido válido.");
+if ($id_pedido) {
+    // Busca el pedido por id y usuario, y que esté pendiente
+    $stmt = $pdo->prepare("SELECT * FROM pedidos WHERE id_pedido = ? AND id_usuario = ? AND estado = 'pendiente' LIMIT 1");
+    $stmt->execute([$id_pedido, $id_usuario]);
+    $pedido = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$pedido) {
+        echo "<div class='container mt-5'><div class='alert alert-danger'>No se encontró un pedido pendiente válido para pagar.</div></div>";
+        exit;
+    }
+} else {
+    // Busca el último pedido pendiente del usuario
+    $stmt = $pdo->prepare("SELECT * FROM pedidos WHERE id_usuario = ? AND estado = 'pendiente' ORDER BY fecha DESC LIMIT 1");
+    $stmt->execute([$id_usuario]);
+    $pedido = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Verifica si hay pedido pendiente
+    if (!$pedido) {
+        echo "<div class='container mt-5'><div class='alert alert-warning'>No tienes pedidos pendientes para pagar.</div></div>";
+        exit;
+    }
+    $id_pedido = $pedido['id_pedido'];
 }
-
-
-$id_pedido = $pedido['id_pedido'];
 
 // 2. Traer los productos del pedido
 $stmt = $pdo->prepare("
@@ -32,6 +46,12 @@ $stmt = $pdo->prepare("
 ");
 $stmt->execute([$id_pedido]);
 $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Verifica si el pedido tiene productos
+if (!$productos || count($productos) === 0) {
+    echo "<div class='container mt-5'><div class='alert alert-warning'>El pedido no tiene productos asociados. No se puede procesar el pago.</div></div>";
+    exit;
+}
 
 // 3. Calcular total
 $total = 0;
@@ -83,7 +103,7 @@ foreach ($productos as $prod) {
 
                     <form action="../controller/procesar_pago.php" method="POST">
                         <!-- Enviar solo id_pedido (oculto) -->
-                        <input type="hidden" name="id_pedido" value="<?= $id_pedido ?>">
+                        <input type="hidden" name="id_pedido" value="<?= htmlspecialchars($id_pedido) ?>">
 
                         <div class="mb-3">
                             <label class="form-label">Método de Pago</label>
