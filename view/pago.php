@@ -82,29 +82,12 @@ foreach ($productos as $prod) {
                     <h4 class="text-end text-success">Total: $<?= number_format($total, 2) ?></h4>
 
                     <form action="../controller/procesar_pago.php" method="POST">
-                        <!-- Enviar solo id_pedido (oculto) -->
                         <input type="hidden" name="id_pedido" value="<?= $id_pedido ?>">
-
-                        <div class="mb-3">
-                            <label class="form-label">Método de Pago</label>
-                            <div class="d-flex justify-content-center">
-                                <label class="me-3">
-                                    <input type="radio" name="metodo" value="Tarjeta" required> Tarjeta
-                                </label>
-                                <label class="me-3">
-                                    <input type="radio" name="metodo" value="PSE" required> PSE
-                                </label>
-                                <label>
-                                    <input type="radio" name="metodo" value="Nequi" required> Nequi
-                                </label>
-                            </div>
-                        </div>
-                        <div class="d-grid mt-4">
-                            <button type="submit" class="btn btn-success btn-lg">
-                                <i class="bi bi-credit-card"></i> Pagar Ahora
-                            </button>
-                        </div>
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="bi bi-credit-card"></i> Pagar con MercadoPago
+                        </button>
                     </form>
+
                 </div>
             </div>
         </div>
