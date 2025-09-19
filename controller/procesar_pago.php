@@ -18,7 +18,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         VALUES (?, ?, ?, ?, ?, NOW())");
     $stmt->execute([$id_pedido, $id_producto, $id_cliente, $monto_total, $metodo]);
 
-    header("Location: ../view/gestion_pagos.php?success=1");
-    exit;
+    // Simulación de pago (puedes cambiar la lógica según lo que desees)
+    $pago_exitoso = true; // Cambia a false para simular error
+
+    if ($pago_exitoso) {
+        // Aquí podrías actualizar el estado del pedido a 'pagado'
+        // $stmt = $pdo->prepare("UPDATE pedidos SET estado = 'pagado' WHERE id_pedido = ?");
+        // $stmt->execute([$id_pedido]);
+        header("Location: ../view/carrito.php?pago=exitoso");
+        exit;
+    } else {
+        header("Location: ../view/carrito.php?pago=fallido");
+        exit;
+    }
 }
 ?>
