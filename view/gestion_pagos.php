@@ -9,7 +9,7 @@ $stmt = $pdo->query("
         agri_user.nombre_completo AS agricultor,
         prod.nombre AS producto
     FROM pagos p
-    JOIN usuarios u ON u.id_usuario = p.id_cliente
+    JOIN usuarios u ON u.id_usuario = p.id_usuario
     JOIN productos prod ON prod.id_producto = p.id_producto
     JOIN agricultor agri ON agri.id_agricultor = prod.id_agricultor
     JOIN usuarios agri_user ON agri_user.id_usuario = agri.id_usuario
@@ -30,6 +30,10 @@ $pagos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h2 class="mb-4">Gestión de Pagos</h2>
         <?php if (isset($_GET['success'])): ?>
             <div class="alert alert-success">Pago registrado correctamente</div>
+        <?php elseif (isset($_GET['error']) && $_GET['error'] === 'pago_fallido'): ?>
+            <div class="alert alert-danger">El pago ha fallado.</div>
+        <?php elseif (isset($_GET['error']) && $_GET['error'] === 'no_pedido'): ?>
+            <div class="alert alert-warning">No se recibió un pedido válido.</div>
         <?php endif; ?>
         <table class="table table-bordered">
             <thead>

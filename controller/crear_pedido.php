@@ -1,9 +1,6 @@
 <?php
 session_start();
 require_once '../config/conexion.php';
-require_once '../model/PedidoModel.php';
-require_once '../model/DetallePedidoModel.php';
-require_once '../model/detalle_carrito_model.php';
 
 if (!isset($_SESSION['user_id_usuario'])) {
     header("Location: ../view/login.php");
@@ -14,33 +11,43 @@ $id_usuario = $_SESSION['user_id_usuario'];
 $id_carrito = $_POST['id_carrito'] ?? null;
 
 if (!$id_carrito) {
-    die("Carrito no válido.");
+    header("Location: ../view/carrito.php?error=no_pedido");
+    exit;
 }
 
-$pedidoModel = new PedidoModel($pdo);
-$detallePedidoModel = new DetallePedidoModel($pdo);
-$detalleCarritoModel = new DetalleCarritoModel($pdo);
+// 1. Crear el pedido
+$stmt = $pdo->prepare("INSERT INTO pedidos (id_usuario, fecha, estado) VALUES (?, NOW(), 'pendiente')");
+$stmt->execute([$id_usuario]);
+$id_pedido = $pdo->lastInsertId();
 
-// 1. Crear pedido
-$id_pedido = $pedidoModel->crearPedido($id_usuario);
+// 2. Pasar los productos del carrito al pedido
+$stmtDetalles = $pdo->prepare("
+    SELECT cd.id_producto, cd.cantidad, p.precio_unitario, p.id_unidad
+    FROM carrito_detalle cd
+    INNER JOIN productos p ON cd.id_producto = p.id_producto
+    WHERE cd.id_carrito = ?
+");
+$stmtDetalles->execute([$id_carrito]);
+$detalles = $stmtDetalles->fetchAll(PDO::FETCH_ASSOC);
 
-// 2. Traer productos del carrito
-$productosCarrito = $detalleCarritoModel->obtenerProductos($id_carrito);
+if ($detalles) {
+    $stmtInsert = $pdo->prepare("
+        INSERT INTO pedido_detalle (id_pedido, id_producto, cantidad, precio_unitario, id_unidad)
+        VALUES (?, ?, ?, ?, ?)
+    ");
 
-// 3. Insertar cada producto en pedido_detalle
-foreach ($productosCarrito as $prod) {
-    $detallePedidoModel->agregarDetalle(
-        $id_pedido,
-        $prod['id_producto'],
-        $prod['cantidad'],
-        $prod['precio_unitario'],
-        $prod['id_unidad']
-    );
+    foreach ($detalles as $d) {
+        $stmtInsert->execute([
+            $id_pedido,
+            $d['id_producto'],
+            $d['cantidad'],
+            $d['precio_unitario'],
+            $d['id_unidad']
+        ]);
+    }
 }
 
-// 4. Vaciar carrito
-$detalleCarritoModel->vaciarCarrito($id_carrito);
-
-// 5. Redirigir al checkout (confirmación del pedido)
-header("Location: ../view/pago.php?id_pedido=" . $id_pedido);
+// 3. Redirigir a pago.php con el ID del pedido
+header("Location: ../view/pago.php?id_pedido=$id_pedido");
 exit;
+?>

@@ -17,10 +17,24 @@ class CarritoModel {
     }
 
     // Buscar carrito activo de un usuario
+
     public function obtenerCarritoPorUsuario($id_usuario) {
-        $sql = "SELECT * FROM carrito WHERE id_usuario = ? ORDER BY fecha_creacion DESC LIMIT 1";
-        $stmt = $this->pdo->prepare($sql);
+    $stmt = $this->pdo->prepare("SELECT * FROM carrito WHERE id_usuario = ?");
+    $stmt->execute([$id_usuario]);
+    $carrito = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$carrito) {
+        // Crear carrito vacío si no existe
+        $stmt = $this->pdo->prepare("INSERT INTO carrito (id_usuario, fecha_creacion) VALUES (?, NOW())");
         $stmt->execute([$id_usuario]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $id_carrito = $this->pdo->lastInsertId();
+
+        $carrito = [
+            'id_carrito' => $id_carrito,
+            'id_usuario' => $id_usuario
+        ];
     }
+
+    return $carrito;
+}
 }
