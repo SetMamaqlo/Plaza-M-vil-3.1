@@ -55,6 +55,12 @@
                         <div class="alert alert-danger">Usuario o contraseña incorrectos.</div>
                     <?php endif; ?>
 
+                    <?php if (isset($_GET['deleted']) && $_GET['deleted'] == '1'): ?>
+                        <div class="alert alert-success text-center mt-3">
+                            Usuario eliminado correctamente. Puedes crear una nueva cuenta o iniciar sesión con otro usuario.
+                        </div>
+                    <?php endif; ?>
+
                     <form action="../controller/logincontroller.php" method="POST">
                         <input type="hidden" name="action" value="login">
                         <div class="mb-3">

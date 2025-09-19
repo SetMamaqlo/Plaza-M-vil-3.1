@@ -31,6 +31,8 @@ $total = 0;
 foreach ($productos as $producto) {
     $total += $producto['precio_unitario'] * $producto['cantidad'];
 }
+
+$pago = isset($_GET['pago']) ? $_GET['pago'] : null;
 ?>
 
 <!DOCTYPE html>
@@ -54,6 +56,19 @@ foreach ($productos as $producto) {
     <div style="height:70px"></div>
 
     <div class="cart-container">
+        <?php if ($pago === 'exitoso'): ?>
+            <div class="alert alert-success">
+                <i class="bi bi-check-circle"></i> ¡Pago realizado con éxito! Tu pedido ha sido registrado.
+            </div>
+        <?php elseif ($pago === 'fallido'): ?>
+            <div class="alert alert-danger">
+                <i class="bi bi-x-circle"></i> Hubo un problema con el pago. Intenta nuevamente.
+            </div>
+        <?php elseif (isset($_GET['error']) && $_GET['error'] === 'no_pedido'): ?>
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle"></i> No se recibió un pedido válido.
+            </div>
+        <?php endif; ?>
         <div class="d-flex align-items-center mb-4">
             <i class="bi bi-cart3 cart-icon"></i>
             <h2 class="ms-3 cart-title mb-0">Carrito de Compras</h2>

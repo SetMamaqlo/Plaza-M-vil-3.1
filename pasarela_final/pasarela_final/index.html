@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pasarela de Pago de Prueba</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f2f5; }
+        .container { background: white; padding: 2em; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 400px; text-align: center; }
+        h2 { color: #333; }
+        .payment-options { margin-bottom: 20px; }
+        .payment-options img { width: 50px; cursor: pointer; opacity: 0.5; margin: 0 10px; transition: opacity 0.3s; }
+        .payment-options img.active { opacity: 1; border: 2px solid #007bff; border-radius: 5px; }
+        .payment-form { display: none; }
+        .payment-form.active { display: block; }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button, .btn { display: block; width: 100%; padding: 10px; margin-top: 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; text-decoration: none; text-align: center; }
+        .btn:hover, button:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Pagar Pedido</h2>
+        <p><strong>Pedido #12345</strong></p>
+        <p><strong>Monto a pagar:</strong> $99.99</p>
+
+        <div class="payment-options">
+            <img src="img/tarjeta.png" alt="Tarjeta de credito" data-method="tarjeta" class="active">
+            <img src="img/pse.png" alt="PSE" data-method="pse">
+            <img src="img/nequi.png" alt="Nequi" data-method="nequi">
+        </div>
+
+        <form action="procesar_pago.php" method="post">
+            <!-- Campos fijos -->
+            <input type="hidden" name="id_pedido" value="12345">
+            <input type="hidden" name="monto_total" value="99.99">
+            <input type="hidden" name="metodo" id="metodo_pago" value="Tarjeta de credito">
+            
+            <!-- Cliente -->
+            <input type="text" name="nombre_cliente" placeholder="Nombre completo del cliente" required>
+
+            <!-- Formulario tarjeta -->
+            <div id="tarjeta-form" class="payment-form active">
+                <input type="text" name="numero_tarjeta" placeholder="Número de tarjeta">
+                <input type="text" name="cvv" placeholder="CVV">
+            </div>
+
+            <!-- Formulario PSE -->
+            <div id="pse-form" class="payment-form">
+                <select name="banco">
+                    <option value="">Seleccione su banco</option>
+                    <option value="Bancolombia">Bancolombia</option>
+                    <option value="Davivienda">Davivienda</option>
+                    <option value="BBVA">BBVA</option>
+                </select>
+                <input type="email" name="email_pse" placeholder="Correo electrónico">
+            </div>
+
+            <!-- Formulario Nequi -->
+            <div id="nequi-form" class="payment-form">
+                <input type="text" name="telefono_nequi" placeholder="Número de teléfono Nequi">
+            </div>
+            
+            <button type="submit">Pagar Ahora</button>
+            <a href="gestion_pagos.php" class="btn">Ver Pagos Existentes</a>
+        </form>
+    </div>
+
+    <script>
+        const paymentMethods = document.querySelectorAll('.payment-options img');
+        const paymentForms = document.querySelectorAll('.payment-form');
+        const metodoInput = document.getElementById('metodo_pago');
+
+        paymentMethods.forEach(img => {
+            img.addEventListener('click', () => {
+                // Quitar selección previa
+                paymentMethods.forEach(i => i.classList.remove('active'));
+                img.classList.add('active');
+                
+                // Ocultar formularios
+                paymentForms.forEach(form => {
+                    form.classList.remove('active');
+                    // quitar required de todos los inputs
+                    form.querySelectorAll('input, select').forEach(el => el.required = false);
+                });
+
+                // Mostrar formulario del método seleccionado
+                const method = img.getAttribute('data-method');
+                const formActivo = document.getElementById(method + '-form');
+                formActivo.classList.add('active');
+                // aplicar required dinámico solo al activo
+                formActivo.querySelectorAll('input, select').forEach(el => el.required = true);
+
+                // Cambiar valor que se manda al backend
+                metodoInput.value = img.alt;
+            });
+        });
+    </script>
+</body>
+</html>

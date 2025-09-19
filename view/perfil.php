@@ -70,9 +70,16 @@ if (!$user) {
                 </ul>
             </div>
 
-            <div class="mt-4 text-center">
-                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarPerfil"><i
-                        class="bi bi-pencil"></i> Editar Perfil</button>
+            <div class="mt-4 text-center d-flex flex-wrap justify-content-center gap-2">
+                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarPerfil">
+                    <i class="bi bi-pencil"></i> Editar Perfil
+                </button>
+                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminarPerfil">
+                    <i class="bi bi-trash"></i> Eliminar Perfil
+                </button>
+                <a href="historialpedidos.php" class="btn btn-info">
+                    <i class="bi bi-clock-history"></i> Historial de Pedidos
+                </a>
             </div>
         </div>
     </div>
@@ -117,6 +124,30 @@ if (!$user) {
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para eliminar perfil -->
+    <div class="modal fade" id="modalEliminarPerfil" tabindex="-1" aria-labelledby="modalEliminarPerfilLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" method="POST" action="../controller/eliminarperfilcontroller.php">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEliminarPerfilLabel">Confirmar Eliminación de Perfil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id_usuario" value="<?php echo htmlspecialchars($user['id_usuario']); ?>">
+                    <p>¿Estás seguro de que deseas eliminar tu perfil? Esta acción no se puede deshacer.</p>
+                    <div class="mb-3">
+                        <label for="confirm_password" class="form-label">Ingresa tu contraseña para confirmar:</label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Eliminar Perfil</button>
                 </div>
             </form>
         </div>
