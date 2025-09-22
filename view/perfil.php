@@ -83,6 +83,9 @@ if (!$user) {
                 <a href="historialpedidos.php" class="btn btn-info">
                     <i class="bi bi-clock-history"></i> Historial de Pedidos
                 </a>
+                <a href="mis_pqrs.php" class="btn btn-secondary">
+                    <i class="bi bi-chat-dots"></i> Mis PQRS
+                </a>
             </div>
         </div>
     </div>
