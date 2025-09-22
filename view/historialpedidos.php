@@ -47,6 +47,11 @@ $pedidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         ');
                         $stmtProd->execute([$pedido['id_pedido']]);
                         $productos = $stmtProd->fetchAll(PDO::FETCH_ASSOC);
+
+                        // Consulta pago relacionado (mejorada: busca el pago más reciente del pedido)
+                        $stmtPago = $pdo->prepare('SELECT id_pago FROM pagos WHERE id_pedido = ? ORDER BY fecha_pago DESC LIMIT 1');
+                        $stmtPago->execute([$pedido['id_pedido']]);
+                        $pago = $stmtPago->fetch(PDO::FETCH_ASSOC);
                         ?>
                         <?php if (count($productos) === 0): ?>
                             <div class="alert alert-warning">No hay productos en este pedido.</div>
@@ -72,6 +77,27 @@ $pedidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 </table>
                             </div>
                         <?php endif; ?>
+                        <div class="mt-3 d-flex gap-2">
+                            <?php if ($pago && !empty($pago['id_pago'])): ?>
+                                <a href="../controller/generar_factura.php?id_pago=<?php echo $pago['id_pago']; ?>" class="btn btn-primary btn-sm" target="_blank">
+                                    <i class="bi bi-file-earmark-pdf"></i> Comprobante PDF
+                                </a>
+                            <?php else: ?>
+                                <button class="btn btn-secondary btn-sm" disabled>
+                                    <i class="bi bi-file-earmark-pdf"></i> Sin comprobante
+                                </button>
+                            <?php endif; ?>
+                            <!-- CRUD: Editar y Eliminar -->
+                            <a href="../view/editar_pedido.php?id_pedido=<?php echo $pedido['id_pedido']; ?>" class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil"></i> Editar
+                            </a>
+                            <form action="../controller/eliminar_pedido.php" method="POST" style="display:inline;">
+                                <input type="hidden" name="id_pedido" value="<?php echo $pedido['id_pedido']; ?>">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar este pedido?');">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             <?php endforeach; ?>
