@@ -179,6 +179,7 @@ while ($row = $promStmt->fetch(PDO::FETCH_ASSOC)) {
                     $productosStmt = $pdo->prepare("SELECT * FROM productos WHERE id_categoria = ? ORDER BY fecha_publicacion DESC");
                     $productosStmt->execute([$categoriaId]);
                     while ($producto = $productosStmt->fetch(PDO::FETCH_ASSOC)) {
+                        $promedio = isset($promedios[$producto['id_producto']]) ? $promedios[$producto['id_producto']] : 0;
                         ?>
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch">
                             <a href="view/producto_detalle.php?id_producto=<?php echo $producto['id_producto']; ?>"
@@ -190,6 +191,17 @@ while ($row = $promStmt->fetch(PDO::FETCH_ASSOC)) {
                                     <div class="card-body d-flex flex-column justify-content-between">
                                         <h5 class="card-title mb-2 fw-semibold text-truncate">
                                             <?php echo htmlspecialchars($producto['nombre']); ?></h5>
+                                        <!-- Mostrar estrellas -->
+                                        <div class="mb-2">
+                                            <?php
+                                            for ($i = 1; $i <= 5; $i++) {
+                                                echo '<i class="bi bi-star' . ($i <= round($promedio) ? '-fill text-warning' : '') . '"></i>';
+                                            }
+                                            if ($promedio > 0) {
+                                                echo ' <span class="text-muted small">(' . number_format($promedio, 2) . ')</span>';
+                                            }
+                                            ?>
+                                        </div>
                                         <p class="card-text small text-muted mb-2" style="min-height:48px;">
                                             <?php echo htmlspecialchars($producto['descripcion']); ?>
                                         </p>
