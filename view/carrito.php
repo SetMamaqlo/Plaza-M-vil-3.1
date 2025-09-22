@@ -41,14 +41,16 @@ foreach ($productos as $prod) {
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Checkout - Plaza Móvil</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="/Plaza-M-vil-3.1/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const params = new URLSearchParams(window.location.search);
             if (params.get('pago') === 'exitoso') {
                 alert('¡Pago realizado exitosamente!');
@@ -58,6 +60,7 @@ foreach ($productos as $prod) {
         });
     </script>
 </head>
+
 <body>
     <?php include '../navbar.php'; ?>
     <div style="height:70px"></div>
@@ -67,7 +70,7 @@ foreach ($productos as $prod) {
             <div class="col-md-8">
                 <div class="card p-4">
                     <h2 class="text-center mb-4 text-success">Confirmar Pedido</h2>
-                    
+
                     <h5>Resumen del Pedido (ID: <?= $id_pedido ?>)</h5>
                     <table class="table">
                         <thead>
@@ -124,4 +127,5 @@ foreach ($productos as $prod) {
         <p>&copy; <?= date('Y') ?> Plaza Móvil. Todos los derechos reservados.</p>
     </footer>
 </body>
+
 </html>

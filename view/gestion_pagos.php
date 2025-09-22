@@ -60,7 +60,9 @@ $pagos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= htmlspecialchars($pago['metodo']) ?></td>
                     <td>
                         <a class="btn btn-sm btn-primary" 
-                           href="../controller/generar_factura.php?id_pago=<?= $pago['id_pago'] ?>">PDF</a>
+                           href="../controller/generar_factura.php?id_pago=<?= $pago['id_pago'] ?>" target="_blank">
+                            <i class="bi bi-file-earmark-pdf"></i> Comprobante PDF
+                        </a>
                     </td>
                 </tr>
                 <?php endforeach; ?>

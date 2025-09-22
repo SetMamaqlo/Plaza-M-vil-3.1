@@ -1,5 +1,6 @@
 <?php
 require_once '../config/conexion.php';
+require_once '../model/resena_model.php';
 session_start();
 if (!isset($_SESSION['carrito'])) {
     $_SESSION['carrito'] = [];
@@ -50,6 +51,24 @@ if (empty($producto['foto_usuario']) || !is_file(__DIR__ . "/../img/" . $product
 }
 
 $id_rol = $_SESSION['user_id_rol'] ?? null;
+
+$resenas = ResenaModel::obtenerResenas($id_producto);
+
+// Obtener agricultor del producto
+$stmt = $pdo->prepare("SELECT id_agricultor FROM productos WHERE id_producto = ?");
+$stmt->execute([$id_producto]);
+$id_agricultor = $stmt->fetchColumn();
+$calificacion = ResenaModel::promedioAgricultor($id_agricultor);
+
+// Procesar reseña
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['estrellas'], $_POST['comentario'])) {
+    $estrellas = (int)$_POST['estrellas'];
+    $comentario = trim($_POST['comentario']);
+    $id_usuario = $_SESSION['user_id_usuario'];
+    ResenaModel::agregarResena($id_producto, $id_usuario, $estrellas, $comentario);
+    header("Location: producto_detalle.php?id_producto=$id_producto");
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -103,6 +122,76 @@ $id_rol = $_SESSION['user_id_rol'] ?? null;
             </div>
         </div>
 
+        <!-- Reseñas del producto -->
+        <div class="container mt-4">
+            <h5>Reseñas del producto</h5>
+            <?php
+            $ultimasResenas = array_slice($resenas, 0, 3);
+            foreach ($ultimasResenas as $resena): ?>
+                <div class="border rounded p-2 mb-2">
+                    <strong><?= htmlspecialchars($resena['nombre_completo']) ?></strong>
+                    <span>
+                <?php for ($i = 1; $i <= 5; $i++): ?>
+                    <i class="bi bi-star<?= $i <= $resena['estrellas'] ? '-fill text-warning' : '' ?>"></i>
+                <?php endfor; ?>
+            </span>
+                    <small class="text-muted"><?= $resena['fecha'] ?></small>
+                    <p><?= htmlspecialchars($resena['comentario']) ?></p>
+                </div>
+            <?php endforeach; ?>
+
+            <?php if (count($resenas) > 3): ?>
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalResenas">
+                    Ver todas las reseñas
+                </button>
+            <?php endif; ?>
+
+            <hr>
+            <h5>Deja tu reseña</h5>
+            <form method="POST">
+                <div class="mb-2">
+                    <label class="form-label">Puntuación:</label>
+                    <select name="estrellas" class="form-select w-auto d-inline" required>
+                        <option value="">Estrellas</option>
+                        <?php for ($i = 1; $i <= 5; $i++): ?>
+                            <option value="<?= $i ?>"><?= $i ?></option>
+                        <?php endfor; ?>
+                    </select>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label">Comentario:</label>
+                    <textarea name="comentario" class="form-control" rows="2" maxlength="250" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-success">Enviar reseña</button>
+            </form>
+        </div>
+
+        <!-- Modal para todas las reseñas -->
+        <div class="modal fade" id="modalResenas" tabindex="-1" aria-labelledby="modalResenasLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalResenasLabel">Todas las reseñas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+              </div>
+              <div class="modal-body">
+                <?php foreach ($resenas as $resena): ?>
+                    <div class="border rounded p-2 mb-2">
+                        <strong><?= htmlspecialchars($resena['nombre_completo']) ?></strong>
+                        <span>
+                            <?php for ($i = 1; $i <= 5; $i++): ?>
+                                <i class="bi bi-star<?= $i <= $resena['estrellas'] ? '-fill text-warning' : '' ?>"></i>
+                            <?php endfor; ?>
+                        </span>
+                        <small class="text-muted"><?= $resena['fecha'] ?></small>
+                        <p><?= htmlspecialchars($resena['comentario']) ?></p>
+                    </div>
+                <?php endforeach; ?>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Productos recomendados -->
         <div class="container mt-5">
             <h4 class="mb-4 text-center">Productos recomendados</h4>
@@ -137,6 +226,19 @@ $id_rol = $_SESSION['user_id_rol'] ?? null;
                     </div>
                 <?php endforeach; ?>
             </div>
+        </div>
+
+        <div class="container mt-4">
+            <h4>Calificación del Agricultor:
+                <?php
+                $prom = $calificacion['promedio'] ?? 0;
+                for ($i = 1; $i <= 5; $i++) {
+                    echo '<i class="bi bi-star' . ($i <= round($prom) ? '-fill text-warning' : '') . '"></i>';
+                }
+                echo " (" . number_format($prom, 2) . " / 5, " . ($calificacion['total'] ?? 0) . " votos)";
+                ?>
+            </h4>
+            <hr>
         </div>
 
         <footer class="bg-light text-center py-3 mt-5">

@@ -33,18 +33,11 @@ if (isset($_SESSION['user_id_usuario'])) {
    
 
 ?>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+3i9zYkGm60D9e5e5e5e5e5e5e5e5" crossorigin="anonymous"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Ensure dropdowns are initialized
-        var dropdownElements = document.querySelectorAll('.dropdown-toggle');
-        dropdownElements.forEach(function (dropdown) {
-            new bootstrap.Dropdown(dropdown);
-        });
-    });
-</script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="/Plaza-M-vil-3.1/css/styles.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
 <!-- Updated styles for buttons -->
 <style>
 
@@ -88,7 +81,7 @@ if (isset($_SESSION['user_id_usuario'])) {
                         php endforeach; ?>
                         
                     </ul>
-                </li> 
+                </li> -->
 
                 <!-- Opciones según el rol -->
                 <?php if (isset($_SESSION['user_id_rol'])): ?>
@@ -137,7 +130,7 @@ if (isset($_SESSION['user_id_usuario'])) {
                         aria-expanded="false">
                         Usuario
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end"> <!-- Alinea el menú hacia la derecha -->
+                    <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/perfil.php">Mi Perfil</a></li>
                         <?php if (isset($id_rol) && $id_rol == 3): ?>
                             <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/mis_productos.php">Mis Productos</a></li>
@@ -156,3 +149,73 @@ if (isset($_SESSION['user_id_usuario'])) {
         </div>
     </div>
 </nav>
+
+<!-- Botón flotante PQRS -->
+<style>
+#pqrs-float-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 9999;
+    background: #198754;
+    color: #fff;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    cursor: pointer;
+}
+</style>
+<div id="pqrs-float-btn" data-bs-toggle="modal" data-bs-target="#modalPQRS" title="PQRS">
+    <i class="bi bi-chat-dots"></i>
+</div>
+
+<!-- Modal PQRS -->
+<div class="modal fade" id="modalPQRS" tabindex="-1" aria-labelledby="modalPQRSLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form class="modal-content" method="POST" action="/Plaza-M-vil-3.1/controller/registrar_pqrs.php" enctype="multipart/form-data">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalPQRSLabel">PQRS: Peticiones, Quejas, Reclamos y Sugerencias</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="tipo" class="form-label">Tipo</label>
+          <select class="form-select" name="tipo" id="tipo" required>
+            <option value="">Seleccione...</option>
+            <option value="peticion">Petición</option>
+            <option value="queja">Queja</option>
+            <option value="reclamo">Reclamo</option>
+            <option value="sugerencia">Sugerencia</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="asunto" class="form-label">Asunto</label>
+          <input type="text" class="form-control" name="asunto" id="asunto" maxlength="150" required>
+        </div>
+        <div class="mb-3">
+          <label for="descripcion" class="form-label">Descripción</label>
+          <textarea class="form-control" name="descripcion" id="descripcion" rows="3" maxlength="250" required></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="adjunto" class="form-label">Adjuntar archivo (opcional)</label>
+          <input type="file" class="form-control" name="adjunto" id="adjunto" accept="image/*,application/pdf">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-success">Enviar PQRS</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<?php if (isset($_GET['pqrs']) && $_GET['pqrs'] === 'ok'): ?>
+<script>
+    alert('PQRS registrada con éxito');
+</script>
+<?php endif; ?>

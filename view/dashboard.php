@@ -21,7 +21,8 @@ if ($id_rol !== 1) {
     <title>Dashboard - Administrador</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="/Plaza-M-vil-3.1/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
@@ -59,7 +60,7 @@ if ($id_rol !== 1) {
             </div>
 
             <!-- gestión unidades de medida -->
-             <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm">
                     <div class="card-body text-center">
                         <i class="bi bi-scale" style="font-size: 3rem; color: #dc3545;"></i>
@@ -79,6 +80,18 @@ if ($id_rol !== 1) {
                         <h5 class="card-title mt-3">Gestión de Categorías</h5>
                         <p class="card-text">Administra las categorías disponibles en el sistema.</p>
                         <a href="gestion_categorias.php" class="btn btn-warning">Ir</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gestión de PQRS -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="bi bi-chat-dots-fill" style="font-size: 3rem; color: #17a2b8;"></i>
+                        <h5 class="card-title mt-3">Gestión de PQRS</h5>
+                        <p class="card-text">Revisa y responde las PQRS enviadas por los usuarios.</p>
+                        <a href="admin_pqrs.php" class="btn btn-info">Ir</a>
                     </div>
                 </div>
             </div>

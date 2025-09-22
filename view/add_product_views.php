@@ -20,6 +20,10 @@ require_once '../controller/gestion_categorias.php';
     <title>Añadir Producto</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/Plaza-M-vil-3.1/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body class="d-flex align-items-center justify-content-center vh-100 bg-light">
@@ -28,21 +32,23 @@ require_once '../controller/gestion_categorias.php';
         <div class="row justify-content-center">
             <div class="col-md-7">
                 <div class="card shadow-lg p-4 rounded-3">
-                    
+
                     <h2 class="text-center mb-4">Añadir Nuevo Producto</h2>
                     <form action="../controller/productcontroller.php" method="POST" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="nombre" class="form-label">Nombre del Producto</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" required>
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="descripcion" class="form-label">Descripción</label>
-                            <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
+                            <textarea class="form-control" id="descripcion" name="descripcion" rows="3"
+                                required></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="precio_unitario" class="form-label">Precio Unitario</label>
-                            <input type="number" step="0.01" class="form-control" id="precio_unitario" name="precio_unitario" required>
+                            <input type="number" step="0.01" class="form-control" id="precio_unitario"
+                                name="precio_unitario" required>
                         </div>
                         <div class="mb-3">
                             <label for="stock" class="form-label">Stock Disponible</label>
@@ -72,13 +78,14 @@ require_once '../controller/gestion_categorias.php';
                         </div>
                         <div class="mb-3">
                             <label for="fecha_publicacion" class="form-label">Fecha de publicacion</label>
-                            <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" required>
+                            <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento"
+                                required>
                         </div>
                         <div class="mb-3">
                             <label for="foto" class="form-label">Imagen del Producto</label>
                             <input type="file" class="form-control" id="foto" name="foto" accept="image/*" required>
                         </div>
-                        
+
                         <button type="submit" class="btn btn-primary w-100">Añadir Producto</button>
                     </form>
                 </div>
