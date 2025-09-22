@@ -23,6 +23,8 @@ if (!$user) {
     <title>Perfil de Usuario</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/Plaza-M-vil-3.1/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         body {
             background-color: #f8f9fa;
@@ -62,7 +64,8 @@ if (!$user) {
             <div class="mt-4">
                 <h4>Información Personal</h4>
                 <ul class="list-group">
-                    <li class="list-group-item"><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></li>
+                    <li class="list-group-item"><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?>
+                    </li>
                     <li class="list-group-item"><strong>Teléfono:</strong>
                         <?php echo htmlspecialchars($user['telefono'] ?? 'No disponible'); ?></li>
                     <li class="list-group-item"><strong>Dirección:</strong>
@@ -130,7 +133,8 @@ if (!$user) {
     </div>
 
     <!-- Modal para eliminar perfil -->
-    <div class="modal fade" id="modalEliminarPerfil" tabindex="-1" aria-labelledby="modalEliminarPerfilLabel" aria-hidden="true">
+    <div class="modal fade" id="modalEliminarPerfil" tabindex="-1" aria-labelledby="modalEliminarPerfilLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <form class="modal-content" method="POST" action="../controller/eliminarperfilcontroller.php">
                 <div class="modal-header">
@@ -142,7 +146,8 @@ if (!$user) {
                     <p>¿Estás seguro de que deseas eliminar tu perfil? Esta acción no se puede deshacer.</p>
                     <div class="mb-3">
                         <label for="confirm_password" class="form-label">Ingresa tu contraseña para confirmar:</label>
-                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                            required>
                     </div>
                 </div>
                 <div class="modal-footer">

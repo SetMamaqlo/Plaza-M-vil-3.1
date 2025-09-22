@@ -38,6 +38,13 @@ try {
     error_log("Error BD en index.php: " . $e->getMessage());
     die("Error al cargar los productos. Revisa el log del servidor.");
 }
+
+// Consulta para obtener el promedio de estrellas de cada producto
+$promedios = [];
+$promStmt = $pdo->query("SELECT id_producto, AVG(estrellas) as promedio FROM producto_resenas GROUP BY id_producto");
+while ($row = $promStmt->fetch(PDO::FETCH_ASSOC)) {
+    $promedios[$row['id_producto']] = $row['promedio'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -48,10 +55,10 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagina Principal</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/Plaza-M-vil-3.1/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
@@ -114,6 +121,7 @@ try {
             <?php
             $stmt = $pdo->query("SELECT * FROM productos ORDER BY fecha_publicacion DESC");
             while ($producto = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $promedio = isset($promedios[$producto['id_producto']]) ? $promedios[$producto['id_producto']] : 0;
                 ?>
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch">
                     <a href="view/producto_detalle.php?id_producto=<?php echo $producto['id_producto']; ?>"
@@ -123,7 +131,19 @@ try {
                                 class="card-img-top rounded-top" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
                             <div class="card-body d-flex flex-column justify-content-between">
                                 <h5 class="card-title mb-2 fw-semibold text-truncate">
-                                    <?php echo htmlspecialchars($producto['nombre']); ?></h5>
+                                    <?php echo htmlspecialchars($producto['nombre']); ?>
+                                </h5>
+                                <!-- Mostrar estrellas -->
+                                <div class="mb-2">
+                                    <?php
+                                    for ($i = 1; $i <= 5; $i++) {
+                                        echo '<i class="bi bi-star' . ($i <= round($promedio) ? '-fill text-warning' : '') . '"></i>';
+                                    }
+                                    if ($promedio > 0) {
+                                        echo ' <span class="text-muted small">(' . number_format($promedio, 2) . ')</span>';
+                                    }
+                                    ?>
+                                </div>
                                 <p class="card-text small text-muted mb-2" style="min-height:48px;">
                                     <?php echo htmlspecialchars($producto['descripcion']); ?>
                                 </p>

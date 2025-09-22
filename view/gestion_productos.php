@@ -1,5 +1,5 @@
 <?php
-include '../navbar.php'; 
+include '../navbar.php';
 require_once '../controller/gestion_productos.php';
 require_once '../controller/medidas_controller.php';
 require_once '../controller/gestion_categorias.php';
@@ -29,7 +29,8 @@ ob_start();
     <title>Gestión de Productos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="/Plaza-M-vil-3.1/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
@@ -72,8 +73,8 @@ ob_start();
                         <td><?= htmlspecialchars($producto['stock']); ?></td>
                         <td>
                             <?php if (!empty($producto['foto'])): ?>
-                                <img src="../img/<?= htmlspecialchars($producto['foto']); ?>" 
-                                     alt="Imagen producto" width="60" height="60">
+                                <img src="../img/<?= htmlspecialchars($producto['foto']); ?>" alt="Imagen producto" width="60"
+                                    height="60">
                             <?php else: ?>
                                 <span class="text-muted">Sin foto</span>
                             <?php endif; ?>
@@ -91,10 +92,12 @@ ob_start();
 
                             <!-- Modal de edición -->
                             <div class="modal fade" id="editarProductoModal<?= $producto['id_producto']; ?>" tabindex="-1"
-                                aria-labelledby="editarProductoModalLabel<?= $producto['id_producto']; ?>" aria-hidden="true">
+                                aria-labelledby="editarProductoModalLabel<?= $producto['id_producto']; ?>"
+                                aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <form action="../controller/gestion_productos.php" method="POST" enctype="multipart/form-data">
+                                        <form action="../controller/gestion_productos.php" method="POST"
+                                            enctype="multipart/form-data">
                                             <div class="modal-header">
                                                 <h5 class="modal-title"
                                                     id="editarProductoModalLabel<?= $producto['id_producto']; ?>">Editar
@@ -104,7 +107,8 @@ ob_start();
                                             </div>
                                             <div class="modal-body">
                                                 <input type="hidden" name="accion" value="actualizar">
-                                                <input type="hidden" name="id_producto" value="<?= $producto['id_producto']; ?>">
+                                                <input type="hidden" name="id_producto"
+                                                    value="<?= $producto['id_producto']; ?>">
                                                 <div class="mb-3">
                                                     <label for="nombre" class="form-label">Nombre</label>
                                                     <input type="text" class="form-control" name="nombre"
@@ -112,12 +116,14 @@ ob_start();
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="descripcion" class="form-label">Descripción</label>
-                                                    <textarea class="form-control" name="descripcion" required><?= htmlspecialchars($producto['descripcion']); ?></textarea>
+                                                    <textarea class="form-control" name="descripcion"
+                                                        required><?= htmlspecialchars($producto['descripcion']); ?></textarea>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="precio_unitario" class="form-label">Precio</label>
                                                     <input type="number" class="form-control" name="precio_unitario"
-                                                        value="<?= htmlspecialchars($producto['precio_unitario']); ?>" required>
+                                                        value="<?= htmlspecialchars($producto['precio_unitario']); ?>"
+                                                        required>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="stock" class="form-label">Stock</label>
@@ -127,11 +133,13 @@ ob_start();
                                                 <div class="mb-3">
                                                     <label for="foto" class="form-label">Foto</label>
                                                     <input type="file" class="form-control" name="foto">
-                                                    <input type="hidden" name="foto_actual" value="<?= htmlspecialchars($producto['foto']); ?>">
+                                                    <input type="hidden" name="foto_actual"
+                                                        value="<?= htmlspecialchars($producto['foto']); ?>">
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="id_categoria" class="form-label">Categoría</label>
-                                                    <select class="form-control" id="id_categoria" name="id_categoria" required>
+                                                    <select class="form-control" id="id_categoria" name="id_categoria"
+                                                        required>
                                                         <option value="">-- Selecciona una categoría --</option>
                                                         <?php foreach ($categorias as $cat): ?>
                                                             <option value="<?= htmlspecialchars($cat['id_categoria']) ?>">
@@ -140,7 +148,7 @@ ob_start();
                                                         <?php endforeach; ?>
                                                     </select>
                                                 </div>
-                                                 <div class="mb-3">
+                                                <div class="mb-3">
                                                     <label for="id_unidad" class="form-label">Unidad de Medida</label>
                                                     <select class="form-control" id="id_unidad" name="id_unidad" required>
                                                         <option value="">-- Selecciona una unidad --</option>
@@ -180,4 +188,5 @@ ob_start();
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

@@ -52,13 +52,16 @@ foreach ($detalles as $d) {
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Pago del Pedido #<?php echo $id_pedido; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="/Plaza-M-vil-3.1/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+
 <body>
     <?php include '../navbar.php'; ?>
     <div style="height:70px"></div>
@@ -83,16 +86,17 @@ foreach ($detalles as $d) {
             </thead>
             <tbody>
                 <?php foreach ($detalles as $d): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($d['nombre']); ?></td>
-                    <td>
-                        <img src="../img/<?php echo htmlspecialchars($d['foto']); ?>" width="60" height="60" style="object-fit:cover;">
-                    </td>
-                    <td><?php echo htmlspecialchars($d['agricultor']); ?></td>
-                    <td><?php echo $d['cantidad']; ?></td>
-                    <td>$<?php echo number_format($d['precio_unitario']); ?></td>
-                    <td>$<?php echo number_format($d['precio_unitario'] * $d['cantidad']); ?></td>
-                </tr>
+                    <tr>
+                        <td><?php echo htmlspecialchars($d['nombre']); ?></td>
+                        <td>
+                            <img src="../img/<?php echo htmlspecialchars($d['foto']); ?>" width="60" height="60"
+                                style="object-fit:cover;">
+                        </td>
+                        <td><?php echo htmlspecialchars($d['agricultor']); ?></td>
+                        <td><?php echo $d['cantidad']; ?></td>
+                        <td>$<?php echo number_format($d['precio_unitario']); ?></td>
+                        <td>$<?php echo number_format($d['precio_unitario'] * $d['cantidad']); ?></td>
+                    </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
@@ -116,4 +120,5 @@ foreach ($detalles as $d) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

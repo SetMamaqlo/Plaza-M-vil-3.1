@@ -289,7 +289,8 @@ CREATE TABLE `pqrs` (
   `fecha` date DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
   `respuesta` varchar(250) DEFAULT NULL,
-  `fecha_respuesta` date DEFAULT NULL
+  `fecha_respuesta` date DEFAULT NULL,
+  `adjunto` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -454,6 +455,34 @@ CREATE TABLE `zona` (
 
 INSERT INTO `zona` (`id_zona`, `zona`) VALUES
 (1, 'Zona por defecto');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `producto_resenas`
+--
+
+CREATE TABLE IF NOT EXISTS `producto_resenas` (
+  `id_resena` INT AUTO_INCREMENT PRIMARY KEY,
+  `id_producto` INT NOT NULL,
+  `id_usuario` INT NOT NULL,
+  `estrellas` INT NOT NULL, -- 1 a 5
+  `comentario` VARCHAR(250),
+  `fecha` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id_producto`),
+  FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Estructura de tabla para la tabla `agricultor_calificacion`
+--
+
+CREATE TABLE IF NOT EXISTS `agricultor_calificacion` (
+  `id_agricultor` INT PRIMARY KEY,
+  `promedio` DECIMAL(3,2) DEFAULT 0,
+  `total_votos` INT DEFAULT 0,
+  FOREIGN KEY (`id_agricultor`) REFERENCES `agricultor` (`id_agricultor`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Índices para tablas volcadas

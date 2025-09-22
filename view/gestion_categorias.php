@@ -26,7 +26,8 @@ $categorias = $model->obtenerCategorias();
     <title>Gestión de Categorías</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="/Plaza-M-vil-3.1/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
@@ -44,14 +45,12 @@ $categorias = $model->obtenerCategorias();
             <form action="../controller/gestion_categorias.php" method="POST" class="row g-2">
                 <input type="hidden" name="accion" value="agregar">
                 <div class="col-md-4">
-                    <input type="text" name="nombre" class="form-control"
-                           placeholder="Nombre de la categoría"
-                           value="<?= htmlspecialchars($_POST['nombre'] ?? '', ENT_QUOTES); ?>" required>
+                    <input type="text" name="nombre" class="form-control" placeholder="Nombre de la categoría"
+                        value="<?= htmlspecialchars($_POST['nombre'] ?? '', ENT_QUOTES); ?>" required>
                 </div>
                 <div class="col-md-6">
-                    <input type="text" name="descripcion" class="form-control"
-                           placeholder="Descripción"
-                           value="<?= htmlspecialchars($_POST['descripcion'] ?? '', ENT_QUOTES); ?>" required>
+                    <input type="text" name="descripcion" class="form-control" placeholder="Descripción"
+                        value="<?= htmlspecialchars($_POST['descripcion'] ?? '', ENT_QUOTES); ?>" required>
                 </div>
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-primary w-100">
@@ -73,71 +72,70 @@ $categorias = $model->obtenerCategorias();
             </thead>
             <tbody>
                 <?php foreach ($categorias as $categoria): ?>
-                <tr>
-                    <td><?= htmlspecialchars($categoria['id_categoria']); ?></td>
-                    <td>
-                        <?= !empty($categoria['nombre']) ? htmlspecialchars($categoria['nombre']) : '<span class="text-danger">Sin nombre</span>'; ?>
-                    </td>
-                    <td>
-                        <?= !empty($categoria['descripcion']) ? htmlspecialchars($categoria['descripcion']) : '<span class="text-danger">Sin descripción</span>'; ?>
-                    </td>
-                    <td class="text-center">
-                        <!-- Botón editar (abre modal) -->
-                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#editarModal<?= $categoria['id_categoria']; ?>">
-                            <i class="bi bi-pencil"></i> Editar
-                        </button>
-
-                        <!-- Formulario eliminar -->
-                        <form action="../controller/gestion_categorias.php" method="POST" class="d-inline">
-                            <input type="hidden" name="accion" value="eliminar">
-                            <input type="hidden" name="id_categoria" value="<?= $categoria['id_categoria']; ?>">
-                            <button type="submit" class="btn btn-danger btn-sm"
-                                onclick="return confirm('¿Seguro que deseas eliminar esta categoría?');">
-                                <i class="bi bi-trash"></i> Eliminar
+                    <tr>
+                        <td><?= htmlspecialchars($categoria['id_categoria']); ?></td>
+                        <td>
+                            <?= !empty($categoria['nombre']) ? htmlspecialchars($categoria['nombre']) : '<span class="text-danger">Sin nombre</span>'; ?>
+                        </td>
+                        <td>
+                            <?= !empty($categoria['descripcion']) ? htmlspecialchars($categoria['descripcion']) : '<span class="text-danger">Sin descripción</span>'; ?>
+                        </td>
+                        <td class="text-center">
+                            <!-- Botón editar (abre modal) -->
+                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#editarModal<?= $categoria['id_categoria']; ?>">
+                                <i class="bi bi-pencil"></i> Editar
                             </button>
-                        </form>
-                    </td>
-                </tr>
 
-                <!-- Modal editar -->
-                <div class="modal fade" id="editarModal<?= $categoria['id_categoria']; ?>" tabindex="-1"
-                    aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <form action="../controller/gestion_categorias.php" method="POST">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Editar Categoría</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Cerrar"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <input type="hidden" name="accion" value="actualizar">
-                                    <input type="hidden" name="id_categoria"
-                                        value="<?= $categoria['id_categoria']; ?>">
-
-                                    <div class="mb-3">
-                                        <label class="form-label">Nombre</label>
-                                        <input type="text" name="nombre" class="form-control"
-                                            value="<?= isset($categoria['nombre']) ? htmlspecialchars($categoria['nombre']) : ''; ?>"
-                                            required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Descripción</label>
-                                        <input type="text" name="descripcion" class="form-control"
-                                            value="<?= isset($categoria['descripcion']) ? htmlspecialchars($categoria['descripcion']) : ''; ?>"
-                                            required>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="submit" class="btn btn-success">Guardar cambios</button>
-                                </div>
+                            <!-- Formulario eliminar -->
+                            <form action="../controller/gestion_categorias.php" method="POST" class="d-inline">
+                                <input type="hidden" name="accion" value="eliminar">
+                                <input type="hidden" name="id_categoria" value="<?= $categoria['id_categoria']; ?>">
+                                <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('¿Seguro que deseas eliminar esta categoría?');">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </button>
                             </form>
+                        </td>
+                    </tr>
+
+                    <!-- Modal editar -->
+                    <div class="modal fade" id="editarModal<?= $categoria['id_categoria']; ?>" tabindex="-1"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form action="../controller/gestion_categorias.php" method="POST">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Editar Categoría</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Cerrar"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input type="hidden" name="accion" value="actualizar">
+                                        <input type="hidden" name="id_categoria" value="<?= $categoria['id_categoria']; ?>">
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Nombre</label>
+                                            <input type="text" name="nombre" class="form-control"
+                                                value="<?= isset($categoria['nombre']) ? htmlspecialchars($categoria['nombre']) : ''; ?>"
+                                                required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Descripción</label>
+                                            <input type="text" name="descripcion" class="form-control"
+                                                value="<?= isset($categoria['descripcion']) ? htmlspecialchars($categoria['descripcion']) : ''; ?>"
+                                                required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="submit" class="btn btn-success">Guardar cambios</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
                 <?php endforeach; ?>
             </tbody>
         </table>
@@ -145,4 +143,5 @@ $categorias = $model->obtenerCategorias();
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

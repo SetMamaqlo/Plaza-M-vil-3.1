@@ -20,13 +20,17 @@ ob_start();
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Unidades de Medida</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/Plaza-M-vil-3.1/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+
 <body>
     <!-- Espacio para la navbar -->
     <div style="height:70px"></div>
@@ -64,19 +68,23 @@ ob_start();
 
                             <!-- Modal de edición -->
                             <div class="modal fade" id="editarMedidaModal<?php echo $medida['id_unidad']; ?>" tabindex="-1"
-                                aria-labelledby="editarMedidaModalLabel<?php echo $medida['id_unidad']; ?>" aria-hidden="true">
+                                aria-labelledby="editarMedidaModalLabel<?php echo $medida['id_unidad']; ?>"
+                                aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <form action="../controller/medidas_controller.php" method="POST">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="editarMedidaModalLabel<?php echo $medida['id_unidad']; ?>">
+                                                <h5 class="modal-title"
+                                                    id="editarMedidaModalLabel<?php echo $medida['id_unidad']; ?>">
                                                     Editar Unidad
                                                 </h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <input type="hidden" name="accion" value="editar">
-                                                <input type="hidden" name="id_unidad" value="<?php echo $medida['id_unidad']; ?>">
+                                                <input type="hidden" name="id_unidad"
+                                                    value="<?php echo $medida['id_unidad']; ?>">
                                                 <div class="mb-3">
                                                     <label for="nombre" class="form-label">Nombre</label>
                                                     <input type="text" class="form-control" name="nombre"
@@ -84,7 +92,8 @@ ob_start();
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Cancelar</button>
                                                 <button type="submit" class="btn btn-warning">Guardar Cambios</button>
                                             </div>
                                         </form>
@@ -109,7 +118,8 @@ ob_start();
     </div>
 
     <!-- Modal crear medida -->
-    <div class="modal fade" id="crearMedidaModal" tabindex="-1" aria-labelledby="crearMedidaModalLabel" aria-hidden="true">
+    <div class="modal fade" id="crearMedidaModal" tabindex="-1" aria-labelledby="crearMedidaModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form action="../controller/medidas_controller.php" method="POST">
@@ -135,4 +145,5 @@ ob_start();
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
