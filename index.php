@@ -46,7 +46,6 @@ while ($row = $promStmt->fetch(PDO::FETCH_ASSOC)) {
     $promedios[$row['id_producto']] = $row['promedio'];
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -59,11 +58,37 @@ while ($row = $promStmt->fetch(PDO::FETCH_ASSOC)) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/Plaza-M-vil-3.1/css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .producto-animate {
+            opacity: 0;
+            transform: translateY(30px) scale(0.97);
+            animation: productoFadeIn 0.7s cubic-bezier(.4,0,.2,1) forwards;
+        }
+        @keyframes productoFadeIn {
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <!-- Navbar -->
     <?php include 'navbar.php'; ?>
+
+    <!-- Sección de bienvenida -->
+    <section class="container welcome-section mt-4 mb-0">
+        <span class="welcome-icon"><i class="bi bi-shop-window"></i></span>
+        <div>
+            <div class="welcome-title">Bienvenido a Plaza Móvil</div>
+            <div class="welcome-desc">
+                Descubre los mejores productos frescos del campo, frutas y verduras seleccionadas para ti.<br>
+                Explora una inumerable cantidad de productos agricolas, fresco y de buena calidad para ti.
+            </div>
+        </div>
+    </section>
+
     <!-- Carrousel -->
     <div id="carouselExampleCaptions" class="carousel slide mb-4 custom-carousel" data-bs-ride="carousel"
         data-bs-interval="3000">
@@ -94,7 +119,7 @@ while ($row = $promStmt->fetch(PDO::FETCH_ASSOC)) {
                 <img src="img/carousel3.jpg" class="d-block w-100 h-100" style="object-fit: cover;" alt="...">
                 <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
                     <h5>LAS FRUTAS MAS FRESCAS</h5>
-                    
+
                     <p>Mira las ultimas publicaciones en frutas.</p>
                 </div>
             </div>
@@ -111,22 +136,28 @@ while ($row = $promStmt->fetch(PDO::FETCH_ASSOC)) {
         </button>
     </div>
 
+    <hr class="section-divider">
+
     <!-- Apartado de productos -->
     <?php include 'config/conexion.php'; ?>
 
     <section class="container mt-5 productos-fondo">
-        <h2 class="text-center mb-4 fw-bold display-6 border-bottom pb-2" style="letter-spacing:1px;">Productos
-            Publicados</h2>
+        <h2 class="text-center mb-4 fw-bold display-6 border-bottom pb-2" style="letter-spacing:1px;">
+            <i class="bi bi-box-seam text-success me-2"></i>Productos Publicados
+        </h2>
         <div class="row g-4 justify-content-center">
             <?php
             $stmt = $pdo->query("SELECT * FROM productos ORDER BY fecha_publicacion DESC");
+            $delay = 0.3;
+            $idx = 0;
             while ($producto = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $promedio = isset($promedios[$producto['id_producto']]) ? $promedios[$producto['id_producto']] : 0;
                 ?>
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch">
                     <a href="view/producto_detalle.php?id_producto=<?php echo $producto['id_producto']; ?>"
                         class="w-100 text-decoration-none text-dark">
-                        <div class="card h-100 border-0 shadow-sm minimal-card">
+                        <div class="card h-100 border-0 shadow-sm minimal-card producto-animate"
+                             style="animation-delay: <?= $delay * $idx ?>s;">
                             <img src="img/<?php echo htmlspecialchars($producto['foto']); ?>"
                                 class="card-img-top rounded-top" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
                             <div class="card-body d-flex flex-column justify-content-between">
@@ -154,13 +185,17 @@ while ($row = $promStmt->fetch(PDO::FETCH_ASSOC)) {
                         </div>
                     </a>
                 </div>
-            <?php } ?>
+            <?php $idx++; } ?>
         </div>
     </section>
+
+    <hr class="section-divider">
+
     <!-- Apartado de productos por categoría -->
     <section class="container mt-5">
-        <h2 class="text-center mb-4 fw-bold display-6 border-bottom pb-2" style="letter-spacing:1px;">Productos por
-            Categoría</h2>
+        <h2 class="text-center mb-4 fw-bold display-6 border-bottom pb-2" style="letter-spacing:1px;">
+            <i class="bi bi-tags text-success me-2"></i>Productos por Categoría
+        </h2>
         <?php
         // Consulta para obtener las categorías desde la tabla `categoria`
         $categoriasStmt = $pdo->query("SELECT id_categoria, nombre FROM categoria ORDER BY nombre ASC");
@@ -172,19 +207,23 @@ while ($row = $promStmt->fetch(PDO::FETCH_ASSOC)) {
             ?>
             <div class="mb-5">
                 <h3 class="text-success border-start border-4 ps-3 mb-4" style="font-weight:600; letter-spacing:0.5px;">
-                    <?php echo $categoriaNombre; ?> </h3>
+                    <i class="bi bi-tag-fill me-2"></i><?php echo $categoriaNombre; ?>
+                </h3>
                 <div class="row g-4 justify-content-center">
                     <?php
                     // Consulta para obtener los productos de la categoría actual
                     $productosStmt = $pdo->prepare("SELECT * FROM productos WHERE id_categoria = ? ORDER BY fecha_publicacion DESC");
                     $productosStmt->execute([$categoriaId]);
+                    $delay = 0.1;
+                    $idx = 0;
                     while ($producto = $productosStmt->fetch(PDO::FETCH_ASSOC)) {
                         $promedio = isset($promedios[$producto['id_producto']]) ? $promedios[$producto['id_producto']] : 0;
                         ?>
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch">
                             <a href="view/producto_detalle.php?id_producto=<?php echo $producto['id_producto']; ?>"
                                 class="w-100 text-decoration-none text-dark">
-                                <div class="card h-100 border-0 shadow-sm minimal-card">
+                                <div class="card h-100 border-0 shadow-sm minimal-card producto-animate"
+                                     style="animation-delay: <?= $delay * $idx ?>s;">
                                     <img src="img/<?php echo htmlspecialchars($producto['foto']); ?>"
                                         class="card-img-top rounded-top"
                                         alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
@@ -212,23 +251,21 @@ while ($row = $promStmt->fetch(PDO::FETCH_ASSOC)) {
                                 </div>
                             </a>
                         </div>
-                    <?php } ?>
+                    <?php $idx++; } ?>
                 </div>
+                <hr class="categoria-separator">
             </div>
         <?php } ?>
     </section>
     </div>
     <?php include 'config/conexion.php'; ?>
-    <div class="container mt-5">
+    <div class="container mt-5"></div>
 
-    </div>
-
-    <footer class="bg-light text-center py-3">
+    <footer class="text-center py-3">
         <p class="mb-0">&copy; 2025 Plaza Móvil. Todos los derechos reservados.</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-    
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>
 </body>

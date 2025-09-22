@@ -75,10 +75,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['estrellas'], $_POST['
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($producto['nombre']); ?> - Detalles</title>
+    <title>Pagina Principal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="/Plaza-M-vil-3.1/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .resena-card {
+            background: #f1f8e9;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(44, 62, 80, 0.07);
+            padding: 1rem 1.2rem;
+            margin-bottom: 1rem;
+        }
+        .star-rating {
+            direction: ltr;
+            unicode-bidi: bidi-override;
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+        .star-rating input[type="radio"] {
+            display: none;
+        }
+        .star-rating label {
+            color: #bdbdbd;
+            margin: 0 2px;
+            transition: color 0.15s;
+        }
+        .star-rating input[type="radio"]:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #ffd600;
+        }
+        /* Animación para productos recomendados */
+        .reco-animate {
+            opacity: 0;
+            transform: translateY(30px) scale(0.97);
+            animation: recoFadeIn 0.7s cubic-bezier(.4,0,.2,1) forwards;
+        }
+        @keyframes recoFadeIn {
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+        .reco-stars {
+            margin-bottom: 6px;
+        }
+    </style>
 </head>
 <body>
     <?php include '../navbar.php'; ?>
@@ -128,13 +172,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['estrellas'], $_POST['
             <?php
             $ultimasResenas = array_slice($resenas, 0, 3);
             foreach ($ultimasResenas as $resena): ?>
-                <div class="border rounded p-2 mb-2">
+                <div class="resena-card">
                     <strong><?= htmlspecialchars($resena['nombre_completo']) ?></strong>
                     <span>
-                <?php for ($i = 1; $i <= 5; $i++): ?>
-                    <i class="bi bi-star<?= $i <= $resena['estrellas'] ? '-fill text-warning' : '' ?>"></i>
-                <?php endfor; ?>
-            </span>
+                        <?php for ($i = 1; $i <= 5; $i++): ?>
+                            <i class="bi bi-star<?= $i <= $resena['estrellas'] ? '-fill text-warning' : '' ?>"></i>
+                        <?php endfor; ?>
+                    </span>
                     <small class="text-muted"><?= $resena['fecha'] ?></small>
                     <p><?= htmlspecialchars($resena['comentario']) ?></p>
                 </div>
@@ -150,13 +194,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['estrellas'], $_POST['
             <h5>Deja tu reseña</h5>
             <form method="POST">
                 <div class="mb-2">
-                    <label class="form-label">Puntuación:</label>
-                    <select name="estrellas" class="form-select w-auto d-inline" required>
-                        <option value="">Estrellas</option>
+                    <label class="form-label d-block mb-1">Puntuación:</label>
+                    <div class="star-rating">
                         <?php for ($i = 1; $i <= 5; $i++): ?>
-                            <option value="<?= $i ?>"><?= $i ?></option>
+                            <input type="radio" id="estrella<?= $i ?>" name="estrellas" value="<?= $i ?>" required>
+                            <label for="estrella<?= $i ?>"><i class="bi bi-star-fill"></i></label>
                         <?php endfor; ?>
-                    </select>
+                    </div>
                 </div>
                 <div class="mb-2">
                     <label class="form-label">Comentario:</label>
@@ -176,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['estrellas'], $_POST['
               </div>
               <div class="modal-body">
                 <?php foreach ($resenas as $resena): ?>
-                    <div class="border rounded p-2 mb-2">
+                    <div class="resena-card">
                         <strong><?= htmlspecialchars($resena['nombre_completo']) ?></strong>
                         <span>
                             <?php for ($i = 1; $i <= 5; $i++): ?>
@@ -201,20 +245,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['estrellas'], $_POST['
                 $stmtRecomendados->execute([$producto['id_producto']]);
                 $recomendados = $stmtRecomendados->fetchAll(PDO::FETCH_ASSOC);
 
-                foreach ($recomendados as $reco):
+                // Obtener promedios de estrellas para recomendados
+                $idsReco = array_column($recomendados, 'id_producto');
+                $promediosReco = [];
+                if ($idsReco) {
+                    $in = implode(',', array_map('intval', $idsReco));
+                    $stmtProm = $pdo->query("SELECT id_producto, AVG(estrellas) as promedio FROM producto_resenas WHERE id_producto IN ($in) GROUP BY id_producto");
+                    while ($row = $stmtProm->fetch(PDO::FETCH_ASSOC)) {
+                        $promediosReco[$row['id_producto']] = $row['promedio'];
+                    }
+                }
+
+                $delay = 0.1;
+                foreach ($recomendados as $idx => $reco):
                     $rutaReco = "../img/" . $reco['foto'];
                     if (empty($reco['foto']) || !is_file(__DIR__ . "/../img/" . $reco['foto'])) {
                         $rutaReco = "../img/default.png";
                     }
+                    $promedio = isset($promediosReco[$reco['id_producto']]) ? $promediosReco[$reco['id_producto']] : 0;
                 ?>
                     <div class="col-md-4 mb-4">
                         <a href="producto_detalle.php?id_producto=<?php echo $reco['id_producto']; ?>"
                            style="text-decoration:none; color:inherit;">
-                            <div class="card h-100 shadow-sm">
+                            <div class="card h-100 shadow-sm reco-animate" style="animation-delay: <?= $delay * $idx ?>s;">
                                 <img src="<?php echo $rutaReco; ?>" class="card-img-top"
                                      style="height:200px; object-fit:cover;"
                                      alt="<?php echo htmlspecialchars($reco['nombre']); ?>">
                                 <div class="card-body text-center">
+                                    <div class="reco-stars">
+                                        <?php for ($i = 1; $i <= 5; $i++): ?>
+                                            <i class="bi bi-star<?= $i <= round($promedio) ? '-fill text-warning' : '' ?>"></i>
+                                        <?php endfor; ?>
+                                        <?php if ($promedio > 0): ?>
+                                            <span class="text-muted small">(<?= number_format($promedio, 2) ?>)</span>
+                                        <?php endif; ?>
+                                    </div>
                                     <h5 class="card-title"><?php echo htmlspecialchars($reco['nombre']); ?></h5>
                                     <p class="card-text text-success fw-bold">
                                         $<?php echo number_format($reco['precio_unitario']); ?></p>
