@@ -5,7 +5,7 @@ require_once '../vendor/autoload.php';
 use MercadoPago\MercadoPagoConfig;
 use MercadoPago\Client\Payment\PaymentClient;
 
-MercadoPagoConfig::setAccessToken("APP_USR-4480789578558929-091821-52f62413327355e4a017c4853860fdfa-2701669732");
+MercadoPagoConfig::setAccessToken("APP_USR-2180958071478070-092210-ac4ee3a8d1cff42421efa9d6ddd087f1-2702024581");
 
 $payment_id = $_GET['payment_id'] ?? null;
 
