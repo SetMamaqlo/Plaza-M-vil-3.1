@@ -78,7 +78,8 @@ $categorias = $stmtCategorias->fetchAll(PDO::FETCH_ASSOC);
                                     '<?php echo htmlspecialchars(addslashes($producto['nombre'])); ?>',
                                     '<?php echo htmlspecialchars(addslashes($producto['descripcion'])); ?>',
                                     '<?php echo $producto['precio_unitario']; ?>',
-                                    '<?php echo $producto['id_categoria']; ?>'
+                                    '<?php echo $producto['id_categoria']; ?>',
+                                    '<?php echo $producto['stock']; ?>'
                                 )">
                             <i class="bi bi-pencil"></i> Editar
                         </button>
@@ -124,6 +125,10 @@ $categorias = $stmtCategorias->fetchAll(PDO::FETCH_ASSOC);
                 <div class="mb-3">
                     <label for="edit_precio" class="form-label">Precio</label>
                     <input type="number" class="form-control" id="edit_precio" name="precio" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_stock" class="form-label">Stock Disponible</label>
+                    <input type="number" class="form-control" id="edit_stock" name="stock" required>
                 </div>
             </div>
             <div class="modal-footer">
@@ -192,12 +197,13 @@ $categorias = $stmtCategorias->fetchAll(PDO::FETCH_ASSOC);
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    function editarProducto(id_producto, nombre, descripcion, precio_unitario, id_categoria) {
+    function editarProducto(id_producto, nombre, descripcion, precio_unitario, id_categoria, stock) {
         document.getElementById('edit_id_producto').value = id_producto;
         document.getElementById('edit_nombre').value = nombre;
         document.getElementById('edit_descripcion').value = descripcion;
         document.getElementById('edit_precio').value = precio_unitario;
         document.getElementById('edit_categoria').value = id_categoria;
+        document.getElementById('edit_stock').value = stock;
 
         let modal = new bootstrap.Modal(document.getElementById('modalEditar'));
         modal.show();
