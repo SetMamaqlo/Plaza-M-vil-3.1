@@ -54,9 +54,9 @@ try {
     $preference = $client->create([
         "items" => $items,
         "back_urls" => [
-            "failure" => "https://149dfc8a654a.ngrok-free.app/Plaza-M-vil-3.1/controller/confirmar_pago.php?status=failure&payment_id={payment.id}&preference_id={preference.id}",
-            "success" => "https://149dfc8a654a.ngrok-free.app/Plaza-M-vil-3.1/controller/confirmar_pago.php?status=success&payment_id={payment.id}&preference_id={preference.id}",
-            "pending" => "https://149dfc8a654a.ngrok-free.app/Plaza-M-vil-3.1/controller/confirmar_pago.php?status=pending&payment_id={payment.id}&preference_id={preference.id}"
+            "failure" => "https://6ee15b78af24.ngrok-free.app/Plaza-M-vil-3.1/controller/confirmar_pago.php?status=failure&payment_id={payment.id}&preference_id={preference.id}",
+            "success" => "https://6ee15b78af24.ngrok-free.app/Plaza-M-vil-3.1/controller/confirmar_pago.php?status=success&payment_id={payment.id}&preference_id={preference.id}",
+            "pending" => "https://6ee15b78af24.ngrok-free.app/Plaza-M-vil-3.1/controller/confirmar_pago.php?status=pending&payment_id={payment.id}&preference_id={preference.id}"
         ],
         "auto_return" => "approved"
     ]);
@@ -69,9 +69,10 @@ try {
 
 // Guardar el registro inicial en la tabla pagos con estado "pendiente"
 // Usamos preference_id temporalmente, luego en confirmar_pago.php lo actualizamos con payment_id real
-$stmt = $pdo->prepare("INSERT INTO pagos (id_pedido, proveedor, transaccion_id, monto, moneda, estado, metodo)
-                       VALUES (?, 'MercadoPago', ?, ?, 'COP', 'pendiente', 'checkout')");
+$stmt = $pdo->prepare("INSERT INTO pagos (id_pedido, preference_id, proveedor, transaccion_id, monto, moneda, estado, metodo)
+                       VALUES (?, ?, 'MercadoPago', NULL, ?, 'COP', 'pendiente', 'checkout')");
 $stmt->execute([$id_pedido, $preference->id, $total]);
+
 
 // Redirigir al checkout de MercadoPago
 header("Location: " . $preference->init_point);
