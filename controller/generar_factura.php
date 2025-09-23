@@ -1,13 +1,16 @@
 <?php
 require_once '../config/conexion.php';
-require_once '../pasarela_final/pasarela_final/fpdf186/fpdf.php';
+// Cambia la ruta al archivo fpdf.php según su ubicación real.
+// Ejemplo si lo tienes en c:\xampp\htdocs\Plaza-M-vil-3.1\fpdf186\fpdf.php:
+require_once __DIR__ . '/../fpdf186/fpdf.php';
 
 if (!isset($_GET['id_pago'])) {
     die("No se especificó el pago.");
 }
 
 $id_pago = $_GET['id_pago'];
-$stmt = $pdo->prepare("SELECT p.*, u.nombre_completo AS cliente FROM pagos p JOIN usuarios u ON u.id_usuario = p.id_cliente WHERE p.id_pago = ?");
+// Cambia p.id_cliente por p.id_usuario
+$stmt = $pdo->prepare("SELECT p.*, u.nombre_completo AS cliente FROM pagos p JOIN usuarios u ON u.id_usuario = p.id_usuario WHERE p.id_pago = ?");
 $stmt->execute([$id_pago]);
 $pago = $stmt->fetch(PDO::FETCH_ASSOC);
 
