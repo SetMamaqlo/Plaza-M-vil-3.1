@@ -1,4 +1,17 @@
 <?php
+if (
+    (isset($_POST['action']) && $_POST['action'] === 'logout') ||
+    (isset($_GET['action']) && $_GET['action'] === 'logout')
+) {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    session_unset();
+    session_destroy();
+    header('Location: /Plaza-M-vil-3.1/view/login.php');
+    exit;
+}
+
 session_start();
 require_once '../model/usermodel.php';
 require_once '../config/conexion.php';
@@ -59,13 +72,19 @@ class LoginController {
         // Limpiar sesión de forma segura
         session_unset();
         session_destroy();
-        header("Location: ../view/login.php");
+        header('Location: /Plaza-M-vil-3.1/view/login.php');
         exit;
     }
 }
 
 // Ejecutar acción
-if (isset($_POST['action']) && $_POST['action'] === 'login') {
+if (
+    (isset($_POST['action']) && $_POST['action'] === 'login') ||
+    (isset($_GET['action']) && $_GET['action'] === 'logout')
+) {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
     $controller = new LoginController($pdo);
     $controller->login();
 } elseif (isset($_GET['action']) && $_GET['action'] === 'logout') {

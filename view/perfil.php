@@ -18,7 +18,7 @@ if (!$user) {
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
+   <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagina Principal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -349,6 +349,18 @@ if (!$user) {
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Diagnóstico: muestra errores de JS y verifica el botón de la navbar
+        document.addEventListener('DOMContentLoaded', function() {
+            var toggler = document.querySelector('.navbar-toggler');
+            if (!toggler) {
+                console.error('No se encontró el botón navbar-toggler');
+            } else {
+                toggler.addEventListener('click', function() {
+                    console.log('Botón de menú clickeado');
+                });
+            }
+        });
+    </script>
 </body>
-
 </html>
