@@ -205,8 +205,8 @@ require_once '../controller/historial_ventas_controller.php';
         <?php endif; ?>
         
         <div class="mt-3 text-center">
-            <a href="dashboard_agricultor.php" class="btn btn-secondary">
-                <i class="bi bi-arrow-left"></i> Volver al Dashboard
+            <a href="/Plaza-M-vil-3.1/index.php" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Volver al Inicio
             </a>
         </div>
     </div>
