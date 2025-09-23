@@ -7,8 +7,6 @@ require_once __DIR__. '/config/conexion.php';
 require_once __DIR__. '/model/carrito_model.php';
 require_once __DIR__.'/model/detalle_carrito_model.php';
 
-
-
 //$categorias = [];
 
 //try {
@@ -64,6 +62,18 @@ if (isset($_SESSION['user_id_usuario'])) {
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/Plaza-M-vil-3.1/view/quienes_somos.php">¿Quienes Somos?</a>
                 </li>
+
+                <!-- ============================ -->
+                <!-- NUEVO: ENLACE HISTORIAL VENTAS PARA AGRICULTOR -->
+                <!-- ============================ -->
+                <?php if (isset($_SESSION['user_id_rol']) && $_SESSION['user_id_rol'] == 3): ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Plaza-M-vil-3.1/view/historial_ventas.php">
+                        <i class="bi bi-graph-up"></i> Mis Ventas
+                    </a>
+                </li>
+                <?php endif; ?>
+                <!-- ============================ -->
 
                 <!-- Enlace de Categorías
                 <li class="nav-item dropdown">               
@@ -132,9 +142,21 @@ if (isset($_SESSION['user_id_usuario'])) {
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/perfil.php">Mi Perfil</a></li>
+                        
+                        <!-- ============================ -->
+                        <!-- NUEVO: OPCIONES ESPECÍFICAS PARA AGRICULTOR EN EL DROPDOWN -->
+                        <!-- ============================ -->
                         <?php if (isset($id_rol) && $id_rol == 3): ?>
-                            <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/mis_productos.php">Mis Productos</a></li>
+                            <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/mis_productos.php">
+                                <i class="bi bi-basket"></i> Mis Productos
+                            </a></li>
+                            <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/historial_ventas.php">
+                                <i class="bi bi-graph-up"></i> Historial de Ventas
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
                         <?php endif; ?>
+                        <!-- ============================ -->
+                        
                         <?php if (isset($id_rol) && $id_rol == 1): ?>
                             <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/dashboard.php">Dashboard</a></li>
                         <?php endif; ?>
