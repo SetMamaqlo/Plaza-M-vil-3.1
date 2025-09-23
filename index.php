@@ -31,7 +31,11 @@ try {
         $categoriaSeleccionada = $catStmt->fetchColumn();
     } else {
         // Todos los productos
-        $stmt = $pdo->query("SELECT * FROM productos ORDER BY fecha_publicacion DESC");
+        $stmt = $pdo->query("SELECT p.*, u.nombre AS unidad
+            FROM productos p
+            LEFT JOIN unidades_de_medida u ON p.id_unidad = u.id_unidad
+            ORDER BY p.fecha_publicacion DESC
+        ");
     }
 } catch (PDOException $e) {
     // Manejo sencillo del error: log y mostrar mensaje mínimo
@@ -147,7 +151,10 @@ while ($row = $promStmt->fetch(PDO::FETCH_ASSOC)) {
         </h2>
         <div class="row g-4 justify-content-center">
             <?php
-            $stmt = $pdo->query("SELECT * FROM productos ORDER BY fecha_publicacion DESC");
+            $stmt = $pdo->query("SELECT p.*, u.nombre AS unidad
+            FROM productos p
+            LEFT JOIN unidades_de_medida u ON p.id_unidad = u.id_unidad
+            ORDER BY p.fecha_publicacion DESC");
             $delay = 0.3;
             $idx = 0;
             while ($producto = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -179,7 +186,8 @@ while ($row = $promStmt->fetch(PDO::FETCH_ASSOC)) {
                                     <?php echo htmlspecialchars($producto['descripcion']); ?>
                                 </p>
                                 <p class="card-text mb-0"><span
-                                        class="fw-bold text-success">$<?php echo number_format($producto['precio_unitario']); ?></span>
+                                        class="fw-bold text-success">$$<?php echo number_format($producto['precio_unitario']); ?> 
+                                        / <?php echo htmlspecialchars($producto['unidad']); ?></span>
                                 </p>
                             </div>
                         </div>
@@ -212,7 +220,12 @@ while ($row = $promStmt->fetch(PDO::FETCH_ASSOC)) {
                 <div class="row g-4 justify-content-center">
                     <?php
                     // Consulta para obtener los productos de la categoría actual
-                    $productosStmt = $pdo->prepare("SELECT * FROM productos WHERE id_categoria = ? ORDER BY fecha_publicacion DESC");
+                    $productosStmt = $pdo->prepare("SELECT p.*, u.nombre AS unidad
+                        FROM productos p
+                        LEFT JOIN unidades_de_medida u ON p.id_unidad = u.id_unidad
+                        WHERE p.id_categoria = ?
+                        ORDER BY p.fecha_publicacion DESC
+                    ");
                     $productosStmt->execute([$categoriaId]);
                     $delay = 0.1;
                     $idx = 0;
@@ -245,7 +258,8 @@ while ($row = $promStmt->fetch(PDO::FETCH_ASSOC)) {
                                             <?php echo htmlspecialchars($producto['descripcion']); ?>
                                         </p>
                                         <p class="card-text mb-0"><span
-                                                class="fw-bold text-success">$<?php echo number_format($producto['precio_unitario']); ?></span>
+                                                class="fw-bold text-success">$<?php echo number_format($producto['precio_unitario']); ?> 
+                                                 / <?php echo htmlspecialchars($producto['unidad']); ?></span>
                                         </p>
                                     </div>
                                 </div>

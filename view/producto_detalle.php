@@ -23,10 +23,12 @@ $id_producto = $_GET['id_producto'];
 
 // Consultar los detalles del producto y del vendedor
 $stmt = $pdo->prepare("
-    SELECT p.*, u.nombre_completo AS agricultor, u.telefono, u.foto AS foto_usuario
+    SELECT p.*, um.nombre AS unidad,
+           u.nombre_completo AS agricultor, u.telefono, u.foto AS foto_usuario
     FROM productos p
     JOIN agricultor a ON p.id_agricultor = a.id_agricultor
     JOIN usuarios u ON a.id_usuario = u.id_usuario
+    LEFT JOIN unidades_de_medida um ON p.id_unidad = um.id_unidad
     WHERE p.id_producto = ?
 ");
 $stmt->execute([$id_producto]);
@@ -141,7 +143,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['estrellas'], $_POST['
                 <div class="product-details">
                     <h2><?php echo htmlspecialchars($producto['nombre']); ?></h2>
                     <p><strong>Descripción:</strong> <?php echo htmlspecialchars($producto['descripcion']); ?></p>
-                    <p><strong>Precio:</strong> $<?php echo number_format($producto['precio_unitario']); ?></p>
+                    <p><strong>Precio:</strong> $<?php echo number_format($producto['precio_unitario']); ?> 
+                    / <?php echo htmlspecialchars($producto['unidad'] ?? ''); ?></p>
                     <p><strong>Fecha de publicación:</strong> <?php echo htmlspecialchars($producto['fecha_publicacion']); ?></p>
                     <hr>
                     <div class="d-flex align-items-center mb-3">
