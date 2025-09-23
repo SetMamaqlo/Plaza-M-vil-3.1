@@ -152,10 +152,10 @@ if (!$user) {
                             $stmtProd->execute([$pedido['id_pedido']]);
                             $productos = $stmtProd->fetchAll(PDO::FETCH_ASSOC);
 
-                            // Consulta pago relacionado
-                            $stmtPago = $pdo->prepare('SELECT id_pago FROM pagos WHERE id_pedido = ? ORDER BY fecha_pago DESC LIMIT 1');
-                            $stmtPago->execute([$pedido['id_pedido']]);
-                            $pago = $stmtPago->fetch(PDO::FETCH_ASSOC);
+                            // Consulta pagos relacionados
+                            $stmtPagos = $pdo->prepare('SELECT id_pago, monto, metodo, estado, fecha_pago FROM pagos WHERE id_pedido = ? ORDER BY fecha_pago DESC');
+                            $stmtPagos->execute([$pedido['id_pedido']]);
+                            $pagos = $stmtPagos->fetchAll(PDO::FETCH_ASSOC);
                             ?>
                             <?php if (count($productos) === 0): ?>
                                 <div class="alert alert-warning">No hay productos en este pedido.</div>
@@ -181,17 +181,45 @@ if (!$user) {
                                     </table>
                                 </div>
                             <?php endif; ?>
+
+                            <!-- Pagos realizados -->
+                            <?php if ($pagos && count($pagos) > 0): ?>
+                                <div class="table-responsive mb-2">
+                                    <table class="table table-sm table-bordered">
+                                        <thead class="table-success">
+                                            <tr>
+                                                <th>ID Pago</th>
+                                                <th>Monto</th>
+                                                <th>Método</th>
+                                                <th>Estado</th>
+                                                <th>Fecha</th>
+                                                <th>Comprobante</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($pagos as $pago): ?>
+                                                <tr>
+                                                    <td><?php echo htmlspecialchars($pago['id_pago']); ?></td>
+                                                    <td>$<?php echo number_format($pago['monto'], 2); ?></td>
+                                                    <td><?php echo htmlspecialchars($pago['metodo']); ?></td>
+                                                    <td><?php echo htmlspecialchars($pago['estado']); ?></td>
+                                                    <td><?php echo htmlspecialchars($pago['fecha_pago']); ?></td>
+                                                    <td>
+                                                        <a href="../controller/generar_factura.php?id_pago=<?php echo $pago['id_pago']; ?>"
+                                                            class="btn btn-primary btn-sm" target="_blank">
+                                                            <i class="bi bi-file-earmark-pdf"></i> PDF
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            <?php else: ?>
+                                <div class="alert alert-info">No hay pagos registrados para este pedido.</div>
+                            <?php endif; ?>
+
                             <div class="mt-2 d-flex gap-2">
-                                <?php if ($pago && !empty($pago['id_pago'])): ?>
-                                    <a href="../controller/generar_factura.php?id_pago=<?php echo $pago['id_pago']; ?>"
-                                        class="btn btn-primary btn-sm" target="_blank">
-                                        <i class="bi bi-file-earmark-pdf"></i> Comprobante PDF
-                                    </a>
-                                <?php else: ?>
-                                    <button class="btn btn-secondary btn-sm" disabled>
-                                        <i class="bi bi-file-earmark-pdf"></i> Sin comprobante
-                                    </button>
-                                <?php endif; ?>
                                 <a href="../view/editar_pedido.php?id_pedido=<?php echo $pedido['id_pedido']; ?>"
                                     class="btn btn-warning btn-sm">
                                     <i class="bi bi-pencil"></i> Editar
