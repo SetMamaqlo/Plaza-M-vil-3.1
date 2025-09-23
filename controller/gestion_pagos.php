@@ -1,10 +1,9 @@
 <?php
 require_once '../config/conexion.php';
-require_once '../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
-use MercadoPago\SDK;
-use MercadoPago\Preference;
-use MercadoPago\Item;
+use MercadoPago\MercadoPagoConfig;
+use MercadoPago\Client\Preference\PreferenceClient;
 
 session_start();
 
@@ -36,37 +35,38 @@ if (!$productos) {
 }
 
 // Configurar MercadoPago (cambia MercadoPagoConfig por SDK)
-SDK::setAccessToken("APP_USR-2180958071478070-092210-ac4ee3a8d1cff42421efa9d6ddd087f1-2702024581"); // token real de pruebas/producción
+MercadoPagoConfig::setAccessToken("APP_USR-2180958071478070-092210-ac4ee3a8d1cff42421efa9d6ddd087f1-2702024581"); // token real de pruebas/producción
 
 $items = [];
 $total = 0;
 foreach ($productos as $prod) {
-    $item = new Item();
-    $item->title = $prod['nombre'];
-    $item->quantity = (int) $prod['cantidad'];
-    $item->currency_id = "COP";
-    $item->unit_price = (float) $prod['precio_unitario'];
-    $items[] = $item;
+    $items[] = [
+        "title" => $prod['nombre'],
+        "quantity" => (int) $prod['cantidad'],
+        "currency_id" => "COP",
+        "unit_price" => (float) $prod['precio_unitario']
+    ];
     $total += $prod['cantidad'] * $prod['precio_unitario'];
 }
-$preference = new Preference();
-$preference->items = $items;
 
-$preference->back_urls = [
-    "failure" => "https://doctorally-uncomposed-merrie.ngrok-free.dev/Plaza-M-vil-3.1/controller/confirmar_pago.php?status=failure&payment_id={payment.id}&preference_id={preference.id}",
-    "success" => "https://doctorally-uncomposed-merrie.ngrok-free.dev/Plaza-M-vil-3.1/controller/confirmar_pago.php?status=success&payment_id={payment.id}&preference_id={preference.id}",
-    "pending" => "https://doctorally-uncomposed-merrie.ngrok-free.dev/Plaza-M-vil-3.1/controller/confirmar_pago.php?status=pending&payment_id={payment.id}&preference_id={preference.id}"
-];
-$preference->auto_return = "approved";
-
+$client = new PreferenceClient();
 try {
-    $preference->save();
-} catch (Exception $e) {
+    $preference = $client->create([
+        "items" => $items,
+        "back_urls" => [
+            "failure" => "https://6ee15b78af24.ngrok-free.app/Plaza-M-vil-3.1/controller/confirmar_pago.php?status=failure&payment_id={payment.id}&preference_id={preference.id}",
+            "success" => "https://6ee15b78af24.ngrok-free.app/Plaza-M-vil-3.1/controller/confirmar_pago.php?status=success&payment_id={payment.id}&preference_id={preference.id}",
+            "pending" => "https://6ee15b78af24.ngrok-free.app/Plaza-M-vil-3.1/controller/confirmar_pago.php?status=pending&payment_id={payment.id}&preference_id={preference.id}"
+        ],
+        "auto_return" => "approved"
+    ]);
+} catch (\MercadoPago\Exceptions\MPApiException $e) {
     echo "<pre>";
-    print_r($e->getMessage());
+    print_r($e->getApiResponse()->getContent()); 
     echo "</pre>";
     exit;
 }
+
 
 // Verifica si las columnas preference_id, proveedor y monto existen en la tabla pagos
 $columns = $pdo->query("SHOW COLUMNS FROM pagos")->fetchAll(PDO::FETCH_COLUMN);
@@ -100,4 +100,4 @@ if ($hasPreferenceId && $hasProveedor && $hasMonto) {
 // Redirigir al checkout de MercadoPago
 header("Location: " . $preference->init_point);
 exit;
-exit;
+

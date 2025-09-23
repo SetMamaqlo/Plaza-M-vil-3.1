@@ -220,10 +220,10 @@ if (!$user) {
                             <?php endif; ?>
 
                             <div class="mt-2 d-flex gap-2">
-                                <a href="../view/editar_pedido.php?id_pedido=<?php echo $pedido['id_pedido']; ?>"
+                                 <!--<a href="../view/editar_pedido.php?id_pedido=<?php echo $pedido['id_pedido']; ?>"
                                     class="btn btn-warning btn-sm">
                                     <i class="bi bi-pencil"></i> Editar
-                                </a>
+                                </a>-->
                                 <form action="../controller/eliminar_pedido.php" method="POST" style="display:inline;">
                                     <input type="hidden" name="id_pedido" value="<?php echo $pedido['id_pedido']; ?>">
                                     <button type="submit" class="btn btn-danger btn-sm"

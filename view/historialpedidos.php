@@ -22,7 +22,7 @@ $pedidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/Plaza-M-vil-3.1/css/styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    
 </head>
 
 <body>
@@ -92,11 +92,11 @@ $pedidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <i class="bi bi-file-earmark-pdf"></i> Sin comprobante
                                 </button>
                             <?php endif; ?>
-                            <!-- CRUD: Editar y Eliminar -->
+                            <!-- CRUD: Editar y Eliminar 
                             <a href="../view/editar_pedido.php?id_pedido=<?php echo $pedido['id_pedido']; ?>"
                                 class="btn btn-warning btn-sm">
                                 <i class="bi bi-pencil"></i> Editar
-                            </a>
+                            </a>-->
                             <form action="../controller/eliminar_pedido.php" method="POST" style="display:inline;">
                                 <input type="hidden" name="id_pedido" value="<?php echo $pedido['id_pedido']; ?>">
                                 <button type="submit" class="btn btn-danger btn-sm"

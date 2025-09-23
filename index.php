@@ -155,10 +155,9 @@ $categoriasFiltro = $pdo->query("SELECT id_categoria, nombre FROM categoria ORDE
     <section class="container welcome-section mt-4 mb-0">
         <span class="welcome-icon"><i class="bi bi-shop-window"></i></span>
         <div>
-            <div class="welcome-title">Bienvenido a Plaza Móvil</div>
+            <div class="welcome-title"></div>
             <div class="welcome-desc">
-                Descubre los mejores productos frescos del campo, frutas y verduras seleccionadas para ti.<br>
-                Explora una inumerable cantidad de productos agricolas, fresco y de buena calidad para ti.
+                <br>
             </div>
         </div>
     </section>

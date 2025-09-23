@@ -12,7 +12,7 @@ session_start();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/Plaza-M-vil-3.1/css/styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    
 
     <style>
         body {
@@ -66,7 +66,7 @@ session_start();
 
 <body>
     <!-- Navbar -->
-    <?php include '../navbar.php'; ?>
+    <?php include __DIR__. '/../navbar.php'; ?>
 
     <!-- Espacio para no tapar contenido -->
     <div style="height:70px;"></div>
