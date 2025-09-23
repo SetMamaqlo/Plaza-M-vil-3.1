@@ -12,10 +12,12 @@ require_once '../controller/historial_ventas_controller.php';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/Plaza-M-vil-3.1/css/styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Mover el script de Bootstrap al final del body -->
+     
 </head>
 
 <body>
+    
     <?php include '../navbar.php'; ?>
     <div style="height:70px"></div>
     <div class="container mt-5">
@@ -23,7 +25,7 @@ require_once '../controller/historial_ventas_controller.php';
         
         <!-- Resumen de ventas -->
         <div class="row mb-4">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="card text-white bg-success">
                     <div class="card-body text-center">
                         <i class="bi bi-currency-dollar display-6"></i>
@@ -32,7 +34,7 @@ require_once '../controller/historial_ventas_controller.php';
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="card text-white bg-primary">
                     <div class="card-body text-center">
                         <i class="bi bi-cart-check display-6"></i>
@@ -41,21 +43,12 @@ require_once '../controller/historial_ventas_controller.php';
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card text-white bg-warning">
+            <div class="col-md-4">
+                <div class="card text-white bg-info">
                     <div class="card-body text-center">
                         <i class="bi bi-box-seam display-6"></i>
                         <h5 class="card-title mt-2">Productos Vendidos</h5>
                         <h3><?php echo $total_productos_vendidos; ?></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card text-white bg-info">
-                    <div class="card-body text-center">
-                        <i class="bi bi-people display-6"></i>
-                        <h5 class="card-title mt-2">Clientes Atendidos</h5>
-                        <h3><?php echo count($ventas_agrupadas); ?></h3>
                     </div>
                 </div>
             </div>
@@ -218,6 +211,8 @@ require_once '../controller/historial_ventas_controller.php';
         </div>
     </div>
 
+    <!-- Scripts al final del body para evitar conflictos -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Aplicar filtros desde URL
         document.addEventListener('DOMContentLoaded', function() {
@@ -232,6 +227,12 @@ require_once '../controller/historial_ventas_controller.php';
             if (urlParams.has('fecha_hasta')) {
                 document.getElementById('fecha_hasta').value = urlParams.get('fecha_hasta');
             }
+
+            // Forzar la inicialización de dropdowns de Bootstrap
+            var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+            var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+                return new bootstrap.Dropdown(dropdownToggleEl);
+            });
         });
     </script>
 </body>
