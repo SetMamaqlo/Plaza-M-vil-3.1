@@ -11,13 +11,21 @@ if (session_status() === PHP_SESSION_NONE) {
 
 $id_rol = isset($_SESSION['user_id_rol']) ? (int) $_SESSION['user_id_rol'] : null;
 
+
 // Verificar si el usuario tiene el rol de administrador
 if ($id_rol !== 1) {
     header("Location: ../index.php");
     exit;
 }
 
+$stmt = $pdo->prepare("SELECT id_agricultor, id_zona FROM agricultor");
+$stmt->execute();
+$agricultor = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+
 ob_start();
+
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +38,7 @@ ob_start();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/Plaza-M-vil-3.1/css/styles.css">
-    
+
 </head>
 
 <body>
@@ -41,9 +49,9 @@ ob_start();
 
         <!-- Botón para abrir el modal de creación de producto -->
         <div class="text-end mb-3">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#crearProductoModal">
-                <i class="bi bi-plus-circle"></i> Crear Producto
-            </button>
+            <a href="#" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#modalAgregar">
+                <i class="bi bi-plus-circle"></i> Añadir Producto
+            </a>
         </div>
 
         <!-- Tabla de productos -->
@@ -167,6 +175,78 @@ ob_start();
                                             </div>
                                         </form>
                                     </div>
+                                </div>
+                            </div>
+                            <!-- Modal Agregar Producto -->
+                            <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="modalAgregarLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <form class="modal-content p-4" id="formAgregarProducto" method="POST"
+                                        action="../controller/productcontroller.php" enctype="multipart/form-data">
+                                        <h2 class="text-center mb-4">Añadir Nuevo Producto</h2>
+                                        <div class="mb-3">
+                                            <label for="nombre" class="form-label">Id Del Agricultor</label>
+                                            <select class="form-control" id="id_unidad" name="id_unidad" required>
+                                                <option value="">-- Selecciona una unidad --</option>
+                                                <?php foreach ($medidas as $medida): ?>
+                                                    <option value="<?= htmlspecialchars($medida['id_unidad']) ?>">
+                                                        <?= htmlspecialchars($medida['nombre']) ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="nombre" class="form-label">Nombre del Producto</label>
+                                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="descripcion" class="form-label">Descripción</label>
+                                            <textarea class="form-control" id="descripcion" name="descripcion" rows="3"
+                                                required></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="precio_unitario" class="form-label">Precio Unitario</label>
+                                            <input type="number" step="0.01" class="form-control" id="precio_unitario"
+                                                name="precio_unitario" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="stock" class="form-label">Stock Disponible</label>
+                                            <input type="number" class="form-control" id="stock" name="stock" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="id_unidad" class="form-label">Unidad de Medida</label>
+                                            <select class="form-control" id="id_unidad" name="id_unidad" required>
+                                                <option value="">-- Selecciona una unidad --</option>
+                                                <?php foreach ($medidas as $medida): ?>
+                                                    <option value="<?= htmlspecialchars($medida['id_unidad']) ?>">
+                                                        <?= htmlspecialchars($medida['nombre']) ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="id_categoria" class="form-label">Categoría</label>
+                                            <select class="form-control" id="id_categoria" name="id_categoria" required>
+                                                <option value="">-- Selecciona una categoría --</option>
+                                                <?php foreach ($categorias as $cat): ?>
+                                                    <option value="<?= htmlspecialchars($cat['id_categoria']) ?>">
+                                                        <?= htmlspecialchars($cat['nombre']) ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="foto" class="form-label">Imagen del Producto</label>
+                                            <input type="file" class="form-control" id="foto" name="foto" accept="image/*"
+                                                required>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="submit" class="btn btn-success">Añadir Producto</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
 
