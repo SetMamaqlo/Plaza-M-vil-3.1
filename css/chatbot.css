@@ -4,7 +4,7 @@
 .chatbot-container {
     position: fixed;
     bottom: 80px; 
-    left: 20px;
+    right: 30px; /* Cambiado de left: 20px; a right: 30px; */
     width: 360px; /* Ancho ajustado */
     height: 420px; /* Altura ajustada */
     background: #fff;

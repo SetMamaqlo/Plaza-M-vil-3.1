@@ -198,6 +198,34 @@ if (isset($_SESSION['user_id_usuario'])) {
     </div>
 </nav>
 
+<!-- Botón flotante Chatbot -->
+<style>
+#chatbot-float-btn {
+    position: fixed;
+    bottom: 100px; /* Encima del botón PQRS */
+    right: 30px;
+    z-index: 10000;
+    background: #343a40;
+    color: #fff;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+#chatbot-float-btn:hover {
+    background: #198754;
+}
+</style>
+<div id="chatbot-float-btn" title="Chatbot">
+    <i class="bi bi-robot"></i>
+</div>
+
 <!-- Botón flotante PQRS -->
 <style>
 #pqrs-float-btn {
@@ -221,6 +249,32 @@ if (isset($_SESSION['user_id_usuario'])) {
 <div id="pqrs-float-btn" data-bs-toggle="modal" data-bs-target="#modalPQRS" title="PQRS">
     <i class="bi bi-chat-dots"></i>
 </div>
+
+<!-- Ventana flotante del chatbot (debe estar en el body, pero aquí para claridad) -->
+<link rel="stylesheet" href="/Plaza-M-vil-3.1/css/chatbot.css">
+<div id="chatbot-container" class="chatbot-container" style="display:none;">
+    <div class="chatbot-header" style="padding:10px; background:#198754; color:#fff; border-top-left-radius:10px; border-top-right-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+        <span><i class="bi bi-robot"></i> Chatbot</span>
+        <button id="chatbot-close-btn" type="button" style="background:none; border:none; color:#fff; font-size:1.3rem;">&times;</button>
+    </div>
+    <div id="chatbot-body" class="chatbot-body" style="flex:1; padding:10px; overflow-y:auto;">
+        <!-- Mensajes del chatbot se mostrarán aquí -->
+        <div class="message bot-message">¡Hola! Soy tu asistente virtual. ¿En qué puedo ayudarte?</div>
+    </div>
+    <div class="chatbot-footer" style="padding:10px; border-top:1px solid #e0e0e0; background:#f8f9fa;">
+        <div style="display:flex;">
+            <input id="chatbot-input" type="text" class="form-control" placeholder="Escribe tu mensaje..." autocomplete="off">
+            <button id="chatbot-send-btn" class="btn btn-success ms-2"><i class="bi bi-send"></i></button>
+        </div>
+    </div>
+</div>
+<script src="/Plaza-M-vil-3.1/controller/chatbot.js"></script>
+<script>
+    // Abrir chatbot al hacer click en el botón flotante
+    document.getElementById("chatbot-float-btn").addEventListener("click", function() {
+        document.getElementById("chatbot-container").style.display = "flex";
+    });
+</script>
 
 <!-- Modal PQRS -->
 <div class="modal fade" id="modalPQRS" tabindex="-1" aria-labelledby="modalPQRSLabel" aria-hidden="true">

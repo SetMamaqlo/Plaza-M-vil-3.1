@@ -16,7 +16,7 @@ function sendMessage() {
     appendUserMessage(userMessage);
     input.value = "";
 
-    fetch("controller/backend.php", {
+    fetch("/Plaza-M-vil-3.1/controller/backend.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mensaje: userMessage }),
@@ -33,7 +33,8 @@ function sendMessage() {
         })
         .catch((error) => {
             console.error("Error en chatbot:", error);
-            appendBotMessage("❌ Error al conectar con el servidor.");
+            // Agrega información de la respuesta
+            appendBotMessage("❌ Error al conectar con el servidor: " + error.message);
         });
 }
 
@@ -78,13 +79,6 @@ document.getElementById("chatbot-input").addEventListener("keypress", function (
 
 // Enviar mensaje con botón
 document.getElementById("chatbot-send-btn").addEventListener("click", sendMessage);
-
-// Mostrar/Ocultar chatbot con el botón 🤖 (CORREGIDA)
-document.getElementById("chatbot-toggle").addEventListener("click", () => {
-    const chatbot = document.getElementById("chatbot-container");
-    // 💥 CORREGIDO: Usamos 'flex' o 'none' para que el contenedor flex funcione
-    chatbot.style.display = (chatbot.style.display === "flex") ? "none" : "flex"; 
-});
 
 // Cerrar chatbot con el botón ✖ (CORREGIDA)
 document.getElementById("chatbot-close-btn").addEventListener("click", () => {
