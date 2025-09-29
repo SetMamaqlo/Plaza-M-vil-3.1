@@ -1,5 +1,5 @@
 <?php
-// index.php (corregido y actualizado)
+// index.php (corregido)
 
 // Iniciar sesión solo si aún no existe
 if (session_status() === PHP_SESSION_NONE) {
@@ -96,13 +96,13 @@ $categoriasFiltro = $pdo->query("SELECT id_categoria, nombre FROM categoria ORDE
 <html lang="en">
 
 <head>
+    <!-- Menu -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagina Principal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/Plaza-M-vil-3.1/css/styles.css">
-<<<<<<< Updated upstream
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         .producto-animate {
@@ -145,14 +145,11 @@ $categoriasFiltro = $pdo->query("SELECT id_categoria, nombre FROM categoria ORDE
             font-size: 0.9rem;
         }
     </style>
-=======
-    <link rel="stylesheet" href="/Plaza-M-vil-3.1/css/chatbot.css">
->>>>>>> Stashed changes
 </head>
 
 <body>
+    <!-- Navbar -->
     <?php include 'navbar.php'; ?>
-<<<<<<< Updated upstream
 
     <!-- Sección de bienvenida -->
     <section class="container welcome-section mt-4 mb-0">
@@ -170,8 +167,6 @@ $categoriasFiltro = $pdo->query("SELECT id_categoria, nombre FROM categoria ORDE
     </section>
 
     <!-- Carrousel -->
-=======
->>>>>>> Stashed changes
     <div id="carouselExampleCaptions" class="carousel slide mb-4 custom-carousel" data-bs-ride="carousel"
         data-bs-interval="3000">
         <div class="carousel-indicators">
@@ -216,7 +211,6 @@ $categoriasFiltro = $pdo->query("SELECT id_categoria, nombre FROM categoria ORDE
             <span class="visually-hidden">Next</span>
         </button>
     </div>
-<<<<<<< Updated upstream
 
     <hr class="section-divider">
 
@@ -435,109 +429,9 @@ $categoriasFiltro = $pdo->query("SELECT id_categoria, nombre FROM categoria ORDE
                     <?php $idx++; } ?>
                 </div>
                 <hr class="categoria-separator">
-=======
-    <section class="container mt-5 productos-fondo">
-        <h2 class="text-center mb-4 fw-bold display-6 border-bottom pb-2" style="letter-spacing:1px;">Productos
-            Publicados</h2>
-        <div class="row g-4 justify-content-center">
-            <?php
-            $stmt = $pdo->query("SELECT * FROM productos ORDER BY fecha_publicacion DESC");
-            while ($producto = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $promedio = isset($promedios[$producto['id_producto']]) ? $promedios[$producto['id_producto']] : 0;
-            ?>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch">
-                <a href="view/producto_detalle.php?id_producto=<?php echo $producto['id_producto']; ?>"
-                    class="w-100 text-decoration-none text-dark">
-                    <div class="card h-100 border-0 shadow-sm minimal-card">
-                        <img src="img/<?php echo htmlspecialchars($producto['foto']); ?>"
-                            class="card-img-top rounded-top" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
-                        <div class="card-body d-flex flex-column justify-content-between">
-                            <h5 class="card-title mb-2 fw-semibold text-truncate">
-                                <?php echo htmlspecialchars($producto['nombre']); ?>
-                            </h5>
-                            <div class="mb-2">
-                                <?php
-                                for ($i = 1; $i <= 5; $i++) {
-                                    echo '<i class="bi bi-star' . ($i <= round($promedio) ? '-fill text-warning' : '') . '"></i>';
-                                }
-                                if ($promedio > 0) {
-                                    echo ' <span class="text-muted small">(' . number_format($promedio, 2) . ')</span>';
-                                }
-                                ?>
-                            </div>
-                            <p class="card-text small text-muted mb-2" style="min-height:48px;">
-                                <?php echo htmlspecialchars($producto['descripcion']); ?>
-                            </p>
-                            <p class="card-text mb-0"><span
-                                    class="fw-bold text-success">$<?php echo number_format($producto['precio_unitario']); ?></span>
-                            </p>
-                        </div>
-                    </div>
-                </a>
             </div>
-            <?php } ?>
-        </div>
-    </section>
-    <section class="container mt-5">
-        <h2 class="text-center mb-4 fw-bold display-6 border-bottom pb-2" style="letter-spacing:1px;">Productos por
-            Categoría</h2>
-        <?php
-        // Consulta para obtener las categorías desde la tabla `categoria`
-        $categoriasStmt = $pdo->query("SELECT id_categoria, nombre FROM categoria ORDER BY nombre ASC");
-        $categorias = $categoriasStmt->fetchAll(PDO::FETCH_ASSOC);
-
-        foreach ($categorias as $categoria) {
-            $categoriaNombre = htmlspecialchars($categoria['nombre']);
-            $categoriaId = $categoria['id_categoria'];
-        ?>
-        <div class="mb-5">
-            <h3 class="text-success border-start border-4 ps-3 mb-4" style="font-weight:600; letter-spacing:0.5px;">
-                <?php echo $categoriaNombre; ?> </h3>
-            <div class="row g-4 justify-content-center">
-                <?php
-                // Consulta para obtener los productos de la categoría actual
-                $productosStmt = $pdo->prepare("SELECT * FROM productos WHERE id_categoria = ? ORDER BY fecha_publicacion DESC");
-                $productosStmt->execute([$categoriaId]);
-                while ($producto = $productosStmt->fetch(PDO::FETCH_ASSOC)) {
-                    $promedio = isset($promedios[$producto['id_producto']]) ? $promedios[$producto['id_producto']] : 0;
-                ?>
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch">
-                    <a href="view/producto_detalle.php?id_producto=<?php echo $producto['id_producto']; ?>"
-                        class="w-100 text-decoration-none text-dark">
-                        <div class="card h-100 border-0 shadow-sm minimal-card">
-                            <img src="img/<?php echo htmlspecialchars($producto['foto']); ?>"
-                                class="card-img-top rounded-top"
-                                alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
-                            <div class="card-body d-flex flex-column justify-content-between">
-                                <h5 class="card-title mb-2 fw-semibold text-truncate">
-                                    <?php echo htmlspecialchars($producto['nombre']); ?></h5>
-                                <div class="mb-2">
-                                    <?php
-                                    for ($i = 1; $i <= 5; $i++) {
-                                        echo '<i class="bi bi-star' . ($i <= round($promedio) ? '-fill text-warning' : '') . '"></i>';
-                                    }
-                                    if ($promedio > 0) {
-                                        echo ' <span class="text-muted small">(' . number_format($promedio, 2) . ')</span>';
-                                    }
-                                    ?>
-                                </div>
-                                <p class="card-text small text-muted mb-2" style="min-height:48px;">
-                                    <?php echo htmlspecialchars($producto['descripcion']); ?>
-                                </p>
-                                <p class="card-text mb-0"><span
-                                        class="fw-bold text-success">$<?php echo number_format($producto['precio_unitario']); ?></span>
-                                </p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <?php } ?>
->>>>>>> Stashed changes
-            </div>
-        </div>
         <?php } ?>
     </section>
-<<<<<<< Updated upstream
     <?php endif; ?>
 
     </div>
@@ -558,35 +452,3 @@ $categoriasFiltro = $pdo->query("SELECT id_categoria, nombre FROM categoria ORDE
     </script>
 </body>
 </html>
-=======
-
-       <footer class="bg-light text-center py-3">
-        <p class="mb-0">&copy; 2025 Plaza Móvil. Todos los derechos reservados.</p>
-    </footer>
-
-    <<!-- Botón flotante -->
-<button id="chatbot-toggle" class="btn btn-success" style="position:fixed; bottom:20px; left:20px; z-index:10000;">
- 🤖
-</button>
-
-<!-- Chatbot -->
-<div class="chatbot-container" id="chatbot-container">
-    <div class="chatbot-header">
-        <i class="bi bi-robot"></i>
-        <span>Chatbot</span>
-        <button id="chatbot-close-btn">&times;</button>
-    </div>
-    <div class="chatbot-body" id="chatbot-body">
-        <div class="message bot-message">
-            ¡Hola! Bienvenido a Plaza Móvil, ¿en qué puedo ayudarte?
-        </div>
-    </div>
-    <div class="chatbot-footer">
-        <input type="text" id="chatbot-input" placeholder="Escribe tu mensaje...">
-        <button id="chatbot-send-btn"><i class="bi bi-send-fill"></i></button>
-    </div>
-</div>
-
-<!-- Script del chatbot -->
-<script src="controller/chatbot.js"></script>
->>>>>>> Stashed changes

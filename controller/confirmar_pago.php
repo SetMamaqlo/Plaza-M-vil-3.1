@@ -2,13 +2,11 @@
 require_once '../config/conexion.php';
 require_once '../vendor/autoload.php';
 
-session_start();
+use MercadoPago\MercadoPagoConfig;
+use MercadoPago\Client\Payment\PaymentClient;
 
-$status = $_GET['status'] ?? 'failure';
-$id_pago = $_GET['payment_id'] ?? null; // id de la transacción de MP
-$id_preference = $_GET['preference_id'] ?? null;
+MercadoPagoConfig::setAccessToken("APP_USR-2180958071478070-092210-ac4ee3a8d1cff42421efa9d6ddd087f1-2702024581");
 
-<<<<<<< Updated upstream
 $payment_id    = $_GET['payment_id'] ?? null;
 $preference_id = $_GET['preference_id'] ?? null;
 
@@ -90,18 +88,4 @@ if ($payment_id && $preference_id) {
 
 } else {
     echo "<h1>No se recibió un payment_id válido.</h1>";
-=======
-// ✅ Actualizar estado en BD
-if ($id_preference) {
-    $stmt = $pdo->prepare("UPDATE pagos SET estado = ?, transaccion_id = ? WHERE transaccion_id = ?");
-    $stmt->execute([$status, $id_pago ?? $id_preference, $id_preference]);
-}
-
-if ($status === "success") {
-    // ✅ Redirigir a generar la factura directamente
-    header("Location: generar_factura.php?pref_id=" . urlencode($id_preference));
-    exit;
-} else {
-    echo "El pago no se completó. Estado: " . htmlspecialchars($status);
->>>>>>> Stashed changes
 }
