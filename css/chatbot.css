@@ -1,0 +1,78 @@
+/* ------------------------------------------- */
+/* 1. Contenedor Principal (Caja del Chatbot)  */
+/* ------------------------------------------- */
+.chatbot-container {
+    position: fixed;
+    bottom: 80px; 
+    left: 20px;
+    width: 360px; /* Ancho ajustado */
+    height: 420px; /* Altura ajustada */
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); 
+    z-index: 9999; 
+    
+    /* Comportamiento Flexbox */
+    display: flex; 
+    flex-direction: column;
+    /* 💥 IMPORTANTE: Si lo ocultas con JS, el 'display: none' va aquí */
+    /* Si lo quieres visible siempre, puedes dejar 'display: flex' */
+}
+
+/* ------------------------------------------- */
+/* 2. Cuerpo de Mensajes (Chatbot Body)        */
+/* ------------------------------------------- */
+.chatbot-body {
+    flex: 1; /* Ocupa el espacio restante */
+    padding: 10px;
+    background: #f9f9f9; 
+    border-bottom: 1px solid #e0e0e0;
+    
+    /* ✅ ESTO ACTIVA EL SCROLL VERTICAL */
+    overflow-y: auto;       
+}
+
+
+/* ------------------------------------------- */
+/* 3. Estilos de Mensajes (SOLUCIÓN AL DESBORDAMIENTO) */
+/* ------------------------------------------- */
+
+.message {
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    border-radius: 15px;
+    clear: both; 
+    
+    /* 💥 APLICAR EL MÁXIMO ANCHO AL CONTENEDOR DE LA BURBUJA */
+    max-width: 95%; 
+    
+    /* 🛑 SOLUCIÓN DEFINITIVA: Fuerzan el salto de línea con máxima prioridad */
+    white-space: normal !important; /* Asegura el salto de línea */
+    word-break: break-word !important; /* Fuerza la ruptura de cualquier cadena larga */
+    overflow-wrap: break-word !important; /* Sinónimo de word-wrap, por compatibilidad */
+}
+
+.bot-message {
+    background-color: #E8F5E9; 
+    color: #333;
+    float: left;
+    border-bottom-left-radius: 3px;
+    /* 💥 Aseguramos que el mensaje del bot no ocupe un ancho innecesario */
+    width: fit-content; 
+    max-width: 85%; /* Limita el ancho real de la burbuja */
+}
+
+.user-message {
+    background-color: #DCF8C6; 
+    color: #333;
+    float: right;
+    border-bottom-right-radius: 3px;
+    /* 💥 Aseguramos que el mensaje del usuario no ocupe un ancho innecesario */
+    width: fit-content;
+    max-width: 85%; /* Limita el ancho real de la burbuja */
+}
+
+/* ------------------------------------------- */
+/* (Asegúrate de incluir aquí los estilos del Header, Footer y Scrollbar) */
+/* ------------------------------------------- */
