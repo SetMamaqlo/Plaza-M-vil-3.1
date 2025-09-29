@@ -15,9 +15,10 @@ $id_agricultor = $_SESSION['user_id_agricultor'] ?? null;
 
 // Obtener productos del agricultor
 $stmt = $pdo->prepare("
-    SELECT p.*, c.nombre AS categoria_nombre
+    SELECT p.*, c.nombre AS categoria_nombre, u.nombre AS unidad_nombre
     FROM productos p
     INNER JOIN categoria c ON p.id_categoria = c.id_categoria
+    LEFT JOIN unidades_de_medida u ON p.id_unidad = u.id_unidad
     WHERE p.id_agricultor = ?
     ORDER BY p.fecha_publicacion DESC
 ");
@@ -37,7 +38,7 @@ $categorias = $stmtCategorias->fetchAll(PDO::FETCH_ASSOC);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/Plaza-M-vil-3.1/css/styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+   
 </head>
 
 <body>
@@ -74,7 +75,8 @@ $categorias = $stmtCategorias->fetchAll(PDO::FETCH_ASSOC);
                                 <p class="card-text">Descripción: <?php echo htmlspecialchars($producto['descripcion']); ?>
                                 </p>
                                 <p class="card-text"><strong>Precio:</strong>
-                                    $<?php echo number_format($producto['precio_unitario']); ?></p>
+                                    $<?php echo number_format($producto['precio_unitario']); ?>
+                                     / <?php echo htmlspecialchars($producto['unidad_nombre']); ?></p>
                                 <p class="card-text"><strong>Categoría:</strong>
                                     <?php echo htmlspecialchars($producto['categoria_nombre']); ?></p>
                             </div>
@@ -124,6 +126,17 @@ $categorias = $stmtCategorias->fetchAll(PDO::FETCH_ASSOC);
                             <?php foreach ($categorias as $categoria): ?>
                                 <option value="<?php echo $categoria['id_categoria']; ?>">
                                     <?php echo htmlspecialchars($categoria['nombre']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_unidad" class="form-label">Unidad de Medida</label>
+                        <select class="form-select" id="edit_unidad" name="id_unidad" required>
+                            <option value="" disabled>Selecciona una unidad</option>
+                            <?php foreach ($medidas as $medida): ?>
+                                <option value="<?php echo $medida['id_unidad']; ?>">
+                                    <?php echo htmlspecialchars($medida['nombre']); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -204,13 +217,14 @@ $categorias = $stmtCategorias->fetchAll(PDO::FETCH_ASSOC);
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function editarProducto(id_producto, nombre, descripcion, precio_unitario, id_categoria, stock) {
+        function editarProducto(id_producto, nombre, descripcion, precio_unitario, id_categoria, stock, id_unidad) {
             document.getElementById('edit_id_producto').value = id_producto;
             document.getElementById('edit_nombre').value = nombre;
             document.getElementById('edit_descripcion').value = descripcion;
             document.getElementById('edit_precio').value = precio_unitario;
             document.getElementById('edit_categoria').value = id_categoria;
             document.getElementById('edit_stock').value = stock;
+            document.getElementById('edit_unidad').value = id_unidad;
 
             let modal = new bootstrap.Modal(document.getElementById('modalEditar'));
             modal.show();

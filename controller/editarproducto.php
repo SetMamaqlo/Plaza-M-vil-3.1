@@ -13,6 +13,8 @@ if (isset($_SESSION['user_id_usuario'])) {
     $id_producto = $_POST['id_producto'] ?? null;
     $nombre = trim($_POST['nombre'] ?? '');
     $descripcion = trim($_POST['descripcion'] ?? '');
+    $stock       = $_POST['stock'];       // 👈 importante
+    $id_unidad   = $_POST['id_unidad']; 
     $precio = $_POST['precio'] ?? 0;
     $categoria = $_POST['categoria'] ?? null;
 
@@ -28,14 +30,18 @@ if (isset($_SESSION['user_id_usuario'])) {
     // Depuración para verificar los datos recibidos
     error_log("Datos recibidos: " . print_r($_POST, true));
 
-    try {
-        // Actualiza el producto en la tabla de productos
-        $stmt = $pdo->prepare("UPDATE productos SET nombre = ?, descripcion = ?, precio_unitario = ?, id_categoria = ? WHERE id_producto = ?");
-        $stmt->execute([$nombre, $descripcion, $precio, $categoria, $id_producto]);
+  try {
+    // Actualiza el producto en la tabla de productos
+    $stmt = $pdo->prepare("
+        UPDATE productos 
+        SET nombre = ?, descripcion = ?, precio_unitario = ?, id_categoria = ?, stock = ?, id_unidad = ? 
+        WHERE id_producto = ?
+    ");
+    $stmt->execute([$nombre, $descripcion, $precio, $categoria, $stock, $id_unidad, $id_producto]);
 
-        // Redirige de vuelta a la página de mis productos
-        header("Location: ../view/mis_productos.php?edit=ok");
-        exit;
+    // Redirige de vuelta a la página de mis productos
+    header("Location: ../view/mis_productos.php?edit=ok");
+    exit;
     } catch (PDOException $e) {
         error_log("Error al actualizar el producto: " . $e->getMessage());
         echo "Error al actualizar el producto.";
