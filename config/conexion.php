@@ -1,8 +1,8 @@
 <?php
-/*$host = 'sql111.infinityfree.com';
-$dbname = 'if0_40007067_XXX';
-$username = 'if0_40007067';
-$password = 'RXnp8F2RN64NJz';*/
+//$host = 'sql111.infinityfree.com';
+//$dbname = 'if0_40007067_XXX';
+//$username = 'if0_40007067';
+//$password = 'RXnp8F2RN64NJz';
 
 $host = 'localhost';
 $dbname = 'agro_app';

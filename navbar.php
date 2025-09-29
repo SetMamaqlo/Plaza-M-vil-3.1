@@ -7,8 +7,6 @@ require_once __DIR__. '/config/conexion.php';
 require_once __DIR__. '/model/carrito_model.php';
 require_once __DIR__.'/model/detalle_carrito_model.php';
 
-
-
 //$categorias = [];
 
 //try {
@@ -64,6 +62,18 @@ if (isset($_SESSION['user_id_usuario'])) {
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/Plaza-M-vil-3.1/view/quienes_somos.php">¿Quienes Somos?</a>
                 </li>
+
+                <!-- ============================ -->
+                <!-- NUEVO: ENLACE HISTORIAL VENTAS PARA AGRICULTOR -->
+                <!-- ============================ -->
+                <?php if (isset($_SESSION['user_id_rol']) && $_SESSION['user_id_rol'] == 3): ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Plaza-M-vil-3.1/view/historial_ventas.php">
+                        <i class="bi bi-graph-up"></i> Mis Ventas
+                    </a>
+                </li>
+                <?php endif; ?>
+                <!-- ============================ -->
 
                 <!-- Enlace de Categorías
                 <li class="nav-item dropdown">               
@@ -128,24 +138,56 @@ if (isset($_SESSION['user_id_usuario'])) {
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        Usuario
+                        <!-- Mostrar nombre del usuario si está disponible -->
+                        <?php 
+                        if (isset($_SESSION['nombre'])) {
+                            echo htmlspecialchars($_SESSION['nombre']);
+                        } else if (isset($_SESSION['user_id_usuario'])) {
+                            echo 'Usuario';
+                        } else {
+                            echo 'Invitado';
+                        }
+                        ?>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/perfil.php">Mi Perfil</a></li>
-                        <?php if (isset($id_rol) && $id_rol == 3): ?>
-                            <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/mis_productos.php">Mis Productos</a></li>
+                        <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/perfil.php">
+                            <i class="bi bi-person"></i> Mi Perfil
+                        </a></li>
+                        
+                        <!-- ============================ -->
+                        <!-- NUEVO: OPCIONES ESPECÍFICAS PARA AGRICULTOR EN EL DROPDOWN -->
+                        <!-- ============================ -->
+                        <?php if (isset($_SESSION['user_id_rol']) && $_SESSION['user_id_rol'] == 3): ?>
+                            <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/mis_productos.php">
+                                <i class="bi bi-basket"></i> Mis Productos
+                            </a></li>
+                            <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/historial_ventas.php">
+                                <i class="bi bi-graph-up"></i> Historial de Ventas
+                            </a></li>
+                            <!---<li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/agregar_producto.php">
+                                <i class="bi bi-plus-circle"></i> Agregar Producto
+                            </a></li>--->
+                            <!-- NUEVO: Enlace para carga masiva -->
+                            <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/carga_masiva.php">
+                                <i class="bi bi-upload"></i> Carga Masiva
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
                         <?php endif; ?>
-                        <?php if (isset($id_rol) && $id_rol == 1): ?>
-                            <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/dashboard.php">Dashboard</a></li>
+                        <!-- ============================ -->
+                        
+                        <!-- OPCIONES PARA ADMINISTRADOR -->
+                        <?php if (isset($_SESSION['user_id_rol']) && $_SESSION['user_id_rol'] == 1): ?>
+                            <li><a class="dropdown-item" href="/Plaza-M-vil-3.1/view/dashboard.php">
+                                <i class="bi bi-speedometer2"></i> Dashboard
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
                         <?php endif; ?>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
+                        
                         <li>
                             <form action="/Plaza-M-vil-3.1/controller/logincontroller.php" method="POST" style="margin:0;">
                                 <input type="hidden" name="action" value="logout">
                                 <button type="submit" class="dropdown-item text-danger" style="width:100%;text-align:left;">
-                                    Cerrar Sesión
+                                    <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
                                 </button>
                             </form>
                         </li>
