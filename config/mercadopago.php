@@ -5,7 +5,7 @@ use MercadoPago\MercadoPagoConfig;
 use MercadoPago\Client\Preference\PreferenceClient;
 
 // Configura el token (usa el de prueba mientras desarrollas)
-MercadoPagoConfig::setAccessToken("APP_USR-2180958071478070-092210-ac4ee3a8d1cff42421efa9d6ddd087f1-2702024581");
+MercadoPagoConfig::setAccessToken("APP_USR-8452269694356919-092417-c15711717e9df463834bed7ebb2225dc-2702024581");
 
 // Crear una preferencia de prueba
 $client = new PreferenceClient();
