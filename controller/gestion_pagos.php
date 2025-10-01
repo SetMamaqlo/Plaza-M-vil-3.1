@@ -35,7 +35,7 @@ if (!$productos) {
 }
 
 // Configurar MercadoPago (cambia MercadoPagoConfig por SDK)
-MercadoPagoConfig::setAccessToken("APP_USR-2180958071478070-092210-ac4ee3a8d1cff42421efa9d6ddd087f1-2702024581"); // token real de pruebas/producción APP_USR-2180958071478070-092210-ac4ee3a8d1cff42421efa9d6ddd087f1-2702024581
+MercadoPagoConfig::setAccessToken("APP_USR-8452269694356919-092417-c15711717e9df463834bed7ebb2225dc-2702024581"); // token real de pruebas/producción APP_USR-2180958071478070-092210-ac4ee3a8d1cff42421efa9d6ddd087f1-2702024581
 
 $items = [];
 $total = 0;
@@ -54,9 +54,9 @@ try {
     $preference = $client->create([
         "items" => $items,
         "back_urls" => [
-            "failure" => "https://821e04b7f409.ngrok-free.app/confirmar_pago.php?status=failure&payment_id={payment.id}&preference_id={preference.id}",
-            "success" => "https://821e04b7f409.ngrok-free.app/confirmar_pago.php?status=success&payment_id={payment.id}&preference_id={preference.id}",
-            "pending" => "https://821e04b7f409.ngrok-free.app/confirmar_pago.php?status=pending&payment_id={payment.id}&preference_id={preference.id}"
+            "failure" => "https://ff60e5e11f15.ngrok-free.app/Plaza-M-vil-3.1/controller/confirmar_pago.php",
+            "success" => "https://ff60e5e11f15.ngrok-free.app/Plaza-M-vil-3.1/controller/confirmar_pago.php",
+            "pending" => "https://ff60e5e11f15.ngrok-free.app/Plaza-M-vil-3.1/controller/confirmar_pago.php"
         ],
         "auto_return" => "approved"
     ]);
