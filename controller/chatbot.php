@@ -1,41 +1,61 @@
-/* Contenedor principal del chatbot */
-.chatbot-container {
-    position: fixed;
-    bottom: 80px; 
-    right: 30px; /* Cambiado de left: 20px; a right: 30px; */
-    width: 360px;  /* ✅ MÁS ANCHO */
-    height: 420px; /* un poquito más alto */
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); 
-    z-index: 9999; 
-    display: flex; 
-    flex-direction: column;
+<?php
+// Esto es esencial: Le dice al navegador que la respuesta será JSON.
+header('Content-Type: application/json');
+
+// 1. Obtener y decodificar el mensaje enviado desde JavaScript.
+$json_data = file_get_contents('php://input');
+$data = json_decode($json_data, true);
+
+$respuesta_bot = "";
+
+// 2. Verificar si se recibió el mensaje
+if (isset($data['mensaje']) && !empty($data['mensaje'])) {
+    
+    // Convertir a minúsculas y limpiar espacios
+    $mensaje_usuario = strtolower(trim($data['mensaje']));
+
+    // 3. Lógica del Chatbot (Tus reglas)
+    
+    // --- Condición 1: SALUDO SECRETO (Para 'puñeta') ---
+    // Tiene prioridad para que nadie más lo vea.
+    if (strpos($mensaje_usuario, 'puñeta') !== false) {
+        $respuesta_bot = "👋 ¡Dímelo, papi! Si se puede puñeta.";
+
+    // --- Condición 2: SALUDO BÁSICO (Para 'hola' o 'iniciar') ---
+    // Saludo normal de la empresa.
+    } else if (strpos($mensaje_usuario, 'hola') !== false || strpos($mensaje_usuario, 'iniciar') !== false) {
+        $respuesta_bot = "👋 ¡Bienvenido a Plaza Móvil! Soy tu asistente virtual. ¿En qué puedo ayudarte hoy?";
+
+    // --- Condición 3: PRODUCTOS ---
+    } else if (strpos($mensaje_usuario, 'producto') !== false || strpos($mensaje_usuario, 'catalogo') !== false) {
+        $respuesta_bot = "🛍️ ¡Claro! Puedes ver nuestro catálogo de productos en el siguiente enlace: [Aquí va el enlace a tu catálogo].";
+        
+    // --- Condición 4: HORARIO ---
+    } else if (strpos($mensaje_usuario, 'horario') !== false) {
+        $respuesta_bot = "⏱️ Nuestro horario de atención es:<br>Lunes a viernes de 8:00 AM a 6:00 PM.";
+
+    // --- Condición 5: CONTACTO/TELÉFONO ---
+    } else if (strpos($mensaje_usuario, 'contacto') !== false || strpos($mensaje_usuario, 'telefono') !== false || strpos($mensaje_usuario, 'whatsapp') !== false) {
+        $respuesta_bot = "📞 Nuestro teléfono/WhatsApp es: **3003105511**.";
+
+    // --- Condición 6: Mensaje por defecto ---
+    } else {
+        $respuesta_bot = "Disculpa, no entendí tu pregunta. Puedes intentar preguntar por 'horario', 'productos' o simplemente decir 'hola'.";
+    }
+    
+} else {
+    // Si no se recibió la clave 'mensaje', es una petición inválida
+    http_response_code(400); // Bad Request
+    $respuesta_bot = "❌ Error: No se recibió un mensaje válido.";
 }
 
-/* Mensajes */
-.message {
-    padding: 8px 12px;
-    margin-bottom: 8px;
-    border-radius: 15px;
-    clear: both; 
-    max-width: 95%;   /* ✅ AHORA USAN MÁS ESPACIO */
-    white-space: normal;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
+// 4. Crear el array de respuesta
+$response_array = array(
+    'respuesta' => $respuesta_bot // Esta es la clave que tu JavaScript espera: data.respuesta
+);
 
-.bot-message {
-    background-color: #E8F5E9; 
-    color: #333;
-    float: left;
-    border-bottom-left-radius: 3px;
-}
+// 5. Codificar el array a formato JSON y enviarlo.
+echo json_encode($response_array);
 
-.user-message {
-    background-color: #DCF8C6; 
-    color: #333;
-    float: right;
-    border-bottom-right-radius: 3px;
-}
+// NO HAY CÓDIGO NI ESPACIOS DESPUÉS DE ESTA LÍNEA
+?>
