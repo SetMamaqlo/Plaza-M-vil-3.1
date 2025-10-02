@@ -54,11 +54,16 @@ try {
     $preference = $client->create([
         "items" => $items,
         "back_urls" => [
-            "failure" => "https://ff60e5e11f15.ngrok-free.app/Plaza-M-vil-3.1/controller/confirmar_pago.php",
-            "success" => "https://ff60e5e11f15.ngrok-free.app/Plaza-M-vil-3.1/controller/confirmar_pago.php",
-            "pending" => "https://ff60e5e11f15.ngrok-free.app/Plaza-M-vil-3.1/controller/confirmar_pago.php"
+            "failure" => "https://4181799cb229.ngrok-free.app/Plaza-M-vil-3.1/controller/confirmar_pago.php?status=success&payment_id={payment.id}",
+            "success" => "https://4181799cb229.ngrok-free.app/Plaza-M-vil-3.1/controller/confirmar_pago.php?status=failure&payment_id={payment.id}",
+            "pending" => "https://4181799cb229.ngrok-free.app/Plaza-M-vil-3.1/controller/confirmar_pago.php?status=pending&payment_id={payment.id}"
         ],
-        "auto_return" => "approved"
+        "auto_return" => "approved",
+        "payment_methods" => [
+            "excluded_payment_methods" => [],   // no excluyas nada
+            "excluded_payment_types" => []      // permite tarjeta, débito, PSE, billeteras, etc.
+        ]
+        
     ]);
 } catch (\MercadoPago\Exceptions\MPApiException $e) {
     echo "<pre>";

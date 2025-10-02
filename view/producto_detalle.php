@@ -157,10 +157,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['estrellas'], $_POST['
                         </div>
                     </div>
 
-                    <form action="../controller/procesar_compra.php" method="POST" class="mt-3">
-                        <input type="hidden" name="id_producto" value="<?php echo $producto['id_producto']; ?>">
+                    <!-- <form action="../controller/procesar_compra.php" method="POST" class="mt-3">
+                        <input type="hidden" name="id_producto" value="php echo $producto['id_producto']; ?>">
                         <button type="submit" class="btn btn-outline-success w-100 mb-3">Comprar Ahora</button>
-                    </form>
+                    </form> -->
                     <form action="../controller/carritocontroller.php" method="POST">
                         <input type="hidden" name="id_producto" value="<?php echo $producto['id_producto']; ?>">
                         <button type="submit" class="btn btn-success w-100">Añadir al Carrito</button>
