@@ -1,7 +1,7 @@
 <?php
 // Cargar variables de entorno (opcional, si usas un archivo .env)
 $host = getenv("DB_HOST") ?: "mysql.railway.internal";
-$db   = getenv("DB_NAME") ?: "railway";
+$db   = getenv("DB_NAME") ?: "agro_app"; // Cambiado a agro_app
 $user = getenv("DB_USER") ?: "root";
 $pass = getenv("DB_PASSWORD") ?: "GedaXvxilJYSGQCwjPJbVaXKLCgnVluP";
 $port = getenv("DB_PORT") ?: "3306";
