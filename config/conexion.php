@@ -1,13 +1,21 @@
 <?php
-$config = require 'config.php';
-
-// Obtener la URL
-$mysql_url = $config['mysql_url'];
+// Cargar variables de entorno (opcional, si usas un archivo .env)
+$host = getenv("DB_HOST") ?: "containers-us-west-123.railway.app";
+$db   = getenv("DB_NAME") ?: "railway";
+$user = getenv("DB_USER") ?: "root";
+$pass = getenv("DB_PASSWORD") ?: "GedaXvxilJYSGQCwjPJbVaXKLCgnVluP";
+$port = getenv("DB_PORT") ?: "3306";
 
 try {
-    $pdo = new PDO($mysql_url);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Conexión exitosa a la base de datos";
+    $dsn = "mysql:host=$host;dbname=$db;port=$port;charset=utf8mb4";
+    $pdo = new PDO($dsn, $user, $pass, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // errores con excepciones
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC // fetch asociativo por defecto
+    ]);
+
+    // Para verificar que conecta correctamente:
+    // echo "✅ Conexión exitosa a la base de datos en Railway";
+
 } catch (PDOException $e) {
-    echo "Error de conexión: " . $e->getMessage();
+    die("❌ Error de conexión: " . $e->getMessage());
 }
