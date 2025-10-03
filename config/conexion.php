@@ -1,17 +1,18 @@
 <?php
-//$host = 'sql111.infinityfree.com';
-//$dbname = 'if0_40007067_XXX';
-//$username = 'if0_40007067';
-//$password = 'RXnp8F2RN64NJz';
+// Obtener la URL de conexión desde la variable de entorno
+$mysql_url = getenv('MYSQL_URL');
 
-$host = 'localhost';
-$dbname = 'agro_app';
-$username = 'root';
-$password = '';
-
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Error de conexión: " . $e->getMessage());
+// Verificar si la URL de conexión fue obtenida correctamente
+if ($mysql_url) {
+    try {
+        $pdo = new PDO($mysql_url);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        // En producción no mostrar mensajes, solo conectar
+    } catch (PDOException $e) {
+        // Puedes loguear el error si lo necesitas
+        die("Error al conectar: " . $e->getMessage());
+    }
+} else {
+    die("No se pudo obtener la URL de conexión.");
 }
+?>
